@@ -1,0 +1,71 @@
+<ion-header>
+	<app-list-toolbar pageTitle="{{'erp.app.pages.admin.config.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [ShowArchive]="false" [query]="optionQuery" (refresh)="preLoadData(null)" (help)="help()"></app-list-toolbar>
+	<div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}" *ngIf="pageConfig.isShowSearch">
+		<section class="table">
+			<header class="bold">
+				<div class="col-checkbox cell"></div>
+				<div class="col-name cell">
+					{{'erp.app.pages.admin.config.config-search' | translate}}
+					<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="optionQuery.Keyword" name="search" color="primary"></ion-icon>
+				</div>
+			</header>
+			<form (submit)="preLoadData(null)" action="#" >
+				<header class="filter">
+					<div class="col-checkbox cell"></div>
+					<div class=" cell">
+						<input [ngModelOptions]="{standalone: true}" [(ngModel)]="optionQuery.Keyword" class="c-input" [ngClass]="{active: optionQuery.Keyword}" type="text">
+						<ion-icon class="min-btn" (click)="optionQuery.Keyword=''; preLoadData(null)" *ngIf="optionQuery.Keyword" name="close-circle-outline"></ion-icon>
+					</div>
+					<button mat-raised-button type="submit" style="display:none">Search</button>
+				</header>
+			</form>
+		</section>
+	</div>
+</ion-header>
+
+<ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
+	<ion-fab *ngIf="pageConfig.isShowFeature" [ngClass]="{withSearch: pageConfig.isShowSearch}" class="feature no-print " vertical="bottom" horizontal="start" slot="fixed">
+		<app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+		<div *ngIf="pageConfig.showSpinner==false">
+			<div class="ion-padding" style="padding-bottom: 0;">
+				<div class="c-control">
+					<label class="c-label" for="IDBranch">
+						<ion-text color="primary">
+							{{'erp.app.pages.admin.config.unit' | translate}}
+						</ion-text>
+					</label>
+					<ng-select class="c-input no-check-dirty" (change)="selectBranch();" appendTo="" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [items]="branchList" bindLabel="Name" bindValue="" placeholder="{{'erp.app.pages.admin.config.unit-placeholder' | translate}}">
+						<ng-template ng-option-tmp let-i="item" let-search="searchTerm">
+							<div *ngIf="i">
+								<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span> <span [ngOptionHighlight]="search">{{i.Name}}</span></div>
+							</div>
+						</ng-template>
+					</ng-select>
+				</div>
+			</div>
+			<div *ngIf="selectedBranch">
+				<ion-list-header lines="full">
+					<ion-label color="dark">{{'erp.app.pages.admin.config.settings' | translate}}</ion-label>
+				</ion-list-header>
+				<ion-list>
+					<ion-item *ngFor="let i of optionGroup" [color]="segmentView == i.Code? 'primary': '' " button detail="true" lines="full" class="clickable" (click)="loadNode(i)">
+						<ion-label class="ion-text-wrap">
+							<h3>{{i.Name}}</h3>
+							<p *ngIf="i.Remark">{{i.Remark}}</p>
+						</ion-label>
+					</ion-item>
+				</ion-list>
+			</div>
+			<div class="ion-padding" style="padding-bottom: 0;"></div>
+		</div>
+	</ion-fab>
+
+	<!-- <app-page-message [itemsLength]="subOptions.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
+	<div class="ion-padding" *ngIf="selectedBranch" style="min-width: 300px;">
+		<app-dynamic-config *ngIf="loadedConfig" [configItem]="configList" [branch]="selectedBranch" [options]="subOptions" (savedConfig)="savedConfig($event)"></app-dynamic-config>
+		<!-- <pre>{{subOptions | json}}</pre>
+		<pre>{{items | json}}</pre> -->
+
+		<!-- <pre>{{subOptions | json}}</pre> -->
+	</div>
+</ion-content>
