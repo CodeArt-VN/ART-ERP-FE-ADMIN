@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { PageBase } from 'src/app/page-base';
 import { EnvService } from 'src/app/services/core/env.service';
-import { CRM_ContactProvider, HRM_StaffProvider, SYS_ConfigProvider, WMS_PriceListProvider } from 'src/app/services/static/services.service';
+import { CRM_ContactProvider, FINANCE_TaxDefinitionProvider, HRM_StaffProvider, SYS_ConfigProvider, WMS_PriceListProvider } from 'src/app/services/static/services.service';
 import { concat, of, Subject } from 'rxjs';
 import { catchError, distinctUntilChanged, switchMap, mergeMap, tap } from 'rxjs/operators';
 import { ApiSetting } from 'src/app/services/static/api-setting';
@@ -18,6 +18,7 @@ import { environment } from 'src/environments/environment';
 export class DynamicConfigComponent extends PageBase {
 	configItems = null;
 	priceList = [];
+	taxDefinitionList = [];
 	selectedBranch;
 	optionList = null;
 	isPreloaded = false;
@@ -43,6 +44,7 @@ export class DynamicConfigComponent extends PageBase {
 	constructor(
 		public pageProvider: SYS_ConfigProvider,
 		public priceListProvider: WMS_PriceListProvider,
+		public taxDefinitionProvider: FINANCE_TaxDefinitionProvider,
 		public staffProvider: HRM_StaffProvider,
 		public contactProvider: CRM_ContactProvider,
 
@@ -59,8 +61,12 @@ export class DynamicConfigComponent extends PageBase {
 	}
 
 	preLoadData(event) {
-		this.priceListProvider.read().then(resp => {
-			this.priceList = resp['data'];
+		Promise.all([
+			this.priceListProvider.read(),
+			this.taxDefinitionProvider.read(),
+		]).then(result=>{
+			this.priceList = result[0]['data'];
+			this.taxDefinitionList = result[1]['data'];
 			this.isPreloaded = true;
 			super.preLoadData(event);
 		});
@@ -143,9 +149,11 @@ export class DynamicConfigComponent extends PageBase {
 										))
 								);
 							}
+							
+							else if(selectOption && selectOption.Model == 'FINANCE_TaxDefinition'){
+								c.items = this.taxDefinitionList.filter(d=>d.Category == selectOption.Category);
+							}
 							else if(selectOption && selectOption.Model == 'WMS_PriceList'){
-								console.log(selectOption, this.priceList);
-								
 								c.items = this.priceList.filter(d=>d.IsPriceListForVendor == selectOption.IsPriceListForVendor);
 							}
 							else if(selectOption && selectOption.Model == 'BRA_Branch'){
