@@ -5,17 +5,17 @@
 			<header class="bold">
 				<div class="col-checkbox cell"></div>
 				<div class="col-name cell" style="padding: 0;">
-					<ion-button style="--padding-start: 2px" (click)="toggleRowAll()" fill="clear" size="small" >
+					<ion-button style="--padding-start: 2px" (click)="toggleRowAll()" fill="clear" size="small">
 						<ion-icon slot="icon-only" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"></ion-icon>
 					</ion-button>
-					{{'erp.app.pages.admin.permission.function' | translate}} <span *ngIf="selectedBranch"> &nbsp; => {{selectedBranch.Name}}  (Id: {{selectedBranch.Id}})</span>
+					{{'erp.app.pages.admin.permission.function' | translate}} <span *ngIf="selectedBranch"> &nbsp; => {{selectedBranch.Name}} (Id: {{selectedBranch.Id}})</span>
 					<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="formQuery.Keyword" name="search" color="primary"></ion-icon>
 				</div>
 			</header>
 			<form (submit)="refresh()" action="#">
 				<header class="filter" *ngIf="pageConfig.isShowSearch">
 					<div class=" cell" style="padding: 0;">
-						<ion-button style="--padding-start: 4px" (click)="showCheckedOnly = !showCheckedOnly" fill="clear" size="small" >
+						<ion-button style="--padding-start: 4px" (click)="showCheckedOnly = !showCheckedOnly" fill="clear" size="small">
 							<ion-icon slot="icon-only" [name]="showCheckedOnly? 'radio-button-on' : 'radio-button-off' "></ion-icon>
 						</ion-button>
 						<input [ngModelOptions]="{standalone: true}" [(ngModel)]="formQuery.Keyword" class="c-input" [ngClass]="{active: formQuery.Keyword}" type="text">
@@ -43,14 +43,15 @@
 						{{'erp.app.pages.admin.permission.unit-job-titble' | translate}}
 					</ion-text>
 				</label>
-				<ng-select class="c-input no-check-dirty" (change)="selectBranch();" appendTo="#ng-select-holder" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [searchFn]="searchShowAllChildren" [items]="env.jobTitleList" [virtualScroll]="true" bindLabel="Name" bindValue="" placeholder="{{'erp.app.pages.admin.permission.unit-placeholder' | translate}}">
+				<ng-select class="c-input no-check-dirty" (change)="selectBranch();" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [searchFn]="searchShowAllChildren" [items]="env.jobTitleList" [virtualScroll]="true" bindLabel="Name" bindValue="" placeholder="{{'erp.app.pages.admin.permission.unit-placeholder' | translate}}">
 					<ng-template ng-option-tmp let-i="item" let-search="searchTerm">
 						<div *ngIf="i">
-							<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span> <ion-text [color]=" i.IDType == 111? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text></div>
+							<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
+								<ion-text [color]=" i.IDType == 111? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text>
+							</div>
 						</div>
 					</ng-template>
 				</ng-select>
-				
 			</div>
 		</div>
 
@@ -66,7 +67,9 @@
 				<ng-select class="c-input multiple" (change)="updateBranch();" appendTo="" #IDBranch labelForId="IDBranch" [items]="env.branchList" [(ngModel)]="selectedBranch.CanViewDataInObject" [multiple]="true" [closeOnSelect]="false" bindLabel="Name" bindValue="Id" placeholder="{{'erp.app.pages.admin.permission.unit-placeholder' | translate}}">
 					<ng-template ng-option-tmp let-i="item" let-i$="item$" let-search="searchTerm">
 						<div *ngIf="i">
-							<div> <input type="checkbox" [ngModel]="i$.selected"/> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span> <ion-text [color]=" i.IDType == 111? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text></div>
+							<div> <input type="checkbox" [ngModel]="i$.selected" /> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
+								<ion-text [color]=" i.IDType == 111? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text>
+							</div>
 						</div>
 					</ng-template>
 				</ng-select>
