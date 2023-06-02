@@ -108,7 +108,7 @@ export class PermissionPage extends PageBase {
 
     isTrackChange = true;
     selectBranch() {
-        if (!this.selectedBranch || this.selectedBranch.IDType != 119) {
+        if (!this.selectedBranch || this.selectedBranch.Type != 'TitlePosition') {
             this.items = [];
             this.isTrackChange = false;
             this.selectedBranch = null;
@@ -213,7 +213,7 @@ export class PermissionPage extends PageBase {
     //                         lib.markNestedNode(e, this.env.selectedBranch);
     //                         for (let idx = 0; idx < e.length; idx++) {
     //                             const i = e[idx];
-    //                             i.disabled = (!i.flag || i.IDType != 119);
+    //                             i.disabled = (!i.flag || i.Type != 'TitlePosition');
     //                         }
     //                         this.branchListSelected = e;
     //                         return lib.buildFlatTree(e, e);

@@ -48,11 +48,11 @@ export class ConfigPage extends PageBase {
         this.subOptions = null;
         Promise.all([
             this.sysConfigOptionProvider.read(this.optionQuery),
-            this.branchProvider.search({ Skip: 0, Take: 5000, IDType: '[114, 115]', Id: this.env.selectedBranchAndChildren }).toPromise(),
+            this.branchProvider.search({ Skip: 0, Take: 5000, Type_ne: 'TitlePosition', Id: this.env.selectedBranchAndChildren }).toPromise(),
         ]).then((values: any) => {
             this.optionGroup = lib.listToTree(values[0]['data']);
 
-            let data = values[1].filter(d => d.IDType != 119)
+            let data = values[1].filter(d => d.Type != 'TitlePosition')
             for (let i = 0; i < data.length; i++) {
                 const it = data[i];
                 it.disabled = true;
