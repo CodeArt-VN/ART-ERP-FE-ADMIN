@@ -11,9 +11,6 @@ import { ShareModule } from 'src/app/share.module';
 
 
 import { FileUploadModule } from 'ng2-file-upload';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
-import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 
 @NgModule({
@@ -24,9 +21,6 @@ import { NgxMaskModule, IConfig } from 'ngx-mask'
     ShareModule,
     ReactiveFormsModule,
     FileUploadModule,
-    NgSelectModule,
-    NgOptionHighlightModule,
-    NgxMaskModule.forRoot(),
     RouterModule.forChild([{ path: '', component: PermissionPage }])
 
   ],

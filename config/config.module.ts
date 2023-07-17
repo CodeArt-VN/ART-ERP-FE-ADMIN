@@ -5,10 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfigPage } from './config.page';
 import { ShareModule } from 'src/app/share.module';
-import { FileUploadModule } from 'ng2-file-upload';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { NgOptionHighlightModule } from '@ng-select/ng-option-highlight';
-import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { FileUploadModule } from 'ng2-file-upload';;
 import { ConfigComponentsModule } from './components/config-components.module';
 
 
@@ -23,9 +20,6 @@ const routes: Routes = [{ path: '', component: ConfigPage }];
     ConfigComponentsModule,
     ReactiveFormsModule,
     FileUploadModule,
-    NgSelectModule,
-    NgOptionHighlightModule,
-    NgxMaskModule.forRoot(),
     RouterModule.forChild(routes)
   ],
   declarations: [ConfigPage]
