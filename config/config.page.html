@@ -9,7 +9,7 @@
 					<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="optionQuery.Keyword" name="search" color="primary"></ion-icon>
 				</div>
 			</header>
-			<form (submit)="preLoadData(null)" action="#" >
+			<form (submit)="preLoadData(null)" action="#">
 				<header class="filter">
 					<div class="col-checkbox cell"></div>
 					<div class=" cell">
@@ -37,7 +37,7 @@
 					<ng-select class="c-input no-check-dirty" (change)="selectBranch();" appendTo="" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [items]="branchList" bindLabel="Name" bindValue="" placeholder="{{'erp.app.pages.admin.config.unit-placeholder' | translate}}">
 						<ng-template ng-option-tmp let-i="item" let-search="searchTerm">
 							<div *ngIf="i">
-								<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span> <span [ngOptionHighlight]="search">{{i.Name}}</span></div>
+								<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span> <ion-text [color]=" i.Type == 'Company'? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text></div>
 							</div>
 						</ng-template>
 					</ng-select>
@@ -59,13 +59,15 @@
 			<div class="ion-padding" style="padding-bottom: 0;"></div>
 		</div>
 	</ion-fab>
-
-	<!-- <app-page-message [itemsLength]="subOptions.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
-	<div class="ion-padding" *ngIf="selectedBranch" style="min-width: 300px;">
-		<app-dynamic-config *ngIf="loadedConfig" [configItem]="configList" [branch]="selectedBranch" [options]="subOptions" (savedConfig)="savedConfig($event)"></app-dynamic-config>
-		<!-- <pre>{{subOptions | json}}</pre>
-		<pre>{{items | json}}</pre> -->
-
-		<!-- <pre>{{subOptions | json}}</pre> -->
-	</div>
+	<ion-grid fixed>
+		<ion-row>
+			<ion-col size="12">
+				<div class="ion-padding" *ngIf="selectedBranch" style="min-width: 300px;">
+					<app-page-title *ngIf="selectedOption" icon="cog-outline" color="primary" [title]="selectedOption.Name" [remark]="selectedOption.Remark"></app-page-title>
+					<app-dynamic-config *ngIf="loadedConfig" [configItem]="configList" [branch]="selectedBranch" [options]="subOptions" (savedConfig)="savedConfig($event)"></app-dynamic-config>
+				</div>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+	
 </ion-content>

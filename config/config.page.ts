@@ -48,30 +48,39 @@ export class ConfigPage extends PageBase {
         this.subOptions = null;
         Promise.all([
             this.sysConfigOptionProvider.read(this.optionQuery),
-            this.branchProvider.search({ Skip: 0, Take: 5000, Type_ne: 'TitlePosition', Id: this.env.selectedBranchAndChildren }).toPromise(),
+            
+            // this.branchProvider.search({ Skip: 0, Take: 5000, Type_ne: 'TitlePosition', Id: this.env.selectedBranchAndChildren }).toPromise(),
         ]).then((values: any) => {
             this.optionGroup = lib.listToTree(values[0]['data']);
 
-            let data = values[1].filter(d => d.Type != 'TitlePosition')
-            for (let i = 0; i < data.length; i++) {
-                const it = data[i];
-                it.disabled = true;
+            
+            this.branchList = this.env.branchList;
+            this.selectedBranch = this.branchList.find(d => d.Id == this.id);
+            if (!this.selectedBranch || this.selectedBranch.disabled) {
+                this.selectedBranch = this.branchList.find(d => d.disabled == false);
             }
-            lib.buildFlatTree(data, this.branchList).then((result: any) => {
-                this.branchList = result;
+            super.preLoadData(event);
 
-                let sb = this.branchList.find(d => d.Id == this.env.selectedBranch);
-                if (sb) {
-                    sb.disabled = false;
-                }
-                lib.markNestedNode(this.branchList, this.env.selectedBranch, 'disabled', true);
+            // let data = values[1].filter(d => d.Type != 'TitlePosition')
+            // for (let i = 0; i < data.length; i++) {
+            //     const it = data[i];
+            //     it.disabled = true;
+            // }
+            // lib.buildFlatTree(data, this.branchList).then((result: any) => {
+            //     this.branchList = result;
 
-                this.selectedBranch = this.branchList.find(d => d.Id == this.id);
-                if (!this.selectedBranch || this.selectedBranch.disabled) {
-                    this.selectedBranch = this.branchList.find(d => d.disabled == false);
-                }
-                super.preLoadData(event);
-            });
+            //     let sb = this.branchList.find(d => d.Id == this.env.selectedBranch);
+            //     if (sb) {
+            //         sb.disabled = false;
+            //     }
+            //     lib.markNestedNode(this.branchList, this.env.selectedBranch, 'disabled', true);
+
+            //     this.selectedBranch = this.branchList.find(d => d.Id == this.id);
+            //     if (!this.selectedBranch || this.selectedBranch.disabled) {
+            //         this.selectedBranch = this.branchList.find(d => d.disabled == false);
+            //     }
+            //     super.preLoadData(event);
+            // });
         });
     }
 
@@ -99,6 +108,8 @@ export class ConfigPage extends PageBase {
         this.loadNode();
     }
 
+    selectedOption = null;
+
     loadNode(option = null) {
         if (!option && this.segmentView) {
             option = this.optionGroup.find(d => d.Code == this.segmentView);
@@ -111,6 +122,8 @@ export class ConfigPage extends PageBase {
         if (!option) {
             return;
         }
+
+        this.selectedOption = option;
 
         this.segmentView = option.Code;
         this.subOptions = option.children;

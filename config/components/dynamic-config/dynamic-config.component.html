@@ -1,6 +1,6 @@
 <app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 <div class="main-view" *ngIf="pageConfig.showSpinner==false">
-	<div class="row-full shadow full-screen ion-padding" style="min-height: calc(100vh - 100px);" *ngIf="optionList">
+	<div class="row-full shadow full-screen ion-padding" *ngIf="optionList">
 		<ion-grid fixed>
 			<app-group-control [title]="o.Name" [fields]="o.children" (onChange)="saveChange($event)" [hideBorder]="idx==optionList.length-1" *ngFor="let o of optionList; let idx = index;">
 				<ion-item class="ion-no-padding" *ngIf="o.Remark">
@@ -8,22 +8,6 @@
 						{{o.Remark}}
 					</ion-label>
 				</ion-item>
-				
-				<!-- <ion-item class="ion-no-padding">
-					<ion-label color="medium" class="ion-text-wrap">
-						Để nâng cao bảo mật - bảo vệ tài khoản, bạn nên dùng mật khẩu có:
-						<ul>
-							<li>Độ dài từ 8 ký tự trở lên</li>
-							<li>Có ít nhất một ký tự là:<ul>
-									<li>Số</li>
-									<li>Chữ hoa</li>
-									<li>Chữ thường</li>
-									<li>Ký tự đặc biệt</li>
-								</ul>
-							</li>
-						</ul>
-					</ion-label>
-				</ion-item> -->
 			</app-group-control>
 		</ion-grid>
 	</div>

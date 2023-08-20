@@ -57,7 +57,7 @@ export class PriceListDetailPage extends PageBase {
             Name: ['', Validators.required],
             Remark: [''],
             Sort: [''],
-            IsDisabled: [''],
+            IsDisabled: new FormControl({ value: '', disabled: true }),
             IsPriceListForVendor: [''],
             IsTaxIncluded: [''],
 
