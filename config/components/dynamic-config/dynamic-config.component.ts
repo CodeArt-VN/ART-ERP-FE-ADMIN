@@ -243,11 +243,20 @@ export class DynamicConfigComponent extends PageBase {
 	}
 
 	saveChange(config) {
-		console.log(config);
+
+		if(!(config['Value'] == null || config['Value'] == 'null') && !config.__InheritedConfig){
+			config.__InheritedConfig = config._InheritedConfig;
+			delete config._InheritedConfig;
+		}
+		else if((config['Value'] == null || config['Value'] == 'null') && !config._InheritedConfig){
+			config._InheritedConfig = config.__InheritedConfig;
+			delete config.__InheritedConfig;
+		}
 
 		return new Promise((resolve, reject) => {
 			config.Value = JSON.stringify(config.ValueObject);
 			this.pageProvider.save(config).then((resp => {
+
 				config.Id = resp['Id'];
 				this.env.showTranslateMessage('erp.app.pages.admin.config.save-complete','success');
 				this.emit('savedConfig', this.configItems);

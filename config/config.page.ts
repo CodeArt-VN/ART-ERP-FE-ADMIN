@@ -27,7 +27,7 @@ export class ConfigPage extends PageBase {
         public sysConfigOptionProvider: SYS_ConfigOptionProvider,
         public branchProvider: BRA_BranchProvider,
         public modalController: ModalController,
-		public popoverCtrl: PopoverController,
+        public popoverCtrl: PopoverController,
         public alertCtrl: AlertController,
         public loadingController: LoadingController,
         public env: EnvService,
@@ -45,62 +45,58 @@ export class ConfigPage extends PageBase {
     optionQuery = { Keyword: '', AllChildren: true, AllParent: true };
 
     preLoadData(event) {
-        this.subOptions = null;
         Promise.all([
             this.sysConfigOptionProvider.read(this.optionQuery),
-            
-            // this.branchProvider.search({ Skip: 0, Take: 5000, Type_ne: 'TitlePosition', Id: this.env.selectedBranchAndChildren }).toPromise(),
         ]).then((values: any) => {
-            this.optionGroup = lib.listToTree(values[0]['data']);
 
-            
+            this.optionGroup = lib.listToTree(values[0]['data']);
             this.branchList = this.env.branchList;
             this.selectedBranch = this.branchList.find(d => d.Id == this.id);
             if (!this.selectedBranch || this.selectedBranch.disabled) {
                 this.selectedBranch = this.branchList.find(d => d.disabled == false);
             }
-            super.preLoadData(event);
+            super.loadedData(event);
 
-            // let data = values[1].filter(d => d.Type != 'TitlePosition')
-            // for (let i = 0; i < data.length; i++) {
-            //     const it = data[i];
-            //     it.disabled = true;
-            // }
-            // lib.buildFlatTree(data, this.branchList).then((result: any) => {
-            //     this.branchList = result;
-
-            //     let sb = this.branchList.find(d => d.Id == this.env.selectedBranch);
-            //     if (sb) {
-            //         sb.disabled = false;
-            //     }
-            //     lib.markNestedNode(this.branchList, this.env.selectedBranch, 'disabled', true);
-
-            //     this.selectedBranch = this.branchList.find(d => d.Id == this.id);
-            //     if (!this.selectedBranch || this.selectedBranch.disabled) {
-            //         this.selectedBranch = this.branchList.find(d => d.disabled == false);
-            //     }
-            //     super.preLoadData(event);
-            // });
+            setTimeout(() => {
+                this.loadNode();
+            }, 0);
         });
     }
 
-    
     loadData(event) {
-        if (this.selectedBranch) {
+        if (this.selectedBranch && this.subOptions) {
+            this.query.Code_in = this.subOptions.flatMap(a => a.children).map(m => m.Code);
             this.query.IDBranch = this.selectedBranch.Id;
-            this.pageProvider.read(this.query).then(resp => {
-                this.items = resp['data'];
-                this.loadedConfig = true;
-                this.loadedData(event);
-            });
+            this.env.showLoading('Please wait a moment!', this.pageProvider.read(this.query))
+                .then(resp => {
+                    this.items = resp['data'];
+                    this.loadedConfig = true;
+                    this.loadedData(event);
+                });
+        }
+        else {
+            console.log('The branch not found');
         }
     }
 
     configList = [];
     loadedData(event) {
         this.configList = [...this.items];
+        this.configList.forEach(c => {
+            if (!c.IDBranch) {
+                c.IDBranch = this.selectedBranch.Id;
+            }
+            if (c._InheritedConfig) {
+                if (c.Value == null || c.Value == 'null') {
+                    c.Value = c._InheritedConfig.Value;
+                }
+
+                c._InheritedConfig._Branches = this.env.branchList;
+            }
+        })
+
+
         super.loadedData(event);
-        this.loadNode();
     }
 
     selectBranch() {
@@ -133,6 +129,8 @@ export class ConfigPage extends PageBase {
             newURL += option.Code + '/' + this.selectedBranch.Id;
         }
         history.pushState({}, null, newURL);
+
+        this.loadData(null);
     }
 
     saveChange(e) {
