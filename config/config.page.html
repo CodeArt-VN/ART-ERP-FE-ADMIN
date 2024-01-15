@@ -63,7 +63,7 @@
 		<ion-row>
 			<ion-col size="12">
 				<div class="ion-padding" *ngIf="selectedBranch" style="min-width: 300px;">
-					<app-page-title *ngIf="selectedOption" icon="cog-outline" color="primary" [title]="selectedOption.Name" [remark]="selectedOption.Remark"></app-page-title>
+					<app-page-title class="ion-margin-bottom" *ngIf="selectedOption" icon="cog-outline" color="primary" [title]="selectedOption.Name" [remark]="selectedOption.Remark"></app-page-title>
 					<app-dynamic-config *ngIf="loadedConfig" [configItem]="configList" [branch]="selectedBranch" [options]="subOptions" (savedConfig)="savedConfig($event)"></app-dynamic-config>
 				</div>
 			</ion-col>
