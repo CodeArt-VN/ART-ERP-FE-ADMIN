@@ -31,6 +31,7 @@ export class FormPage extends PageBase {
         this.query.AllChildren = true;
         this.query.AllParent = true;
         
+        this.pageConfig.canCopy = true;
     }
 
     loadedData(event) {
@@ -74,6 +75,23 @@ export class FormPage extends PageBase {
             IsDisabled: false,
         };
         this.showModal(newItem);
+    }
+
+    async copy() {    
+        const modal = await this.modalController.create({
+            component: FormDetailPage,
+            componentProps: {
+                items : this.itemsState,
+                item: {
+                    Id: 0,
+                    IsDisabled: false,
+                },
+                copyFrom:  this.selectedItems[0],
+                id: 0,
+            },
+            cssClass: 'my-custom-class'
+        });
+        return await modal.present();
     }
 
 }
