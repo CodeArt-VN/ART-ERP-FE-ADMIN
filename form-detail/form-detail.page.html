@@ -48,6 +48,12 @@
                         </select>
                     </div>
 
+                    <div class="c-control" *ngIf="item.HasChild && navParams.data.copyFrom">
+                        <label class="c-label" for="Type">{{'Chức năng con' | translate}}
+                        </label>
+                        <input (click)="chooseChild($event)" class="c-checkbox" style="border: 1px solid #c7c9cb;" id="IsCopyChildren"  type="checkbox">
+                    </div>
+
                 </ion-col>
                 <ion-col>
                     <div class="c-control">

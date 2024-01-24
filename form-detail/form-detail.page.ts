@@ -51,7 +51,9 @@ export class FormDetailPage extends PageBase {
             Icon: [''],
             APIs: [''],
             Sort: [''],
-            BadgeColor: ['']
+            BadgeColor: [''],
+            IsCopyChildren: [''],
+            IDOriginal: ['']
         });
     }
 
@@ -71,6 +73,15 @@ export class FormDetailPage extends PageBase {
             })
 
             this.item = JSON.parse(JSON.stringify(this.navParams.data.item));
+            if(this.navParams.data.copyFrom){
+                this.item = JSON.parse(JSON.stringify(this.navParams.data.copyFrom));
+                this.formGroup.controls.IDOriginal.setValue(this.item.Id);
+                this.formGroup.controls.IDOriginal.markAsDirty();
+                this.formGroup.controls.IsCopyChildren.setValue(false);
+                this.formGroup.controls.IsCopyChildren.markAsDirty();
+                this.item.Id = 0;
+            }
+            
             this.id = this.navParams.data.id;
 
             this.removeCurrentNode();
@@ -105,4 +116,11 @@ export class FormDetailPage extends PageBase {
         });
     }
 
+    chooseChild(e) {
+        if(e.target.checked){
+            this.formGroup.controls.IsCopyChildren.setValue(true);
+        }else {
+            this.formGroup.controls.IsCopyChildren.setValue(false);
+        }
+    }
 }
