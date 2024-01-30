@@ -48,12 +48,14 @@ export class FormDetailPage extends PageBase {
             Code: [''],
             Name: ['', Validators.required],
             Remark: [''],
-            Icon: [''],
+            Icon: [{ value: '', disabled: true }],
             APIs: [''],
             Sort: [''],
-            BadgeColor: [''],
+            BadgeColor: [{ value: '', disabled: true }],
             IsCopyChildren: [''],
-            IDOriginal: ['']
+            IDOriginal: [''],
+            IsColorModalOpened: [{ value: false, disabled: true }],
+            IsIconModalOpened: [{ value: false, disabled: true }],
         });
     }
 
@@ -123,4 +125,26 @@ export class FormDetailPage extends PageBase {
             this.formGroup.controls.IsCopyChildren.setValue(false);
         }
     }
+
+    onSelectColor(e, fg) {
+        fg.get('BadgeColor').setValue(e.Code);
+        fg.get('IsColorModalOpened').setValue(false);
+        fg.get('BadgeColor').markAsDirty();
+        this.item.BadgeColor = e.Code;
+        if(!this.navParams.data.copyFrom){
+            this.saveChange();
+        }
+        
+    }
+
+    onSelectIcon(e, fg) {
+        fg.get('Icon').setValue(e.Name);
+        fg.get('IsIconModalOpened').setValue(false);
+        fg.get('Icon').markAsDirty();
+        this.item.Icon = e.Name;
+        if(!this.navParams.data.copyFrom){
+            this.saveChange();
+        }
+    }
+    
 }

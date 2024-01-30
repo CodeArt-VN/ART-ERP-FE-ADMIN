@@ -67,12 +67,35 @@
                     <div class="c-control">
                         <label class="c-label" for="Code">{{'erp.app.pages.admin.form.icon' | translate}}
                             <ion-icon [name]="formGroup.controls.Icon.value"></ion-icon>
+                            <small label>
+                                <a class="clickable" (click)="formGroup.get('IsIconModalOpened').setValue(true)">{{'Change icon' |
+                                    translate}}</a>
+                                <ion-modal #modal [isOpen]="formGroup.get('IsColorModalOpened').value" (willDismiss)="formGroup.get('IsColorModalOpened').setValue(false); " [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+                                    <ng-template>
+                                        <ion-content>
+                                            <app-color-picker (selected)="onSelectColor($event,formGroup)"></app-color-picker>
+                                        </ion-content>
+                                    </ng-template>
+                                </ion-modal>
+                            </small>
                         </label>
-                        <input class="c-input" id="Icon" formControlName="Icon" type="text">
+                        <input class="c-input" id="Icon" formControlName="Icon" type="text">        
                     </div>
 
                     <div class="c-control">
-                        <label class="c-label" for="Code">{{'erp.app.pages.admin.form.badge-color' | translate}}</label>
+                        <label class="c-label" for="Code">{{'erp.app.pages.admin.form.badge-color' | translate}}
+                            <small label>
+                                <a class="clickable" (click)="formGroup.get('IsColorModalOpened').setValue(true)">{{'Change badge color' |
+                                    translate}}</a>
+                                <ion-modal #modal [isOpen]="formGroup.get('IsIconModalOpened').value" (willDismiss)="formGroup.get('IsIconModalOpened').setValue(false); " [initialBreakpoint]="0.5" [breakpoints]="[0, 0.25, 0.5, 0.75]">
+                                    <ng-template>
+                                        <ion-content>
+                                            <app-icon-picker (selected)="onSelectIcon($event,formGroup)" [color]="formGroup.get('BadgeColor').value" ></app-icon-picker>
+                                        </ion-content>
+                                    </ng-template>
+                                </ion-modal>
+                            </small>
+                        </label>
                         <input class="c-input" id="BadgeColor" formControlName="BadgeColor" type="text">
                     </div>
                     
