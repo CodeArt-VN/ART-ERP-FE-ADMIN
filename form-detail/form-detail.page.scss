@@ -1,0 +1,38 @@
+.c-input{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .no-padding{
+        --padding-start: 0;
+        --padding-end: 0;
+    }
+}
+.content-btn ion-icon{
+    display:none;
+}
+.content-btn:hover > ion-icon{
+    display:block;
+}
+.color-dot {
+    margin-inline-end: 1rem;
+}
+.colorDot {
+    border-radius: 1000px;
+    height: 2rem;
+    width: 2rem
+}
+.colorDotLight {
+    border: 1px solid #e4e4e4;
+}
+.colorPicker {
+    cursor: pointer;
+    height: 100%;
+    opacity: 0;
+    width: 100%;
+}
+.c-color-modal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}

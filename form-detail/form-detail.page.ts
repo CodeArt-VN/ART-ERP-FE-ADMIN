@@ -25,6 +25,28 @@ export class FormDetailPage extends PageBase {
 
     ];
 
+    colorList = [
+		{Code:"primary", Name: "Primary", BaseColor: "#005ce6"},
+		{Code:"secondary", Name: "Secondary", BaseColor: "#e1150b"},
+		{Code:"tertiary", Name: "Tertiary", BaseColor: "#ffffff"},
+
+		{Code:"success", Name: "Success", BaseColor: "#2dd36f"},
+		{Code:"warning", Name: "Warning", BaseColor: "#ffc409"},
+		{Code:"danger", Name: "Danger", BaseColor: "#eb445a"},
+
+		{Code:"red", Name: "Red", BaseColor: "#f44336"},
+		{Code:"pink", Name: "Pink", BaseColor: "#e91e63"},
+		{Code:"purple", Name: "Purple", BaseColor: "#9c27b0"},
+
+    	{Code:"blue", Name: "Blue", BaseColor: "#03a9f4"},
+		{Code:"bluegreen", Name: "Bluegreen", BaseColor: "#00bcd4"},
+
+		{Code:"dark", Name: "Dark", BaseColor: "#26292c"},
+		{Code:"medium", Name: "Medium", BaseColor: "#394951"},
+		{Code:"light", Name: "Light", BaseColor: "#f4f5f8"},
+
+	];
+
     constructor(
         public pageProvider: SYS_FormProvider,
         public env: EnvService,
@@ -48,14 +70,15 @@ export class FormDetailPage extends PageBase {
             Code: [''],
             Name: ['', Validators.required],
             Remark: [''],
-            Icon: [{ value: '', disabled: true }],
+            Icon: [''],
             APIs: [''],
             Sort: [''],
-            BadgeColor: [{ value: '', disabled: true }],
+            BadgeColor: [''],
             IsCopyChildren: [''],
             IDOriginal: [''],
             IsColorModalOpened: [{ value: false, disabled: true }],
             IsIconModalOpened: [{ value: false, disabled: true }],
+            BaseColor: [{ value: '', disabled: true }],
         });
     }
 
@@ -82,6 +105,10 @@ export class FormDetailPage extends PageBase {
                 this.formGroup.controls.IsCopyChildren.setValue(false);
                 this.formGroup.controls.IsCopyChildren.markAsDirty();
                 this.item.Id = 0;
+            }
+            if(this.item.BadgeColor) {
+                let bgColor = this.colorList.find((color) => color.Code === this.item.BadgeColor);
+                this.formGroup.get('BaseColor').setValue(bgColor.BaseColor);
             }
             
             this.id = this.navParams.data.id;
@@ -130,7 +157,7 @@ export class FormDetailPage extends PageBase {
         fg.get('BadgeColor').setValue(e.Code);
         fg.get('IsColorModalOpened').setValue(false);
         fg.get('BadgeColor').markAsDirty();
-        this.item.BadgeColor = e.Code;
+        fg.get('BaseColor').setValue(e.BaseColor);
         if(!this.navParams.data.copyFrom){
             this.saveChange();
         }
@@ -141,10 +168,24 @@ export class FormDetailPage extends PageBase {
         fg.get('Icon').setValue(e.Name);
         fg.get('IsIconModalOpened').setValue(false);
         fg.get('Icon').markAsDirty();
-        this.item.Icon = e.Name;
         if(!this.navParams.data.copyFrom){
             this.saveChange();
         }
     }
-    
+
+    async saveChange() {
+        if (this.navParams.data.copyFrom) {
+          this.markAllFormAsDirty();
+        }
+        super.saveChange2();
+    }
+
+    markAllFormAsDirty() {
+        this.formGroup.markAsDirty();
+        Object.keys(this.formGroup.controls).forEach(controlName => {
+          const control = this.formGroup.get(controlName);
+          control.markAsDirty();
+        });
+    }
+
 }
