@@ -25,28 +25,6 @@ export class FormDetailPage extends PageBase {
 
     ];
 
-    colorList = [
-		{Code:"primary", Name: "Primary", BaseColor: "#005ce6"},
-		{Code:"secondary", Name: "Secondary", BaseColor: "#e1150b"},
-		{Code:"tertiary", Name: "Tertiary", BaseColor: "#ffffff"},
-
-		{Code:"success", Name: "Success", BaseColor: "#2dd36f"},
-		{Code:"warning", Name: "Warning", BaseColor: "#ffc409"},
-		{Code:"danger", Name: "Danger", BaseColor: "#eb445a"},
-
-		{Code:"red", Name: "Red", BaseColor: "#f44336"},
-		{Code:"pink", Name: "Pink", BaseColor: "#e91e63"},
-		{Code:"purple", Name: "Purple", BaseColor: "#9c27b0"},
-
-    	{Code:"blue", Name: "Blue", BaseColor: "#03a9f4"},
-		{Code:"bluegreen", Name: "Bluegreen", BaseColor: "#00bcd4"},
-
-		{Code:"dark", Name: "Dark", BaseColor: "#26292c"},
-		{Code:"medium", Name: "Medium", BaseColor: "#394951"},
-		{Code:"light", Name: "Light", BaseColor: "#f4f5f8"},
-
-	];
-
     constructor(
         public pageProvider: SYS_FormProvider,
         public env: EnvService,
@@ -107,8 +85,7 @@ export class FormDetailPage extends PageBase {
                 this.item.Id = 0;
             }
             if(this.item.BadgeColor) {
-                let bgColor = this.colorList.find((color) => color.Code === this.item.BadgeColor);
-                this.formGroup.get('BaseColor').setValue(bgColor.BaseColor);
+                this.formGroup.get('BadgeColor').setValue(this.item.BadgeColor);
             }
             
             this.id = this.navParams.data.id;
