@@ -53,7 +53,10 @@ export class FormDetailPage extends PageBase {
             Sort: [''],
             BadgeColor: [''],
             IsCopyChildren: [''],
-            IDOriginal: ['']
+            IDOriginal: [''],
+            IsColorModalOpened: [{ value: false, disabled: true }],
+            IsIconModalOpened: [{ value: false, disabled: true }],
+            BaseColor: [{ value: '', disabled: true }],
         });
     }
 
@@ -80,6 +83,9 @@ export class FormDetailPage extends PageBase {
                 this.formGroup.controls.IsCopyChildren.setValue(false);
                 this.formGroup.controls.IsCopyChildren.markAsDirty();
                 this.item.Id = 0;
+            }
+            if(this.item.BadgeColor) {
+                this.formGroup.get('BadgeColor').setValue(this.item.BadgeColor);
             }
             
             this.id = this.navParams.data.id;
@@ -123,4 +129,40 @@ export class FormDetailPage extends PageBase {
             this.formGroup.controls.IsCopyChildren.setValue(false);
         }
     }
+
+    onSelectColor(e, fg) {
+        fg.get('BadgeColor').setValue(e.Code);
+        fg.get('IsColorModalOpened').setValue(false);
+        fg.get('BadgeColor').markAsDirty();
+        fg.get('BaseColor').setValue(e.BaseColor);
+        if(!this.navParams.data.copyFrom){
+            this.saveChange();
+        }
+        
+    }
+
+    onSelectIcon(e, fg) {
+        fg.get('Icon').setValue(e.Name);
+        fg.get('IsIconModalOpened').setValue(false);
+        fg.get('Icon').markAsDirty();
+        if(!this.navParams.data.copyFrom){
+            this.saveChange();
+        }
+    }
+
+    async saveChange() {
+        if (this.navParams.data.copyFrom) {
+          this.markAllFormAsDirty();
+        }
+        super.saveChange2();
+    }
+
+    markAllFormAsDirty() {
+        this.formGroup.markAsDirty();
+        Object.keys(this.formGroup.controls).forEach(controlName => {
+          const control = this.formGroup.get(controlName);
+          control.markAsDirty();
+        });
+    }
+
 }

@@ -1,0 +1,30 @@
+.c-input{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .no-padding{
+        --padding-start: 0;
+        --padding-end: 0;
+    }
+}
+.content-btn ion-icon{
+    display:none;
+}
+.content-btn:hover > ion-icon{
+    display:block;
+}
+.colorPicker {
+    cursor: pointer;
+    height: 100%;
+    opacity: 0;
+    width: 100%;
+}
+.c-color-modal {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+ion-popover {
+    --width: 300px;
+}
