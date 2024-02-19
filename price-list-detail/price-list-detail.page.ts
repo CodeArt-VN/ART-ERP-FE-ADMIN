@@ -184,7 +184,7 @@ export class PriceListDetailPage extends PageBase {
                         this.priceListVersion.delete(Ids).then(resp => {
                             groups.removeAt(index);
                             this.env.publishEvent({ Code: this.pageConfig.pageName });
-                            this.env.showTranslateMessage('erp.app.pages.admin.pricelist.comment.delete-complete', 'success');
+                            this.env.showTranslateMessage('Deleted!', 'success');
                         });
                     }
                 }
@@ -258,14 +258,14 @@ export class PriceListDetailPage extends PageBase {
             p.Price1 = resp['Price1'];
             p.Price2 = resp['Price2'];
 
-            this.env.showTranslateMessage('erp.app.pages.admin.pricelist.comment.save-change-complete', 'success');
+            this.env.showTranslateMessage('Changes saved', 'success');
         });
     }
 
     reCalcPrice() {
         let apiPath = { method: "POST", url: function () { return ApiSetting.apiDomain("WMS/PriceList/ReCalcPrice") } };
         this.pageProvider.commonService.connect(apiPath.method, apiPath.url(), this.item).toPromise().then((data: any) => {
-            this.env.showTranslateMessage('erp.app.pages.admin.pricelist.comment.save-change-complete', 'success');
+            this.env.showTranslateMessage('Changes saved', 'success');
             this.loadItemsPrice();
         });
     }
@@ -333,7 +333,7 @@ export class PriceListDetailPage extends PageBase {
                         })
                     }
                     else {
-                        this.env.showTranslateMessage('erp.app.pages.admin.pricelist.comment.import-complete', 'success');
+                        this.env.showTranslateMessage('Import completed!', 'success');
                         this.env.publishEvent({ Code: this.pageConfig.pageName });
                     }
                 })
@@ -414,7 +414,7 @@ export class PriceListDetailPage extends PageBase {
                             p.Price1 = 0;
                             p.Price2 = 0;
                             p.IsManual = false;
-                            this.env.showTranslateMessage('erp.app.pages.admin.pricelist.comment.save-change-complete', 'success');
+                            this.env.showTranslateMessage('Changes saved', 'success');
                         });
                     }
                 }]

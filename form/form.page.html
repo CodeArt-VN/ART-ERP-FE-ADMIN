@@ -1,16 +1,16 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.admin.form.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (copy)="copy()"></app-list-toolbar>
+	<app-list-toolbar pageTitle="{{'System function' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (copy)="copy()"></app-list-toolbar>
 
 	<section class="table">
 		<header class="bold">
 			<div class="col-checkbox cell"></div>
 			<div class="col-name cell" (click)="toggleRowAll()">
 				<ion-icon class="min-btn" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"></ion-icon>
-				{{'erp.app.pages.admin.form.name' | translate}}
+				{{'Name' | translate}}
 				<ion-icon *ngIf="sort.Name" [name]="sort.Name == 'Name'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Keyword" name="search" color="primary"></ion-icon>
 			</div>
-			<div class="col-code cell">{{'erp.app.pages.admin.form.code' | translate}}
+			<div class="col-code cell">{{'Code' | translate}}
 				<ion-icon *ngIf="sort.Code" [name]="sort.Code == 'Code'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Code" name="search" color="primary"></ion-icon>
 			</div>

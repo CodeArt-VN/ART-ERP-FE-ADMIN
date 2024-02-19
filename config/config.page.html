@@ -1,11 +1,11 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'erp.app.pages.admin.config.page-title' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [ShowArchive]="false" [query]="optionQuery" (refresh)="refresh()" (help)="help()"></app-list-toolbar>
+	<app-list-toolbar pageTitle="{{'Configuration' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [ShowArchive]="false" [query]="optionQuery" (refresh)="refresh()" (help)="help()"></app-list-toolbar>
 	<div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}" *ngIf="pageConfig.isShowSearch">
 		<section class="table">
 			<header class="bold">
 				<div class="col-checkbox cell"></div>
 				<div class="col-name cell">
-					{{'erp.app.pages.admin.config.config-search' | translate}}
+					{{'Search confirguration' | translate}}
 					<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="optionQuery.Keyword" name="search" color="primary"></ion-icon>
 				</div>
 			</header>
@@ -31,10 +31,10 @@
 				<div class="c-control">
 					<label class="c-label" for="IDBranch">
 						<ion-text color="primary">
-							{{'erp.app.pages.admin.config.unit' | translate}}
+							{{'Unit' | translate}}
 						</ion-text>
 					</label>
-					<ng-select class="c-input no-check-dirty" [searchFn]="searchShowAllChildren" (change)="selectBranch();" appendTo="" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [items]="branchList" bindLabel="Name" bindValue="" placeholder="{{'erp.app.pages.admin.config.unit-placeholder' | translate}}">
+					<ng-select class="c-input no-check-dirty" [searchFn]="searchShowAllChildren" (change)="selectBranch();" appendTo="" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [items]="branchList" bindLabel="Name" bindValue="" placeholder="{{'Select unit' | translate}}">
 						<ng-template ng-option-tmp let-i="item" let-search="searchTerm">
 							<div *ngIf="i">
 								<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span> <ion-text [color]=" i.Type == 'Company'? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text></div>
@@ -45,7 +45,7 @@
 			</div>
 			<div *ngIf="selectedBranch">
 				<ion-list-header lines="full">
-					<ion-label color="dark">{{'erp.app.pages.admin.config.settings' | translate}}</ion-label>
+					<ion-label color="dark">{{'Settings' | translate}}</ion-label>
 				</ion-list-header>
 				<ion-list>
 					<ion-item *ngFor="let i of optionGroup" [color]="segmentView == i.Code? 'primary': '' " button detail="true" lines="full" class="clickable" (click)="loadNode(i)">

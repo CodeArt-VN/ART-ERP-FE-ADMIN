@@ -3,7 +3,7 @@
         <ion-title>{{item.Name}}</ion-title>
 
         <ion-buttons slot="primary">
-            <ion-button title="{{'erp.app.pages.admin.form.close-modal' | translate}}" color="secondary" (click)="closeModal()">
+            <ion-button title="{{'Close' | translate}}" color="secondary" (click)="closeModal()">
                 <ion-icon slot="icon-only" name="close"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -20,90 +20,52 @@
                         <input class="c-input" id="Id" formControlName="Id" type="text">
                     </div> -->
                     <div class="c-control">
-                        <label class="c-label" for="Name">{{'erp.app.pages.admin.form.name-detail' | translate}}
+                        <label class="c-label" for="Name">{{'Function' | translate}}
                             <span *ngIf="!formGroup.controls.Name.valid && !formGroup.controls.Name.pending && (formGroup.controls.Name.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                         </label>
                         <input class="c-input" id="Name" formControlName="Name" type="text">
                     </div>
                     <div class="c-control">
-                        <label class="c-label" for="IDParent">{{'erp.app.pages.admin.form.id-parent' | translate}}
+                        <label class="c-label" for="IDParent">{{'Belonged to' | translate}}
                             <span *ngIf="!formGroup.controls.IDParent.valid && !formGroup.controls.IDParent.pending && (formGroup.controls.IDParent.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                         </label>
-                        <select class="c-input c-dropdown" formControlName="IDParent" >
-                            <option [ngValue]="null">{{'erp.app.pages.admin.form.root' | translate}}</option>
-                            <ng-container *ngFor="let t of items" >
+                        <select class="c-input c-dropdown" formControlName="IDParent">
+                            <option [ngValue]="null">{{'Root' | translate}}</option>
+                            <ng-container *ngFor="let t of items">
 
                                 <option *ngIf="t.Type != 3 " [disabled]="t.Flag" [value]="t.Id">{{t.Name}}</option>
                             </ng-container>
-                            
+
                         </select>
                     </div>
 
                     <div class="c-control">
-                        <label class="c-label" for="Type">{{'erp.app.pages.admin.form.type' | translate}}
+                        <label class="c-label" for="Type">{{'Type' | translate}}
                             <span *ngIf="!formGroup.controls.Type.valid && !formGroup.controls.Type.pending && (formGroup.controls.Type.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                         </label>
-                        <select class="c-input c-dropdown" formControlName="Type" >
+                        <select class="c-input c-dropdown" formControlName="Type">
                             <option *ngFor="let t of typeList" [value]="t.Id">{{t.Name}}</option>
                         </select>
                     </div>
 
                     <div class="c-control" *ngIf="item.HasChild && navParams.data.copyFrom">
-                        <label class="c-label" for="Type">{{'Chức năng con' | translate}}
+                        <label class="c-label" for="IsCopyChildren">{{'Copy children' | translate}}
                         </label>
-                        <input (click)="chooseChild($event)" class="c-checkbox" style="border: 1px solid #c7c9cb;" id="IsCopyChildren"  type="checkbox">
+                        <input (click)="chooseChild($event)" class="c-checkbox" style="border: 1px solid #c7c9cb;" id="IsCopyChildren" type="checkbox">
                     </div>
 
                 </ion-col>
                 <ion-col>
                     <div class="c-control">
-                        <label class="c-label" for="Code">{{'erp.app.pages.admin.form.code-detail' | translate}} <small *ngIf="item.Id">Id: {{item.Id}}</small>
+                        <label class="c-label" for="Code">{{'Code' | translate}} <small *ngIf="item.Id">Id: {{item.Id}}</small>
                             <span *ngIf="!formGroup.controls.Code.valid && !formGroup.controls.Code.pending && (formGroup.controls.Code.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                         </label>
                         <input class="c-input" id="Code" formControlName="Code" type="text">
                     </div>
 
-                    
-                    <div class="c-control">
-                        <label class="c-label">{{'erp.app.pages.admin.form.icon' | translate}}</label>
-                        <span class="c-input">
-                            <ion-icon [name]="formGroup.controls.Icon.value"></ion-icon>
-                            <ion-button class="no-padding" fill="clear" size="small">
-                                <a class="clickable" (click)="formGroup.get('IsIconModalOpened').setValue(true)" >{{formGroup.controls.Icon.value ? formGroup.controls.Icon.value : 'Icon' }}</a>
-                                <ion-modal #modal [isOpen]="formGroup.get('IsIconModalOpened').value"
-                                    (willDismiss)="formGroup.get('IsIconModalOpened').setValue(false); " [initialBreakpoint]="0.5"
-                                    [breakpoints]="[0, 0.25, 0.5, 0.75]">
-                                    <ng-template>
-                                        <ion-content>
-                                            <app-icon-picker (selected)="onSelectIcon($event,formGroup)"></app-icon-picker>
-                                        </ion-content>
-                                    </ng-template>
-                                </ion-modal>
-                            </ion-button>
-                        </span>
-                    </div>
+                    <app-form-control [field]="{id:'BadgeColor', label:'Badge color', type : 'color', form : formGroup }" (change)="saveChange()"></app-form-control>
 
-                    <div class="c-control">
-                        <label class="c-label">{{'erp.app.pages.admin.form.badge-color' | translate}}</label>
-                        <span class="c-input">
-                            <ion-button class="no-padding" fill="clear" size="small" id="popover-color">
-                                <div class="c-color-modal" (click)="formGroup.get('IsColorModalOpened').setValue(true)">
-                                    <ion-icon name="radio-button-on-outline" [color]="formGroup.controls.BadgeColor.value"></ion-icon> &nbsp;
-                                    <a class="clickable">{{formGroup.controls.BadgeColor.value ? formGroup.controls.BadgeColor.value : 'Color' |
-                                        translate}}</a>
-                                </div>
-                                <ion-popover trigger="popover-color" #modal [isOpen]="formGroup.get('IsColorModalOpened').value" (didDismiss)="formGroup.get('IsColorModalOpened').setValue(false); ">
-                                    <ng-template>
-                                        <ion-content>
-                                            <app-color (selected)="onSelectColor($event,formGroup)" [color]="formGroup.get('BadgeColor').value" ></app-color>
-                                        </ion-content>
-                                    </ng-template>
-                                </ion-popover>
-                            </ion-button>
-                        </span>
-                    </div>
-                    
-                    
+                    <app-form-control [field]="{id:'Icon', type : 'icon', form : formGroup, color: formGroup.controls.BadgeColor.value }" (change)="saveChange()"></app-form-control>
 
                 </ion-col>
             </ion-row>
@@ -111,40 +73,40 @@
                 <ion-col>
 
                     <div class="c-control">
-                        <label class="c-label" for="Remark">{{'erp.app.pages.admin.form.remark' | translate}}
+                        <label class="c-label" for="Remark">{{'Description' | translate}}
                             <span *ngIf="!formGroup.controls.Remark.valid && !formGroup.controls.Remark.pending && (formGroup.controls.Remark.dirty || submitAttempt)" ion-text color="danger">(*)</span>
                         </label>
-                        
+
                         <input class="c-input" id="Remark" formControlName="Remark" type="text">
                     </div>
-                    
+
                     <div class="c-control">
-                        <label class="c-label" for="Sort">{{'erp.app.pages.admin.form.sort' | translate}}</label>
+                        <label class="c-label" for="Sort">{{'Sort' | translate}}</label>
                         <input class="c-input" id="Sort" formControlName="Sort" type="number">
                     </div>
 
                     <div class="c-control">
-                        <label class="c-label" for="APIs">{{'erp.app.pages.admin.form.apis' | translate}}</label>
-                       
+                        <label class="c-label" for="APIs">{{'APIs' | translate}}</label>
+
                         <textarea rows="3" class="c-input" id="APIs" formControlName="APIs" type="textarea"></textarea>
                     </div>
 
                     <div class="c-control ion-text-right" *ngIf="!item.Id && (pageConfig.canEditFunction || pageConfig.canAdd)">
                         <label class="c-label" for=""></label>
-                        <ion-button (click)="saveChange()">{{'erp.app.pages.admin.form.save' | translate}}</ion-button>
+                        <ion-button (click)="saveChange()">{{'Add function' | translate}}</ion-button>
                     </div>
                     <div class="c-control ion-text-right" *ngIf="item.Id">
-                        <ion-button *ngIf="pageConfig.canEditFunction || pageConfig.canEdit" (click)="saveChange()" [disabled]="!formGroup.dirty">{{'erp.app.pages.admin.form.save-change' | translate}}</ion-button>
-                        <ion-button (click)="refresh()" color="warning">{{'erp.app.pages.admin.form.cancel' | translate}}</ion-button>
-                        <ion-button *ngIf="item.Id && pageConfig.canDelete" (click)="delete()" color="danger">{{'erp.app.pages.admin.form.delete' | translate}}</ion-button>
+                        <ion-button *ngIf="pageConfig.canEditFunction || pageConfig.canEdit" (click)="saveChange()" [disabled]="!formGroup.dirty">{{'Save' | translate}}</ion-button>
+                        <ion-button (click)="refresh()" color="warning">{{'Change cancel' | translate}}</ion-button>
+                        <ion-button *ngIf="item.Id && pageConfig.canDelete" (click)="delete()" color="danger">{{'Delete' | translate}}</ion-button>
                     </div>
-            
+
                 </ion-col>
             </ion-row>
         </ion-grid>
 
 
-        
+
 
     </form>
 

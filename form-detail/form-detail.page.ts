@@ -130,26 +130,6 @@ export class FormDetailPage extends PageBase {
         }
     }
 
-    onSelectColor(e, fg) {
-        fg.get('BadgeColor').setValue(e.Code);
-        fg.get('IsColorModalOpened').setValue(false);
-        fg.get('BadgeColor').markAsDirty();
-        fg.get('BaseColor').setValue(e.BaseColor);
-        if(!this.navParams.data.copyFrom){
-            this.saveChange();
-        }
-        
-    }
-
-    onSelectIcon(e, fg) {
-        fg.get('Icon').setValue(e.Name);
-        fg.get('IsIconModalOpened').setValue(false);
-        fg.get('Icon').markAsDirty();
-        if(!this.navParams.data.copyFrom){
-            this.saveChange();
-        }
-    }
-
     async saveChange() {
         if (this.navParams.data.copyFrom) {
           this.markAllFormAsDirty();

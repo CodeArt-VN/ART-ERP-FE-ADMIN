@@ -258,7 +258,7 @@ export class DynamicConfigComponent extends PageBase {
 			this.pageProvider.save(config).then((resp => {
 
 				config.Id = resp['Id'];
-				this.env.showTranslateMessage('erp.app.pages.admin.config.save-complete','success');
+				this.env.showTranslateMessage('Saving completed!','success');
 				this.emit('savedConfig', this.configItems);
 			}));
 		});
