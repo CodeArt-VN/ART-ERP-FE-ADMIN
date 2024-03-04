@@ -46,7 +46,7 @@ export class PriceListDetailPage extends PageBase {
         this.config.clearAllText = 'Xóa hết';
 
         this.formGroup = formBuilder.group({
-            IDBranch: [''],
+            IDBranch: [this.env.selectedBranch],
             IDBasePriceList: [''],
 
             PrimaryDefaultCurrency: ['', Validators.required],
