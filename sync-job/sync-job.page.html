@@ -69,7 +69,7 @@
 
 		<datatable-column class="col-status" name="IsDone" property="IsDone" >
 			<ng-template let-i="row" datatable-cell-template>
-				<span class="sp-checkbox">IsDone: </span>	<input class="c-checkbox" type="checkbox" [checked]="i.IsDone ? 1 : 0" disabled>
+				<input class="c-checkbox" type="checkbox" [checked]="i.IsDone ? 1 : 0" disabled>
 		   </ng-template>
 		</datatable-column>
 		
@@ -83,7 +83,7 @@
 		
 		<datatable-column class="col-status" name="IsRunning" property="IsRunning">
 			<ng-template let-i="row" datatable-cell-template>
-				<span class="sp-checkbox">IsRunning: </span> <input class="c-checkbox" type="checkbox" [checked]="i.IsRunning ? 1 : 0" disabled>
+				<input class="c-checkbox" type="checkbox" [checked]="i.IsRunning ? 1 : 0" disabled>
 	   		</ng-template>
 		</datatable-column>
 
