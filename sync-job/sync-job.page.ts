@@ -4,6 +4,7 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
 import { BRA_BranchProvider, SYS_SyncJobProvider, WMS_ZoneProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
+import { SortConfig } from 'src/app/models/options-interface';
 
 @Component({
     selector: 'app-sync-job',
@@ -28,6 +29,14 @@ export class SyncJobPage extends PageBase {
         
     }
 
+    preLoadData(event?: any): void {
+        let sorted: SortConfig[] = [
+            { Dimension: 'Id', Order: 'DESC' }
+        ];
+        this.pageConfig.sort = sorted;
+        super.preLoadData(event);
+    }
+    
     sync(){
         if (this.submitAttempt) return;
         let obj = {
@@ -39,10 +48,17 @@ export class SyncJobPage extends PageBase {
         this.pageProvider.commonService.connect('POST', 'SYS/SyncJob/Exec/', obj).toPromise()
             .then(() => {
                             
-                //this.loadData();
+                this.env.showMessage('Sync completed ', 'success');
+                this.refresh();
                 this.submitAttempt = false;
 
             }).catch(err => {
+                if (err.message != null) {
+                    this.env.showMessage(err.message, 'danger');
+                }
+                else {
+                    this.env.showTranslateMessage('Sync fail','danger');
+                }
                 this.submitAttempt = false;
             });
         }

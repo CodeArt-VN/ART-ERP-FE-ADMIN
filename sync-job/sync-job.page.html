@@ -1,8 +1,10 @@
 <ion-header>
 	<app-list-toolbar [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)">
-		<ion-button selected title="{{'Sync' | translate}}" *ngIf="pageConfig.canSync && selectedItems.length>=1" (click)="sync()">
-			<ion-icon color="success" name="sync-outline"></ion-icon>
-		</ion-button>
+		<ion-buttons selected *ngIf="pageConfig.canSync && selectedItems.length >= 1">
+			<ion-button title="{{'Sync' | translate}}" (click)="sync()">
+				<ion-icon color="success" name="sync-outline"></ion-icon>
+			</ion-button>
+		</ion-buttons>
 	</app-list-toolbar>
 </ion-header>
 <!-- <ion-header>
@@ -28,7 +30,7 @@
 		</div>
 	</ion-fab>
 
-	<app-data-table style="min-width: 1000px; width: fit-content;" class="box-shadow" [rows]="items" [trackBy]="'Id'" [(selectedRows)]="selectedItems" [showSpinner]="pageConfig.showSpinner" [showFilter]="pageConfig.isShowSearch" [(query)]="query" (dataInfinite)="loadData($event)" (filter)="onDatatableFilter($event)" (sort)="onSort($event)">
+	<app-data-table class="box-shadow" [rows]="items" [trackBy]="'Id'" [(selectedRows)]="selectedItems" [showSpinner]="pageConfig.showSpinner" [showFilter]="pageConfig.isShowSearch" [(query)]="query" (dataInfinite)="loadData($event)" (filter)="onDatatableFilter($event)" (sort)="onSort($event)">
 		<datatable-column class="col-checkbox" [checkbox]="true"></datatable-column>
 
 		<datatable-column class="col-id" name="Id" property="Id">
@@ -37,31 +39,31 @@
 			</ng-template>
 		</datatable-column>
 
-		<datatable-column class="col-code" name="Type" property="Type">
+		<datatable-column class="col-type" name="Type" property="Type">
 			<ng-template let-i="row" datatable-cell-template>
 				{{i.Type}}
 			</ng-template>
 		</datatable-column>
 
-		<datatable-column class="col-code" name="Command" property="Command">
+		<datatable-column class="col-command" name="Command" property="Command">
 			<ng-template let-i="row" datatable-cell-template>
 				 {{i.Command}}
 			</ng-template>
 		</datatable-column>
 
-		<datatable-column class="col-name" name="Branch" property="IDBranch">
+		<datatable-column class="col-branch" name="Branch" property="IDBranch">
 			<ng-template let-i="row" datatable-cell-template>
 				{{i.BranchName}}
 			</ng-template>	
 		</datatable-column>
 
-		<datatable-column class="col-number" name="RefNum" property="RefNum1">
+		<datatable-column class="col-refNum" name="RefNum" property="RefNum1">
 			<ng-template let-i="row" datatable-cell-template>
 				 {{i.RefNum1}}
 			</ng-template>
 		</datatable-column>
 
-		<datatable-column class="col-code" name="RefChar" property="RefChar9">
+		<datatable-column class="col-refChar" name="RefChar" property="RefChar9">
 			<ng-template let-i="row" datatable-cell-template>
 				 {{i.RefChar9}}
 			</ng-template>
@@ -69,22 +71,28 @@
 
 		<datatable-column class="col-status" name="IsDone" property="IsDone" >
 			<ng-template let-i="row" datatable-cell-template>
-				<input class="c-checkbox" type="checkbox" [checked]="i.IsDone ? 1 : 0" disabled>
-		   </ng-template>
+				<ion-icon class="min-btn" *ngIf="i.IsDone" color="primary" name="checkmark"></ion-icon>
+				<div *ngIf="i.IsDone" class="mobile">Done</div>
+			</ng-template>
 		</datatable-column>
 		
-		<datatable-column class="col-number" name="TryCount" property="TryCount">
+		<datatable-column class="col-tryCount" name="TryCount" property="TryCount">
 			<ng-template let-i="row" datatable-cell-template>
 				 {{i.TryCount}}
 			</ng-template>
 		</datatable-column>
 
-		<datatable-column class="col-date" format="yyyy-MM-dd" name="ExeDate" property="ExeDate" filterControlType="date"></datatable-column>
-		
-		<datatable-column class="col-status" name="IsRunning" property="IsRunning">
+		<datatable-column class="col-date" format="yyyy-MM-dd" name="ExeDate" property="ExeDate" filterControlType="date">
 			<ng-template let-i="row" datatable-cell-template>
-				<input class="c-checkbox" type="checkbox" [checked]="i.IsRunning ? 1 : 0" disabled>
-	   		</ng-template>
+				{{i.ExeDate | date:'yyyy-MM-dd'}}
+		    </ng-template>
+		</datatable-column>
+		
+		<datatable-column class="col-running" name="IsRunning" property="IsRunning">
+			<ng-template let-i="row" datatable-cell-template>
+				<ion-icon class="min-btn" *ngIf="i.IsRunning" color="primary" name="checkmark"></ion-icon>
+				<div *ngIf="i.IsRunning" class="mobile">Running</div>
+			</ng-template>
 		</datatable-column>
 
 		<datatable-column class="col-err-message" name="ErrorMessage" property="ErrorMessage">
