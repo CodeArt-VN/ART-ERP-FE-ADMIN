@@ -84,7 +84,7 @@
 
 		<datatable-column class="col-date" format="yyyy-MM-dd" name="ExeDate" property="ExeDate" filterControlType="date">
 			<ng-template let-i="row" datatable-cell-template>
-				{{i.ExeDate | date:'yyyy-MM-dd'}}
+				{{i.ExeDate | date:'yyyy-MM-dd HH:mm'}}
 		    </ng-template>
 		</datatable-column>
 		
