@@ -138,13 +138,48 @@
 
             form {
                 .row.header {
-                    height: 216px !important;
+                    height: auto;
+                    width: fit-content !important;
+                    margin-left: 0;
                 }
                
 
-                .col-running {
-                    min-width: 40px !important;
+                .col-running,
+                .col-status {
+                    min-width: 60px !important;
                     max-width: 40px;
+                    .min-btn {
+                        display: block;
+                    }
+                    .mobile {
+                        margin-right: 20px;
+                        margin-bottom: 0;
+                        border-left: unset;
+                        background-color: unset;
+                    }
+                }
+
+                .col-tryCount,
+                .col-refNum,
+                .col-refChar {
+                    position: unset;
+                }
+                .col-date {
+                    border-left: unset;
+                    background-color: unset;
+                    border-radius: unset;
+                    font-size: unset;
+                    margin-bottom: 0;
+                    margin-right: 0;
+                    max-width: 125px !important;
+                    min-width: 125px !important;
+                }
+                
+                .col-branch,
+                .col-command,
+                .col-err-message {
+                    max-width: 125px !important;
+                    min-width: 125px !important;
                 }
                
             }

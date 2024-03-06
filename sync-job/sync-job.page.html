@@ -71,6 +71,7 @@
 
 		<datatable-column class="col-status" name="IsDone" property="IsDone" >
 			<ng-template datatable-filter-template>
+				<span class="mobile">Done</span>
 				<ion-icon class="min-btn" (click)="query.IsDone=query.IsDone===true?false:(query.IsDone===false? '': true); refresh()" [name]="query.IsDone===true?'checkmark-outline':(query.IsDone===false?'ban-outline':'checkmark-done-outline')"></ion-icon>
 			</ng-template>
 			<ng-template let-i="row" datatable-cell-template>
@@ -93,6 +94,7 @@
 		
 		<datatable-column class="col-running" name="IsRunning" property="IsRunning">
 			<ng-template datatable-filter-template>
+				<span class="mobile">Running</span>
 				<ion-icon class="min-btn" (click)="query.IsRunning=query.IsRunning===true?false:(query.IsRunning===false? '': true); refresh()" [name]="query.IsRunning===true?'checkmark-outline':(query.IsRunning===false?'ban-outline':'checkmark-done-outline')"></ion-icon>
 			</ng-template>
 			<ng-template let-i="row" datatable-cell-template>
