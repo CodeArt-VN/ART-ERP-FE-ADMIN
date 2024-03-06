@@ -10,7 +10,7 @@ describe('PermissionPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [PermissionPage],
-      imports: [IonicModule.forRoot()]
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PermissionPage);

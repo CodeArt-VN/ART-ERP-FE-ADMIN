@@ -191,12 +191,6 @@
             max-width: 60px;
             min-width: 60px;
             justify-content: center;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--ion-color-primary) !important;
-            font-size: 1rem;
-		    cursor: pointer;
         }
 
         .col-status,

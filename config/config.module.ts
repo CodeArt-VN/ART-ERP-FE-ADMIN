@@ -5,9 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfigPage } from './config.page';
 import { ShareModule } from 'src/app/share.module';
-import { FileUploadModule } from 'ng2-file-upload';;
-import { ConfigComponentsModule } from './components/config-components.module';
 
+import { ConfigComponentsModule } from './components/config-components.module';
 
 const routes: Routes = [{ path: '', component: ConfigPage }];
 
@@ -19,9 +18,8 @@ const routes: Routes = [{ path: '', component: ConfigPage }];
     ShareModule,
     ConfigComponentsModule,
     ReactiveFormsModule,
-    FileUploadModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
-  declarations: [ConfigPage]
+  declarations: [ConfigPage],
 })
-export class ConfigPageModule { }
+export class ConfigPageModule {}

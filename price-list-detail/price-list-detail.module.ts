@@ -5,25 +5,16 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ShareModule } from 'src/app/share.module';
 import { PriceListDetailPage } from './price-list-detail.page';
-import { FileUploadModule } from 'ng2-file-upload';
 
 const routes: Routes = [
   {
     path: '',
-    component: PriceListDetailPage
-  }
+    component: PriceListDetailPage,
+  },
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ReactiveFormsModule,
-    FileUploadModule,
-    ShareModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [PriceListDetailPage]
+  imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
+  declarations: [PriceListDetailPage],
 })
-export class PriceListDetailPageModule { }
+export class PriceListDetailPageModule {}

@@ -1,113 +1,150 @@
 <ion-header>
-    <ion-toolbar>
-        <ion-title>{{item.Name}}</ion-title>
+  <ion-toolbar>
+    <ion-title>{{item.Name}}</ion-title>
 
-        <ion-buttons slot="primary">
-            <ion-button title="{{'Close' | translate}}" color="secondary" (click)="closeModal()">
-                <ion-icon slot="icon-only" name="close"></ion-icon>
-            </ion-button>
-        </ion-buttons>
-
-    </ion-toolbar>
+    <ion-buttons slot="primary">
+      <ion-button title="{{'Close' | translate}}" color="secondary" (click)="closeModal()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 <ion-content appScrollbarTheme class="ion-padding" fullscreen>
-    <form [formGroup]="formGroup">
-        <ion-grid fixed>
-            <ion-row>
-                <ion-col>
-                    <!-- <div class="c-control" *ngIf="item.Id">
+  <form [formGroup]="formGroup">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col>
+          <!-- <div class="c-control" *ngIf="item.Id">
                         <label class="c-label" for="Code">Id</label>
                         <input class="c-input" id="Id" formControlName="Id" type="text">
                     </div> -->
-                    <div class="c-control">
-                        <label class="c-label" for="Name">{{'Function' | translate}}
-                            <span *ngIf="!formGroup.controls.Name.valid && !formGroup.controls.Name.pending && (formGroup.controls.Name.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-                        </label>
-                        <input class="c-input" id="Name" formControlName="Name" type="text">
-                    </div>
-                    <div class="c-control">
-                        <label class="c-label" for="IDParent">{{'Belonged to' | translate}}
-                            <span *ngIf="!formGroup.controls.IDParent.valid && !formGroup.controls.IDParent.pending && (formGroup.controls.IDParent.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-                        </label>
-                        <select class="c-input c-dropdown" formControlName="IDParent">
-                            <option [ngValue]="null">{{'Root' | translate}}</option>
-                            <ng-container *ngFor="let t of items">
+          <div class="c-control">
+            <label class="c-label" for="Name"
+              >{{'Function' | translate}}
+              <span
+                *ngIf="!formGroup.controls.Name.valid && !formGroup.controls.Name.pending && (formGroup.controls.Name.dirty || submitAttempt)"
+                ion-text
+                color="danger"
+                >(*)</span
+              >
+            </label>
+            <input class="c-input" id="Name" formControlName="Name" type="text" />
+          </div>
+          <div class="c-control">
+            <label class="c-label" for="IDParent"
+              >{{'Belonged to' | translate}}
+              <span
+                *ngIf="!formGroup.controls.IDParent.valid && !formGroup.controls.IDParent.pending && (formGroup.controls.IDParent.dirty || submitAttempt)"
+                ion-text
+                color="danger"
+                >(*)</span
+              >
+            </label>
+            <select class="c-input c-dropdown" formControlName="IDParent">
+              <option [ngValue]="null">{{'Root' | translate}}</option>
+              <ng-container *ngFor="let t of items">
+                <option *ngIf="t.Type != 3 " [disabled]="t.Flag" [value]="t.Id">{{t.Name}}</option>
+              </ng-container>
+            </select>
+          </div>
 
-                                <option *ngIf="t.Type != 3 " [disabled]="t.Flag" [value]="t.Id">{{t.Name}}</option>
-                            </ng-container>
+          <div class="c-control">
+            <label class="c-label" for="Type"
+              >{{'Type' | translate}}
+              <span
+                *ngIf="!formGroup.controls.Type.valid && !formGroup.controls.Type.pending && (formGroup.controls.Type.dirty || submitAttempt)"
+                ion-text
+                color="danger"
+                >(*)</span
+              >
+            </label>
+            <select class="c-input c-dropdown" formControlName="Type">
+              <option *ngFor="let t of typeList" [value]="t.Id">{{t.Name}}</option>
+            </select>
+          </div>
 
-                        </select>
-                    </div>
+          <div class="c-control" *ngIf="item.HasChild && navParams.data.copyFrom">
+            <label class="c-label" for="IsCopyChildren">{{'Copy children' | translate}} </label>
+            <input
+              (click)="chooseChild($event)"
+              class="c-checkbox"
+              style="border: 1px solid #c7c9cb"
+              id="IsCopyChildren"
+              type="checkbox"
+            />
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="c-control">
+            <label class="c-label" for="Code"
+              >{{'Code' | translate}}
+              <small *ngIf="item.Id">Id: {{item.Id}}</small>
+              <span
+                *ngIf="!formGroup.controls.Code.valid && !formGroup.controls.Code.pending && (formGroup.controls.Code.dirty || submitAttempt)"
+                ion-text
+                color="danger"
+                >(*)</span
+              >
+            </label>
+            <input class="c-input" id="Code" formControlName="Code" type="text" />
+          </div>
 
-                    <div class="c-control">
-                        <label class="c-label" for="Type">{{'Type' | translate}}
-                            <span *ngIf="!formGroup.controls.Type.valid && !formGroup.controls.Type.pending && (formGroup.controls.Type.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-                        </label>
-                        <select class="c-input c-dropdown" formControlName="Type">
-                            <option *ngFor="let t of typeList" [value]="t.Id">{{t.Name}}</option>
-                        </select>
-                    </div>
+          <app-form-control
+            [field]="{id:'BadgeColor', label:'Badge color', type : 'color', form : formGroup }"
+            (change)="saveChange()"
+          ></app-form-control>
 
-                    <div class="c-control" *ngIf="item.HasChild && navParams.data.copyFrom">
-                        <label class="c-label" for="IsCopyChildren">{{'Copy children' | translate}}
-                        </label>
-                        <input (click)="chooseChild($event)" class="c-checkbox" style="border: 1px solid #c7c9cb;" id="IsCopyChildren" type="checkbox">
-                    </div>
+          <app-form-control
+            [field]="{id:'Icon', type : 'icon', form : formGroup, color: formGroup.controls.BadgeColor.value }"
+            (change)="saveChange()"
+          ></app-form-control>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="c-control">
+            <label class="c-label" for="Remark"
+              >{{'Description' | translate}}
+              <span
+                *ngIf="!formGroup.controls.Remark.valid && !formGroup.controls.Remark.pending && (formGroup.controls.Remark.dirty || submitAttempt)"
+                ion-text
+                color="danger"
+                >(*)</span
+              >
+            </label>
 
-                </ion-col>
-                <ion-col>
-                    <div class="c-control">
-                        <label class="c-label" for="Code">{{'Code' | translate}} <small *ngIf="item.Id">Id: {{item.Id}}</small>
-                            <span *ngIf="!formGroup.controls.Code.valid && !formGroup.controls.Code.pending && (formGroup.controls.Code.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-                        </label>
-                        <input class="c-input" id="Code" formControlName="Code" type="text">
-                    </div>
+            <input class="c-input" id="Remark" formControlName="Remark" type="text" />
+          </div>
 
-                    <app-form-control [field]="{id:'BadgeColor', label:'Badge color', type : 'color', form : formGroup }" (change)="saveChange()"></app-form-control>
+          <div class="c-control">
+            <label class="c-label" for="Sort">{{'Sort' | translate}}</label>
+            <input class="c-input" id="Sort" formControlName="Sort" type="number" />
+          </div>
 
-                    <app-form-control [field]="{id:'Icon', type : 'icon', form : formGroup, color: formGroup.controls.BadgeColor.value }" (change)="saveChange()"></app-form-control>
+          <div class="c-control">
+            <label class="c-label" for="APIs">{{'APIs' | translate}}</label>
 
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
+            <textarea rows="3" class="c-input" id="APIs" formControlName="APIs" type="textarea"></textarea>
+          </div>
 
-                    <div class="c-control">
-                        <label class="c-label" for="Remark">{{'Description' | translate}}
-                            <span *ngIf="!formGroup.controls.Remark.valid && !formGroup.controls.Remark.pending && (formGroup.controls.Remark.dirty || submitAttempt)" ion-text color="danger">(*)</span>
-                        </label>
-
-                        <input class="c-input" id="Remark" formControlName="Remark" type="text">
-                    </div>
-
-                    <div class="c-control">
-                        <label class="c-label" for="Sort">{{'Sort' | translate}}</label>
-                        <input class="c-input" id="Sort" formControlName="Sort" type="number">
-                    </div>
-
-                    <div class="c-control">
-                        <label class="c-label" for="APIs">{{'APIs' | translate}}</label>
-
-                        <textarea rows="3" class="c-input" id="APIs" formControlName="APIs" type="textarea"></textarea>
-                    </div>
-
-                    <div class="c-control ion-text-right" *ngIf="!item.Id && (pageConfig.canEditFunction || pageConfig.canAdd)">
-                        <label class="c-label" for=""></label>
-                        <ion-button (click)="saveChange()">{{'Add function' | translate}}</ion-button>
-                    </div>
-                    <div class="c-control ion-text-right" *ngIf="item.Id">
-                        <ion-button *ngIf="pageConfig.canEditFunction || pageConfig.canEdit" (click)="saveChange()" [disabled]="!formGroup.dirty">{{'Save' | translate}}</ion-button>
-                        <ion-button (click)="refresh()" color="warning">{{'Change cancel' | translate}}</ion-button>
-                        <ion-button *ngIf="item.Id && pageConfig.canDelete" (click)="delete()" color="danger">{{'Delete' | translate}}</ion-button>
-                    </div>
-
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-
-
-
-
-    </form>
-
+          <div class="c-control ion-text-right" *ngIf="!item.Id && (pageConfig.canEditFunction || pageConfig.canAdd)">
+            <label class="c-label" for=""></label>
+            <ion-button (click)="saveChange()">{{'Add function' | translate}}</ion-button>
+          </div>
+          <div class="c-control ion-text-right" *ngIf="item.Id">
+            <ion-button
+              *ngIf="pageConfig.canEditFunction || pageConfig.canEdit"
+              (click)="saveChange()"
+              [disabled]="!formGroup.dirty"
+              >{{'Save' | translate}}</ion-button
+            >
+            <ion-button (click)="refresh()" color="warning">{{'Change cancel' | translate}}</ion-button>
+            <ion-button *ngIf="item.Id && pageConfig.canDelete" (click)="delete()" color="danger"
+              >{{'Delete' | translate}}</ion-button
+            >
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>

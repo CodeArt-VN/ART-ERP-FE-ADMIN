@@ -1,81 +1,153 @@
 <ion-header>
-	<app-list-toolbar pageTitle="{{'Access authorazation' | translate}}" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()"></app-list-toolbar>
-	<div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
-		<section class="table">
-			<header class="bold">
-				<div class="col-checkbox cell"></div>
-				<div class="col-name cell" style="padding: 0;">
-					<ion-button style="--padding-start: 2px" (click)="toggleRowAll()" fill="clear" size="small">
-						<ion-icon slot="icon-only" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"></ion-icon>
-					</ion-button>
-					{{'Function' | translate}} <span *ngIf="selectedBranch"> &nbsp; => {{selectedBranch.Name}} (Id: {{selectedBranch.Id}})</span>
-					<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="formQuery.Keyword" name="search" color="primary"></ion-icon>
-				</div>
-			</header>
-			<form (submit)="refresh()" action="#">
-				<header class="filter" *ngIf="pageConfig.isShowSearch">
-					<div class=" cell" style="padding: 0;">
-						<ion-button style="--padding-start: 4px" (click)="showCheckedOnly = !showCheckedOnly" fill="clear" size="small">
-							<ion-icon slot="icon-only" [name]="showCheckedOnly? 'radio-button-on' : 'radio-button-off' "></ion-icon>
-						</ion-button>
-						<input [ngModelOptions]="{standalone: true}" [(ngModel)]="formQuery.Keyword" class="c-input" [ngClass]="{active: formQuery.Keyword}" type="text">
-						<ion-icon class="min-btn" (click)="formQuery.Keyword=''; refresh()" *ngIf="formQuery.Keyword" name="close-circle-outline"></ion-icon>
-					</div>
-					<button mat-raised-button type="submit" style="display:none">Search</button>
-				</header>
-			</form>
-		</section>
-	</div>
+  <app-list-toolbar
+    pageTitle="{{'Access authorazation' | translate}}"
+    [pageConfig]="pageConfig"
+    [selectedItems]="selectedItems"
+    [query]="query"
+    (refresh)="refresh()"
+    (export)="export()"
+    (import)="import($event)"
+    (help)="help()"
+    (unselect)="unselect()"
+    (archiveItems)="archiveItems()"
+    (deleteItems)="deleteItems()"
+  ></app-list-toolbar>
+  <div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
+    <section class="table">
+      <header class="bold">
+        <div class="col-checkbox cell"></div>
+        <div class="col-name cell" style="padding: 0">
+          <ion-button style="--padding-start: 2px" (click)="toggleRowAll()" fill="clear" size="small">
+            <ion-icon
+              slot="icon-only"
+              [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"
+            ></ion-icon>
+          </ion-button>
+          {{'Function' | translate}}
+          <span *ngIf="selectedBranch"> &nbsp; => {{selectedBranch.Name}} (Id: {{selectedBranch.Id}})</span>
+          <ion-icon
+            class="min-btn"
+            (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
+            *ngIf="formQuery.Keyword"
+            name="search"
+            color="primary"
+          ></ion-icon>
+        </div>
+      </header>
+      <form (submit)="refresh()" action="#">
+        <header class="filter" *ngIf="pageConfig.isShowSearch">
+          <div class="cell" style="padding: 0">
+            <ion-button
+              style="--padding-start: 4px"
+              (click)="showCheckedOnly = !showCheckedOnly"
+              fill="clear"
+              size="small"
+            >
+              <ion-icon slot="icon-only" [name]="showCheckedOnly? 'radio-button-on' : 'radio-button-off' "></ion-icon>
+            </ion-button>
+            <input
+              [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="formQuery.Keyword"
+              class="c-input"
+              [ngClass]="{active: formQuery.Keyword}"
+              type="text"
+            />
+            <ion-icon
+              class="min-btn"
+              (click)="formQuery.Keyword=''; refresh()"
+              *ngIf="formQuery.Keyword"
+              name="close-circle-outline"
+            ></ion-icon>
+          </div>
+          <button mat-raised-button type="submit" style="display: none">Search</button>
+        </header>
+      </form>
+    </section>
+  </div>
 </ion-header>
 
 <ion-content appScrollbarTheme class="header-table left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
-	<app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
-	<ion-fab *ngIf="pageConfig.isShowFeature" [ngClass]="{withSearch: pageConfig.isShowSearch}" class="feature no-print " vertical="bottom" horizontal="start" slot="fixed">
-
-		<!-- <ion-list-header lines="inset">
+  <app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+  <ion-fab
+    *ngIf="pageConfig.isShowFeature"
+    [ngClass]="{withSearch: pageConfig.isShowSearch}"
+    class="feature no-print"
+    vertical="bottom"
+    horizontal="start"
+    slot="fixed"
+  >
+    <!-- <ion-list-header lines="inset">
 			<ion-label color="dark">Đơn vị / Chức danh</ion-label>
 		</ion-list-header> -->
 
-		<div class="ion-padding" style="padding-bottom: 0;">
-			<div class="c-control">
-				<label class="c-label" for="IDBranch">
-					<ion-text color="primary">
-						{{'Unit/Job title' | translate}}
-					</ion-text>
-				</label>
-				<ng-select class="c-input no-check-dirty" (change)="selectBranch();" #IDBranch [(ngModel)]="selectedBranch" labelForId="IDBranch" [searchFn]="searchShowAllChildren" [items]="env.jobTitleList" [virtualScroll]="true" bindLabel="Name" bindValue="" placeholder="{{'Select unit' | translate}}">
-					<ng-template ng-option-tmp let-i="item" let-search="searchTerm">
-						<div *ngIf="i">
-							<div> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
-								<ion-text [color]=" i.Type == 'Company'? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text>
-							</div>
-						</div>
-					</ng-template>
-				</ng-select>
-			</div>
-		</div>
+    <div class="ion-padding" style="padding-bottom: 0">
+      <div class="c-control">
+        <label class="c-label" for="IDBranch">
+          <ion-text color="primary"> {{'Unit/Job title' | translate}} </ion-text>
+        </label>
+        <ng-select
+          class="c-input no-check-dirty"
+          (change)="selectBranch();"
+          #IDBranch
+          [(ngModel)]="selectedBranch"
+          labelForId="IDBranch"
+          [searchFn]="searchShowAllChildren"
+          [items]="env.jobTitleList"
+          [virtualScroll]="true"
+          bindLabel="Name"
+          bindValue=""
+          placeholder="{{'Select unit' | translate}}"
+        >
+          <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
+            <div *ngIf="i">
+              <div>
+                <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
+                <ion-text [color]=" i.Type == 'Company'? 'primary':'dark'" [ngOptionHighlight]="search"
+                  >{{i.Name}}</ion-text
+                >
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
 
-		<ion-list-header lines="inset" *ngIf="selectedBranch">
-			<ion-label color="dark">{{'Data authorization' | translate}}</ion-label>
-		</ion-list-header>
+    <ion-list-header lines="inset" *ngIf="selectedBranch">
+      <ion-label color="dark">{{'Data authorization' | translate}}</ion-label>
+    </ion-list-header>
 
-		<div class="ion-padding" style="padding-bottom: 0;" *ngIf="selectedBranch">
+    <div class="ion-padding" style="padding-bottom: 0" *ngIf="selectedBranch">
+      <div class="c-control">
+        <label class="c-label" for="IDBranch">{{'Branch data permission' | translate}}</label>
+        <ng-select
+          class="c-input multiple"
+          (change)="updateBranch();"
+          appendTo=""
+          #IDBranch
+          labelForId="IDBranch"
+          [items]="env.branchList"
+          [(ngModel)]="selectedBranch.CanViewDataInObject"
+          [multiple]="true"
+          [closeOnSelect]="false"
+          bindLabel="Name"
+          bindValue="Id"
+          placeholder="{{'Select unit' | translate}}"
+        >
+          <ng-template ng-option-tmp let-i="item" let-i$="item$" let-search="searchTerm">
+            <div *ngIf="i">
+              <div>
+                <input type="checkbox" [ngModel]="i$.selected" />
+                <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
+                <ion-text [color]=" i.Type == 'Company'? 'primary':'dark'" [ngOptionHighlight]="search"
+                  >{{i.Name}}</ion-text
+                >
+              </div>
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
 
-
-			<div class="c-control">
-				<label class="c-label" for="IDBranch">{{'Branch data permission' | translate}}</label>
-				<ng-select class="c-input multiple" (change)="updateBranch();" appendTo="" #IDBranch labelForId="IDBranch" [items]="env.branchList" [(ngModel)]="selectedBranch.CanViewDataInObject" [multiple]="true" [closeOnSelect]="false" bindLabel="Name" bindValue="Id" placeholder="{{'Select unit' | translate}}">
-					<ng-template ng-option-tmp let-i="item" let-i$="item$" let-search="searchTerm">
-						<div *ngIf="i">
-							<div> <input type="checkbox" [ngModel]="i$.selected" /> <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
-								<ion-text [color]=" i.Type == 'Company'? 'primary':'dark'" [ngOptionHighlight]="search">{{i.Name}}</ion-text>
-							</div>
-						</div>
-					</ng-template>
-				</ng-select>
-			</div>
-
-			<!-- <div class="c-control">
+      <!-- <div class="c-control">
 				<label class="c-label" for="IDBranch">{{'Branch data permission' | translate}}</label>
 				<ng-select class="c-input" appendTo=""  #IDBranch (change)="updateBranch();" labelForId="IDBranch" [items]="env.branchList" [(ngModel)]="selectedBranch.SaveDataTo" bindLabel="Name" bindValue="Id" placeholder="{{'Select unit' | translate}}">
 					<ng-template ng-option-tmp let-i="item" let-search="searchTerm">
@@ -85,42 +157,51 @@
 					</ng-template>
 				</ng-select>
 			</div> -->
+    </div>
+  </ion-fab>
 
-
-
-
-		</div>
-	</ion-fab>
-
-	<section class="table" *ngIf="pageConfig.showSpinner==false">
-		<div class="table-body">
-			<ng-container *ngFor="let i of formList; let j = index;">
-				<div  class="row" [ngClass]="{odd: j % 2 != 0}" *ngIf="i.show && (!showCheckedOnly || (showCheckedOnly && i.checked))">
-					<div class="col-checkbox cell">
-						<!-- <input [disabled]="i.disabled" (click)="changePermission(i)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox"> -->
-						<ion-checkbox [disabled]="i.disabled" [(ngModel)]="i.checked" (ionChange)="changePermission(i)"></ion-checkbox>
-					</div>
-					<div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
-						<span>
-							<ng-container *ngFor="let w of i.levels; let k = index;"><span class="spacing" *ngIf="k>0"></span></ng-container>
-							<ion-icon (click)="toggleRow(formList, i, true);" class="min-btn clickable" [name]="i.HasChild? (!i.showdetail? 'chevron-forward-outline':'chevron-down-outline') : ''"></ion-icon>
-							<ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
-							<ion-text [color]="i.Color" [ngOptionHighlight]="formQuery.Keyword" [title]="i.Id">{{i.Name}}</ion-text>
-							<ion-text color="medium" *ngIf="i.Remark">
-								<small> - {{i.Remark}}</small>
-							</ion-text>
-						</span>
-					</div>
-					<!-- <div class="col-checkbox cell" *ngIf="pageConfig.canEditFunction">
+  <section class="table" *ngIf="pageConfig.showSpinner==false">
+    <div class="table-body">
+      <ng-container *ngFor="let i of formList; let j = index;">
+        <div
+          class="row"
+          [ngClass]="{odd: j % 2 != 0}"
+          *ngIf="i.show && (!showCheckedOnly || (showCheckedOnly && i.checked))"
+        >
+          <div class="col-checkbox cell">
+            <!-- <input [disabled]="i.disabled" (click)="changePermission(i)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox"> -->
+            <ion-checkbox
+              [disabled]="i.disabled"
+              [(ngModel)]="i.checked"
+              (ionChange)="changePermission(i)"
+            ></ion-checkbox>
+          </div>
+          <div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
+            <span>
+              <ng-container *ngFor="let w of i.levels; let k = index;"
+                ><span class="spacing" *ngIf="k>0"></span
+              ></ng-container>
+              <ion-icon
+                (click)="toggleRow(formList, i, true);"
+                class="min-btn clickable"
+                [name]="i.HasChild? (!i.showdetail? 'chevron-forward-outline':'chevron-down-outline') : ''"
+              ></ion-icon>
+              <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
+              <ion-text [color]="i.Color" [ngOptionHighlight]="formQuery.Keyword" [title]="i.Id">{{i.Name}}</ion-text>
+              <ion-text color="medium" *ngIf="i.Remark">
+                <small> - {{i.Remark}}</small>
+              </ion-text>
+            </span>
+          </div>
+          <!-- <div class="col-checkbox cell" *ngIf="pageConfig.canEditFunction">
 						<ion-icon (click)="showForm(i)" title="{{'show-form' | translate}}" class="min-btn" name="pencil-outline"></ion-icon>
 					</div> -->
-				</div>
+        </div>
+      </ng-container>
+    </div>
+  </section>
 
-			</ng-container>
-		</div>
-	</section>
-
-	<!-- <ion-infinite-scroll color="primary" threshold="20%" (ionInfinite)="loadData($event)" [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData">
+  <!-- <ion-infinite-scroll color="primary" threshold="20%" (ionInfinite)="loadData($event)" [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData">
 		<ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
 	</ion-infinite-scroll> -->
 </ion-content>

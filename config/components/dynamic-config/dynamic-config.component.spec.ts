@@ -9,8 +9,8 @@ describe('DynamicConfigComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DynamicConfigComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [DynamicConfigComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DynamicConfigComponent);

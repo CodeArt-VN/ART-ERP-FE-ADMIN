@@ -6,13 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermissionPage } from './permission.page';
 import { ShareModule } from 'src/app/share.module';
 
-
-
-
-
-import { FileUploadModule } from 'ng2-file-upload';
-
-
 @NgModule({
   imports: [
     IonicModule,
@@ -20,10 +13,8 @@ import { FileUploadModule } from 'ng2-file-upload';
     FormsModule,
     ShareModule,
     ReactiveFormsModule,
-    FileUploadModule,
-    RouterModule.forChild([{ path: '', component: PermissionPage }])
-
+    RouterModule.forChild([{ path: '', component: PermissionPage }]),
   ],
-  declarations: [PermissionPage]
+  declarations: [PermissionPage],
 })
 export class PermissionPageModule {}
