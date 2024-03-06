@@ -3,6 +3,9 @@
         app-data-table {
             min-width: unset !important;
 
+            .row.header.sticky-header.bold {
+                display: none !important;
+            }
             .row:first-child {
                 margin-top: 0px;
             }
@@ -18,9 +21,6 @@
                 position: relative;
             }
 
-            .row.header {
-                display: none;
-            }
             
             .col-checkbox {
                 order: 0;
@@ -130,9 +130,23 @@
             .col-branch {
                 order: 3;
                 min-width: 100% !important;
+                justify-content: start !important;
             }
             .col-err-message {
                 order: 3;
+            }
+
+            form {
+                .row.header {
+                    height: 216px !important;
+                }
+               
+
+                .col-running {
+                    min-width: 40px !important;
+                    max-width: 40px;
+                }
+               
             }
         }
 
@@ -168,10 +182,21 @@
 
         }
 
-        .col-err-message,
-        .col-branch {
+        .col-err-message {
             cursor: pointer;
             min-width: 250px;
+        }
+        
+        .col-branch {
+            max-width: 60px;
+            min-width: 60px;
+            justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--ion-color-primary) !important;
+            font-size: 1rem;
+		    cursor: pointer;
         }
 
         .col-status,

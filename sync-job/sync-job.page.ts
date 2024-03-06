@@ -12,7 +12,6 @@ import { SortConfig } from 'src/app/models/options-interface';
     styleUrls: ['sync-job.page.scss'],
 })
 export class SyncJobPage extends PageBase {
-    statusList = [];
     constructor(
         public pageProvider: SYS_SyncJobProvider,
         public branchProvider: BRA_BranchProvider,
@@ -63,12 +62,4 @@ export class SyncJobPage extends PageBase {
             });
         }
     }
-    loadedData(event) {
-        this.items.forEach(i => { 
-            i.BranchName = this.env.branchList.find(b => i.Id == b.Id)?.Name;
-        });
-        super.loadedData(event);
-
-    }
-
 }
