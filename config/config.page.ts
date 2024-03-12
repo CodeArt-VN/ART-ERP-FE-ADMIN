@@ -144,19 +144,4 @@ export class ConfigPage extends PageBase {
     this.items = [...data];
   }
   
-  backSubPage() {
-    this.pageConfig.isMainPageActive = true;
-    this.pageConfig.isShowFeature = true;
-  }
-
-  toggleFeature() {
-    this.pageConfig.isShowFeature = !this.pageConfig.isShowFeature;
-    if(this.pageConfig.isShowFeature) {
-        this.pageConfig.isMainPageActive = true;
-    }
-    else
-    {
-        this.pageConfig.isMainPageActive = false;
-    }
-  }
 }
