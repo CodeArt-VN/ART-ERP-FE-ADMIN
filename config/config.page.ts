@@ -143,5 +143,4 @@ export class ConfigPage extends PageBase {
   savedConfig(data) {
     this.items = [...data];
   }
-  
 }
