@@ -49,7 +49,7 @@
   </div>
 </ion-header>
 
-<ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
+<ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature, childViewActive: !pageConfig.isMainPageActive}" forceOverscroll="false">
   <ion-fab
     *ngIf="pageConfig.isShowFeature"
     [ngClass]="{withSearch: pageConfig.isShowSearch}"
