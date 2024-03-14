@@ -379,7 +379,7 @@ export class PriceListDetailPage extends PageBase {
                     text: 'Có',
                     cssClass: 'success-btn',
                     handler: () => {
-                      this.downloadURLContent(ApiSetting.mainService.base + resp.FileUrl);
+                      this.downloadURLContent(resp.FileUrl);
                     },
                   },
                 ],
@@ -396,7 +396,7 @@ export class PriceListDetailPage extends PageBase {
         })
         .catch((err) => {
           if (err.statusText == 'Conflict') {
-            this.downloadURLContent(ApiSetting.mainService.base + err._body);
+            this.downloadURLContent(err._body);
           }
           if (loading) loading.dismiss();
         });
@@ -415,7 +415,7 @@ export class PriceListDetailPage extends PageBase {
       this.priceListVersionDetail
         .export({ IDPriceListVersion: id })
         .then((response: any) => {
-          this.downloadURLContent(ApiSetting.mainService.base + response);
+          this.downloadURLContent(response);
           if (loading) loading.dismiss();
           this.submitAttempt = false;
         })
@@ -436,7 +436,7 @@ export class PriceListDetailPage extends PageBase {
       this.pageProvider
         .export({ Id: this.id })
         .then((response: any) => {
-          this.downloadURLContent(ApiSetting.mainService.base + response);
+          this.downloadURLContent(response);
           if (loading) loading.dismiss();
           this.submitAttempt = false;
         })
