@@ -9,7 +9,7 @@
     (refresh)="refresh()"
     (help)="help()"
   ></app-list-toolbar>
-  <div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}" *ngIf="pageConfig.isShowSearch">
+  <div class="withFeature left tab-search" [ngClass]="{withFeature: pageConfig.isShowFeature, childViewActive: !pageConfig.isMainPageActive}" *ngIf="pageConfig.isShowSearch">
     <section class="table">
       <header class="bold">
         <div class="col-checkbox cell"></div>
