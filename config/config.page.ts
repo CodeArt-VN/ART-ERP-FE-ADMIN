@@ -42,7 +42,7 @@ export class ConfigPage extends PageBase {
     super();
     this.item = {};
     this.pageConfig.isShowFeature = true;
-    this.pageConfig.isMainPageActive = true;
+    this.pageConfig.isFeatureAsMain = true;
     this.segmentView = this.route.snapshot?.paramMap?.get('segment');
   }
 
@@ -105,7 +105,7 @@ export class ConfigPage extends PageBase {
   selectedOption = null;
 
   loadNode(option = null) {
-    this.pageConfig.isMainPageActive = false;
+    this.pageConfig.isSubActive = true;
     if (!option && this.segmentView) {
       option = this.optionGroup.find((d) => d.Code == this.segmentView);
     }
