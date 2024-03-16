@@ -1,24 +1,11 @@
 <ion-header>
-	<app-list-toolbar [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query" (add)="add()" (refresh)="refresh()" (export)="export()" (import)="import($event)" (help)="help()" (unselect)="unselect()" (archiveItems)="archiveItems()" (deleteItems)="deleteItems()" (changeBranch)="changeBranch($event)">
-		<ion-buttons selected *ngIf="pageConfig.canSync && selectedItems.length >= 1">
-			<ion-button title="{{'Sync' | translate}}" (click)="sync()">
-				<ion-icon color="success" name="sync-outline"></ion-icon>
-			</ion-button>
-		</ion-buttons>
-	</app-list-toolbar>
-</ion-header>
-<!-- <ion-header>
-	<app-toolbar pageTitle="Sync Job" [page]="this" [pageConfig]="pageConfig" [selectedItems]="selectedItems" [query]="query">
-		<ion-button selected title="{{'Sync' | translate}}" *ngIf="pageConfig.canSync && selectedItems.length>=1" (click)="sync()">
+	<app-toolbar [page]="this" [selectedItems]="selectedItems" [query]="query">
+		<ion-button tollbarSelected title="{{'Sync' | translate}}" (click)="sync()">
 			<ion-icon color="success" name="sync-outline"></ion-icon>
 		</ion-button>
-		<ion-item rightScreenPop title="{{'Sync' | translate}}" lines="full" [button]="true" [detail]="false"
-			*ngIf="pageConfig.canSync && selectedItems.length>=1" (click)="sync()">
-			<ion-icon color="success" slot="start" name="ync-outline"></ion-icon>
-			<ion-label> {{'CreateARInvoice' | translate}}</ion-label>
-		</ion-item>
 	</app-toolbar>
-</ion-header> -->
+</ion-header>
+
 
 <ion-content appScrollbarTheme class="scrollx" *ngIf="items">
 	<ion-refresher [disabled]="!pageConfig.refresher" [disabled]="!pageConfig.refresher" slot="fixed" (ionRefresh)="refresh($event)">
