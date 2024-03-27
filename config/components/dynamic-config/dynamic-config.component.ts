@@ -101,7 +101,7 @@ export class DynamicConfigComponent extends PageBase {
             c.bindLabel = selectOption.BindLabel || 'Name';
 
             if (selectOption && selectOption.Model == 'SYS_Type') {
-              await this.env.getType(selectOption.Key).then((data) => {
+              await this.env.getType(selectOption.Key, true).then((data) => {
                 c.items = data;
               });
             } else if (selectOption && selectOption.Model == 'SYS_Status') {
