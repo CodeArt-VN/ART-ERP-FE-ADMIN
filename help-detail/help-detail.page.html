@@ -1,0 +1,103 @@
+<ion-header>
+	<app-toolbar [page]="this" pageTitle="{{'Help detail' | translate}}" [pageConfig]="pageConfig"
+		[selectedItems]="selectedItems" [query]="query"></app-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+	<div *ngIf="!showEditorContent && item">
+		<div [innerHtml]="content | safeHtml" class="ql-editor"></div>
+	  </div>
+	<div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
+		<ion-grid fixed>
+			<form [formGroup]="formGroup">
+				<ion-row>
+					<ion-col size="12" size-sm>
+						<app-page-title [icon]="person-outline" [color]="warning" [title]="'Help'"></app-page-title>
+					</ion-col>
+					<ion-col>
+						
+					</ion-col>
+				</ion-row>
+			</form>
+		</ion-grid>
+		<div class="row-full shadow full-screen">
+			<ion-toolbar color="primary">
+			  <ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
+				<ion-segment-button value="s1">
+				  <ion-label>{{'Content' | translate}}</ion-label>
+				</ion-segment-button>
+				<ion-segment-button value="s2">
+				  <ion-label>{{'Other information' | translate}}</ion-label>
+				</ion-segment-button>
+			  </ion-segment>
+			</ion-toolbar>
+			<form [formGroup]="formGroup">
+			  <div class="ion-padding" *ngIf="segmentView == 's1'">
+				<!-- Create the editor container -->
+				<div
+				  #quillEditor
+				  style="min-height: 200px"
+				  id="editor"
+				  [innerHTML]="formGroup.controls.Content.value | safeHtml"
+				  (focusout)="saveChange()"
+				></div>
+			  </div>
+			</form>
+	  
+			<!-- Order information -->
+			<div *ngIf="segmentView == 's2'" class="ion-padding">
+			  <ion-grid fixed>
+				<form [formGroup]="formGroup">
+				  <!-- Other information -->
+				  <ion-row class="hr-group">
+					<ion-col size="12">
+					  <app-form-control
+						*ngIf="item.Id"
+						[field]="{id:'Id', label: 'Id', type : 'number', form : formGroup }"
+						(change)="saveChange()"
+					  >
+					  </app-form-control>
+	  
+					  <app-form-control
+						[field]="{id:'Code', label: 'Code', type : 'text', form : formGroup }"
+						(change)="saveChange()"
+					  ></app-form-control>
+					  <app-form-control
+						[field]="{id:'Summary', type : 'textarea', label: 'Summary', form : formGroup }"
+						(change)="saveChange()"
+					  ></app-form-control>
+	  
+					  <app-form-control
+						*ngIf="item.Id"
+						[field]="{id:'CreatedBy', type : 'text', label: 'Created by', form : formGroup }"
+					  ></app-form-control>
+					  <app-form-control
+						*ngIf="item.Id"
+						[field]="{id:'CreatedDate', type : 'span-datetime', label: 'Created date', form : formGroup }"
+					  ></app-form-control>
+					  <app-form-control
+						*ngIf="item.Id"
+						[field]="{id:'ModifiedBy', type : 'text', label: 'Last modified by', form : formGroup }"
+					  ></app-form-control>
+					  <app-form-control
+						*ngIf="item.Id"
+						[field]="{id:'ModifiedDate', type : 'span-datetime', label: 'Last modified date', form : formGroup }"
+					  ></app-form-control>
+					  <app-form-control
+						*ngIf="item.Id"
+						[field]="{id:'IDBranch', type : 'branch-breadcrumbs', label: 'Branch', form : formGroup, dataSource:env.branchList }"
+					  ></app-form-control>
+					  <app-form-control
+						[field]="{id:'Remark', type : 'textarea', label: 'Remark', form : formGroup }"
+						(change)="saveChange()"
+					  ></app-form-control>
+					</ion-col>
+				  </ion-row>
+				</form>
+			  </ion-grid>
+			</div>
+		  </div>
+
+	</div>
+	<app-page-message [itemsLength]="item? 1: 0" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+</ion-content>

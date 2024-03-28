@@ -1,0 +1,118 @@
+import { Component, ViewChild } from '@angular/core';
+import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
+import { EnvService } from 'src/app/services/core/env.service';
+import { PageBase } from 'src/app/page-base';
+import { SYS_FormProvider } from 'src/app/services/static/services.service';
+import { FormDetailPage } from '../form-detail/form-detail.page';
+
+@Component({
+  selector: 'app-help',
+  templateUrl: 'help.page.html',
+  styleUrls: ['help.page.scss'],
+})
+export class HelpPage extends PageBase {
+  itemsState: any = [];
+  itemsView = [];
+  isAllRowOpened = false;
+  typeList = [];
+
+  constructor(
+    public pageProvider: SYS_FormProvider,
+    public modalController: ModalController,
+    public alertCtrl: AlertController,
+    public loadingController: LoadingController,
+    public env: EnvService,
+    public navCtrl: NavController,
+  ) {
+    super();
+    this.query.Take = 5000;
+    this.query.AllChildren = true;
+    this.query.AllParent = true;
+  }
+
+  loadedData(event) {
+    this.buildFlatTree(this.items, this.itemsState, this.isAllRowOpened).then((resp: any) => {
+      this.itemsState = resp;
+      this.itemsView = this.itemsState.filter((d) => d.show);
+    });
+    super.loadedData(event);
+  }
+
+  loadData(event = null) {
+    if (this.pageConfig.isDetailPage) {
+      this.loadAnItem(event);
+    } else {
+      this.parseSort();
+
+      if (this.pageProvider && !this.pageConfig.isEndOfData) {
+        if (event == 'search') {
+          this.env.getStorage('UserProfile').then((result) => {
+            if (result.Forms.length == 0) {
+              this.pageConfig.isEndOfData = true;
+            }
+            this.items = result.Forms;
+            this.loadedData(null);
+          });
+        } else {
+          this.env
+            .getStorage('UserProfile')
+            .then((i) => {
+              let result = i.Forms;
+
+              const shouldFilter =
+                (this.query?.Code && this.query.Code !== '') || (this.query?.Keyword && this.query.Keyword !== '');
+
+              if (shouldFilter) {
+                result = result.filter((e) => {
+                  const queryCode = this.query?.Code && this.query.Code !== '' && e.Code === this.query.Code;
+                  const queryKeyword =
+                    this.query?.Keyword && this.query.Keyword !== '' && e.Name === this.query.Keyword;
+                  return queryCode || queryKeyword;
+                });
+              }
+              return result;
+            })
+            .then((data) => {
+              if (data.length == 0) {
+                this.pageConfig.isEndOfData = true;
+              }
+              if (data.length > 0) {
+                let firstRow = data[0];
+
+                //Fix dupplicate rows
+                if (this.items.findIndex((d) => d.Id == firstRow.Id) == -1) {
+                  this.items = [...this.items, ...data];
+                }
+              }
+              this.loadedData(event);
+            })
+            .catch((err) => {
+              if (err.message != null) {
+                this.env.showMessage(err.message, 'danger');
+              } else {
+                this.env.showTranslateMessage('Cannot extract data', 'danger');
+              }
+
+              this.loadedData(event);
+            });
+        }
+      } else {
+        this.loadedData(event);
+      }
+    }
+  }
+
+  toggleRowAll() {
+    this.isAllRowOpened = !this.isAllRowOpened;
+    this.itemsState.forEach((i) => {
+      i.showdetail = !this.isAllRowOpened;
+      this.toggleRow(this.itemsState, i, true);
+    });
+    this.itemsView = this.itemsState.filter((d) => d.show);
+  }
+
+  toggleRow(ls, ite, toogle = false) {
+    super.toggleRow(ls, ite, toogle);
+    this.itemsView = this.itemsState.filter((d) => d.show);
+  }
+}
