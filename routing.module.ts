@@ -13,6 +13,6 @@ export const ADMINRoutes: Routes = [
   { path: 'sync-job', loadChildren: () => import('./sync-job/sync-job.module').then(m => m.SyncJobPageModule), canActivate: [AuthGuard] },
   
   { path: 'help', loadChildren: () => import('./help/help.module').then(m => m.HelpPageModule), canActivate: [AuthGuard] },
-  { path: 'help/:id', loadChildren: () => import('./help-detail/help-detail.module').then(m => m.HelpDetailPageModule), canActivate: [AuthGuard] },
+  { path: 'help/:code', loadChildren: () => import('./help-detail/help-detail.module').then(m => m.HelpDetailPageModule), canActivate: [AuthGuard] },
   
 ];

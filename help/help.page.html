@@ -76,7 +76,7 @@
         ></ion-icon>
         <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
         <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
-        <ion-text class="clickable" [color]="i.Color"><a style="color: #000;" [routerLink]="['/'+pageConfig.pageName+'/'+i.Id]">{{i.Name}}</a></ion-text>
+        <ion-text class="clickable" [color]="i.Color"><a style="color: #000;" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]">{{i.Name}}</a></ion-text>
         <ion-text color="medium" *ngIf="i.Remark">
           <small>&nbsp; - {{i.Remark}}</small>
         </ion-text>

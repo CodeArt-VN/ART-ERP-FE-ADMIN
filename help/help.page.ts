@@ -59,17 +59,15 @@ export class HelpPage extends PageBase {
             .then((i) => {
               let result = i.Forms;
 
-              const shouldFilter =
-                (this.query?.Code && this.query.Code !== '') || (this.query?.Keyword && this.query.Keyword !== '');
+              const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
 
               if (shouldFilter) {
                 result = result.filter((e) => {
-                  const queryCode = this.query?.Code && this.query.Code !== '' && e.Code === this.query.Code;
-                  const queryKeyword =
-                    this.query?.Keyword && this.query.Keyword !== '' && e.Name === this.query.Keyword;
-                  return queryCode || queryKeyword;
+                  const queryKeyword = e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase());
+                  return queryKeyword;
                 });
               }
+              result = result.filter((d) => !d.Code.startsWith('can'));
               return result;
             })
             .then((data) => {

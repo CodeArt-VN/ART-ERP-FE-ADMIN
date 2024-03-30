@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ShareModule } from 'src/app/share.module';
 import { HelpDetailPage } from './help-detail.page';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
     IonicModule,
     ReactiveFormsModule,
     ShareModule,
+    PipesModule,
     RouterModule.forChild(routes)
   ],
   declarations: [HelpDetailPage]
