@@ -45,55 +45,45 @@ export class HelpPage extends PageBase {
       this.parseSort();
 
       if (this.pageProvider && !this.pageConfig.isEndOfData) {
-        if (event == 'search') {
-          this.env.getStorage('UserProfile').then((result) => {
-            if (result.Forms.length == 0) {
+        this.env
+          .getStorage('UserProfile')
+          .then((i) => {
+            let result = i.Forms;
+
+            const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
+
+            if (shouldFilter) {
+              result = result.filter((e) => {
+                const queryKeyword = e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase());
+                return queryKeyword;
+              });
+            }
+            result = result.filter((d) => !d.Code.startsWith('can'));
+            return result;
+          })
+          .then((data) => {
+            if (data.length == 0) {
               this.pageConfig.isEndOfData = true;
             }
-            this.items = result.Forms;
-            this.loadedData(null);
+            if (data.length > 0) {
+              let firstRow = data[0];
+
+              //Fix dupplicate rows
+              if (this.items.findIndex((d) => d.Id == firstRow.Id) == -1) {
+                this.items = [...this.items, ...data];
+              }
+            }
+            this.loadedData(event);
+          })
+          .catch((err) => {
+            if (err.message != null) {
+              this.env.showMessage(err.message, 'danger');
+            } else {
+              this.env.showTranslateMessage('Cannot extract data', 'danger');
+            }
+
+            this.loadedData(event);
           });
-        } else {
-          this.env
-            .getStorage('UserProfile')
-            .then((i) => {
-              let result = i.Forms;
-
-              const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
-
-              if (shouldFilter) {
-                result = result.filter((e) => {
-                  const queryKeyword = e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase());
-                  return queryKeyword;
-                });
-              }
-              result = result.filter((d) => !d.Code.startsWith('can'));
-              return result;
-            })
-            .then((data) => {
-              if (data.length == 0) {
-                this.pageConfig.isEndOfData = true;
-              }
-              if (data.length > 0) {
-                let firstRow = data[0];
-
-                //Fix dupplicate rows
-                if (this.items.findIndex((d) => d.Id == firstRow.Id) == -1) {
-                  this.items = [...this.items, ...data];
-                }
-              }
-              this.loadedData(event);
-            })
-            .catch((err) => {
-              if (err.message != null) {
-                this.env.showMessage(err.message, 'danger');
-              } else {
-                this.env.showTranslateMessage('Cannot extract data', 'danger');
-              }
-
-              this.loadedData(event);
-            });
-        }
       } else {
         this.loadedData(event);
       }
