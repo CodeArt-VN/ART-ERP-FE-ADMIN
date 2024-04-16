@@ -1,16 +1,15 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { NavController, ModalController, AlertController, LoadingController, PopoverController } from '@ionic/angular';
-import { EnvService } from 'src/app/services/core/env.service';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { AlertController, LoadingController, ModalController, NavController, PopoverController } from '@ionic/angular';
 import { PageBase } from 'src/app/page-base';
+import { EnvService } from 'src/app/services/core/env.service';
+import { lib } from 'src/app/services/static/global-functions';
 import {
   BRA_BranchProvider,
   SYS_ConfigOptionProvider,
   SYS_ConfigProvider,
 } from 'src/app/services/static/services.service';
-import { lib } from 'src/app/services/static/global-functions';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-config',
@@ -52,7 +51,7 @@ export class ConfigPage extends PageBase {
     Promise.all([this.sysConfigOptionProvider.read(this.optionQuery)]).then((values: any) => {
       this.optionGroup = lib.listToTree(values[0]['data']);
       this.branchList = this.env.branchList;
-      this.selectedBranch = this.branchList.find((d) => d.Id == this.id);
+      this.selectedBranch = this.branchList.find((d) => d.Id == (this.id || this.env.selectedBranch));
       if (!this.selectedBranch || this.selectedBranch.disabled) {
         this.selectedBranch = this.branchList.find((d) => d.disabled == false);
       }
