@@ -1,7 +1,9 @@
 <ion-header>
-  <app-list-toolbar
-    pageTitle="{{'Access authorazation' | translate}}"
+  <app-toolbar 
+    [page]="this" 
+    pageTitle="{{'Access authorazation' | translate}}" 
     [pageConfig]="pageConfig"
+    selectedTitle="{{selectedItems.length}} {{'Access authorazation' | translate}}" 
     [selectedItems]="selectedItems"
     [query]="query"
     (refresh)="refresh()"
@@ -10,8 +12,9 @@
     (help)="help()"
     (unselect)="unselect()"
     (archiveItems)="archiveItems()"
-    (deleteItems)="deleteItems()"
-  ></app-list-toolbar>
+    (deleteItems)="deleteItems()">
+  </app-toolbar>
+
   <div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
     <section class="table">
       <header class="bold">

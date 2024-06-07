@@ -1,7 +1,9 @@
 <ion-header>
-  <app-list-toolbar
-    pageTitle="{{'Price list' | translate}}"
+  <app-toolbar 
+    [page]="this" 
+    pageTitle="{{'Price list' | translate}}" 
     [pageConfig]="pageConfig"
+    selectedTitle="{{selectedItems.length}} {{'Price list' | translate}}" 
     [selectedItems]="selectedItems"
     [query]="query"
     (add)="add()"
@@ -12,8 +14,9 @@
     (unselect)="unselect()"
     (archiveItems)="archiveItems()"
     (deleteItems)="deleteItems()"
-    (changeBranch)="changeBranch($event)"
-  ></app-list-toolbar>
+    (changeBranch)="changeBranch($event)">
+  </app-toolbar>
+  
   <section class="table">
     <header class="bold">
       <div class="col-checkbox cell"></div>

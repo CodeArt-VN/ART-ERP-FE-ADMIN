@@ -1,7 +1,9 @@
 <ion-header>
-  <app-list-toolbar
-    pageTitle="{{'System function' | translate}}"
+  <app-toolbar 
+    [page]="this" 
+    pageTitle="{{'System function' | translate}}" 
     [pageConfig]="pageConfig"
+    selectedTitle="{{selectedItems.length}} {{'System function' | translate}}" 
     [selectedItems]="selectedItems"
     [query]="query"
     (add)="add()"
@@ -12,8 +14,8 @@
     (unselect)="unselect()"
     (archiveItems)="archiveItems()"
     (deleteItems)="deleteItems()"
-    (copy)="copy()"
-  ></app-list-toolbar>
+    (copy)="copy()">
+  </app-toolbar>
 
   <section class="table">
     <header class="bold">
