@@ -6,13 +6,7 @@
     selectedTitle="{{selectedItems.length}} {{'Access authorazation' | translate}}" 
     [selectedItems]="selectedItems"
     [query]="query"
-    (refresh)="refresh()"
-    (export)="export()"
-    (import)="import($event)"
-    (help)="help()"
-    (unselect)="unselect()"
-    (archiveItems)="archiveItems()"
-    (deleteItems)="deleteItems()">
+    [ShowFeature] = "true">
   </app-toolbar>
 
   <div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
