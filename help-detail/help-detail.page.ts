@@ -35,7 +35,6 @@ export class HelpDetailPage extends PageBase {
     public cdr: ChangeDetectorRef,
     public loadingController: LoadingController,
     public commonService: CommonService,
-    public dynamicScriptLoaderService: DynamicScriptLoaderService,
   ) {
     super();
     this.pageConfig.isDetailPage = true;
