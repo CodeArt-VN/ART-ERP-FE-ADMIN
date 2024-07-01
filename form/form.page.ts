@@ -28,8 +28,6 @@ export class FormPage extends PageBase {
     this.query.Take = 5000;
     this.query.AllChildren = true;
     this.query.AllParent = true;
-
-    this.pageConfig.canCopy = true;
   }
 
   loadedData(event) {

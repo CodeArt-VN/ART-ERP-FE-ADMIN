@@ -37,8 +37,6 @@ export class PermissionPage extends PageBase {
     this.query.Take = 5000;
     this.query.AllChildren = true;
     this.query.AllParent = true;
-
-    this.pageConfig.ShowFeature = false;
     this.pageConfig.isShowFeature = true;
   }
 
