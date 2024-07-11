@@ -45,7 +45,7 @@ export class ConfigPage extends PageBase {
     this.segmentView = this.route.snapshot?.paramMap?.get('segment');
   }
 
-  optionQuery = { Keyword: '', AllChildren: true, AllParent: true };
+  optionQuery = { Keyword: '', AllChildren: true, AllParent: true, Take: 5000 };
 
   preLoadData(event) {
     Promise.all([this.sysConfigOptionProvider.read(this.optionQuery)]).then((values: any) => {
