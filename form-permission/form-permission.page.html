@@ -1,0 +1,130 @@
+<ion-header>
+  <app-toolbar [page]="this">
+    <ion-button tollbarSelected (click)="viewPermission()">
+      <label>{{ 'View' | translate }}</label>
+    </ion-button>
+  </app-toolbar>
+
+  <div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
+    <section class="table">
+      <header class="bold">
+        <div class="col-checkbox cell"></div>
+        <div class="col-name cell" style="padding: 0">
+          <ion-icon
+            class="min-btn"
+            (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
+            *ngIf="formQuery.Keyword"
+            name="search"
+            color="primary"
+          ></ion-icon>
+        </div>
+      </header>
+      <form (submit)="refresh()" action="#">
+        <header class="filter" *ngIf="pageConfig.isShowSearch">
+          <div class="cell" style="padding: 0">
+            <ion-button
+              style="--padding-start: 4px"
+              (click)="showCheckedOnly = !showCheckedOnly"
+              fill="clear"
+              size="small"
+            >
+              <ion-icon slot="icon-only" [name]="showCheckedOnly? 'radio-button-on' : 'radio-button-off' "></ion-icon>
+            </ion-button>
+            <input
+              [ngModelOptions]="{standalone: true}"
+              [(ngModel)]="formQuery.Keyword"
+              class="c-input"
+              [ngClass]="{active: formQuery.Keyword}"
+              type="text"
+            />
+            <ion-icon
+              class="min-btn"
+              (click)="formQuery.Keyword=''; refresh()"
+              *ngIf="formQuery.Keyword"
+              name="close-circle-outline"
+            ></ion-icon>
+          </div>
+          <button mat-raised-button type="submit" style="display: none">Search</button>
+        </header>
+      </form>
+    </section>
+  </div>
+</ion-header>
+
+<ion-content appScrollbarTheme class="header-table left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
+  <app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+  <ion-fab
+    *ngIf="pageConfig.isShowFeature"
+    [ngClass]="{withSearch: pageConfig.isShowSearch}"
+    class="feature no-print"
+    vertical="bottom"
+    horizontal="start"
+    slot="fixed"
+  >
+    <div class="table">
+      <div *ngFor="let i of itemsView; let j = index;" class="row" [ngClass]="{selected: i.checked}">
+        <div class="col-checkbox cell">
+          <input
+            (click)="changeSelection(i, $event)"
+            class="c-checkbox"
+            [(ngModel)]="i.checked"
+            type="checkbox"
+            [disabled]="!(i.Type == 1 || i.Type == 2 || i.Type == 3)"
+          />
+        </div>
+        <div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
+          <ng-container *ngFor="let w of i.levels; let k = index;"
+            ><span class="spacing" *ngIf="k>0"></span
+          ></ng-container>
+          <ion-icon
+            (click)="toggleRow(itemsState, i, true);"
+            class="min-btn clickable"
+            [name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
+            *ngIf="i.HasChild"
+          ></ion-icon>
+          <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
+          <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
+          <ion-text class="clickable" [color]="i.Color">{{i.Name}}</ion-text>
+        </div>
+      </div>
+    </div>
+  </ion-fab>
+
+  <section class="table" *ngIf="pageConfig.showSpinner==false">
+    <div class="table">
+      <div *ngFor="let i of itemsView; let j = index;" class="row">
+        <div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
+          <ng-container *ngFor="let w of i.levels; let k = index;"
+            ><span class="spacing" *ngIf="k>0"></span
+          ></ng-container>
+          <ion-icon
+            (click)="toggleRow(itemsState, i, true);"
+            class="min-btn clickable"
+            [name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
+            *ngIf="i.HasChild"
+          ></ion-icon>
+          <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
+          <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
+          <ion-text class="clickable" [color]="i.Color">{{i.Name}}</ion-text>
+        </div>
+
+        <div class="col-name cell">
+          <div>
+            <div *ngFor="let j of i._groups;" class="row">
+              <app-branch-breadcrumbs
+                [maxItems]="3"
+                [itemsBeforeCollapse]="0"
+                [itemsAfterCollapse]="2"
+                [Id]="j.IDBranch"
+                [Items]="env.jobTitleList"
+                [ngClass]="{'no-check-dirty': noCheckDirty}"
+                class="c-input disable breadcrumbs"
+                *ngIf="j.IDBranch"
+              ></app-branch-breadcrumbs>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ion-content>
