@@ -1,18 +1,15 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
-import { EnvService } from 'src/app/services/core/env.service';
+import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
 import { PageBase } from 'src/app/page-base';
+import { EnvService } from 'src/app/services/core/env.service';
 import {
   BRA_BranchProvider,
   SYS_FormProvider,
   SYS_PermissionListProvider,
 } from 'src/app/services/static/services.service';
 
-import { FormDetailPage } from '../form-detail/form-detail.page';
 import { lib } from 'src/app/services/static/global-functions';
-
-import { concat, of, Subject } from 'rxjs';
-import { catchError, distinctUntilChanged, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { FormDetailPage } from '../form-detail/form-detail.page';
 
 @Component({
   selector: 'app-permission',
@@ -152,9 +149,8 @@ export class PermissionPage extends PageBase {
     });
   }
 
-  changePermission(form) {
+  changePermission(form, parentOnly = false, childrenOnly = false) {
     if (this.isTrackChange && this.selectedBranch && !form._submitAttempt) {
-      //console.log(form);
       let permission = this.items.find((d) => d.IDForm == form.Id);
       if (!permission) {
         permission = {
@@ -172,21 +168,21 @@ export class PermissionPage extends PageBase {
         this.pageProvider.save(permission).then((resp: any) => {
           permission.Id = resp.Id;
           form._submitAttempt = false;
-          if (form.IDParent && form.checked) {
+          if (form.IDParent && form.checked && !childrenOnly) {
             let parent = this.formList.find((d) => d.Id == form.IDParent);
             if (parent && !parent.checked) {
               parent.checked = true;
-              this.changePermission(parent);
+              this.changePermission(parent, true, false);
             }
           }
 
-          if (!form.checked) {
+          if (!parentOnly) {
             let childrenForms = this.formList.filter((d) => d.IDParent == form.Id);
             if (childrenForms.length) {
               childrenForms.forEach((i) => {
-                if (i.checked) {
-                  i.checked = false;
-                  this.changePermission(i);
+                if (i.checked != form.checked) {
+                  i.checked = form.checked;
+                  this.changePermission(i, false, true);
                 }
               });
             }
@@ -196,36 +192,7 @@ export class PermissionPage extends PageBase {
     }
   }
 
-  // branchList$
-  // branchListLoading = false;
-  // branchListInput$ = new Subject<string>();
-  // branchListSelected = [];
   selectedBranch = null;
-  // branchSearch() {
-  //     this.branchListLoading = false;
-  //     this.branchList$ = concat(
-  //         of(this.branchListSelected),
-  //         this.branchListInput$.pipe(
-  //             distinctUntilChanged(),
-  //             tap(() => this.branchListLoading = true),
-  //             switchMap(term => this.branchProvider.search({ Take: 5000, Skip: 0, Keyword: term, Id: this.env.selectedBranchAndChildren })
-  //                 .pipe(
-  //                     catchError(() => of([])), // empty list on error
-  //                     tap(() => this.branchListLoading = false),
-  //                     mergeMap((e: any) => {
-  //                         lib.markNestedNode(e, this.env.selectedBranch);
-  //                         for (let idx = 0; idx < e.length; idx++) {
-  //                             const i = e[idx];
-  //                             i.disabled = (!i.flag || i.Type != 'TitlePosition');
-  //                         }
-  //                         this.branchListSelected = e;
-  //                         return lib.buildFlatTree(e, e);
-  //                     }),
-  //                 ))
-  //         )
-  //     );
-  // }
-
   searchResultIdList = { term: '', ids: [] };
   searchShowAllChildren = (term: string, item: any) => {
     if (this.searchResultIdList.term != term) {
