@@ -153,7 +153,7 @@ export class PermissionPage extends PageBase {
   }
 
   changePermission(form) {
-    if (this.isTrackChange && this.selectedBranch) {
+    if (this.isTrackChange && this.selectedBranch && !form._submitAttempt) {
       //console.log(form);
       let permission = this.items.find((d) => d.IDForm == form.Id);
       if (!permission) {
@@ -167,10 +167,11 @@ export class PermissionPage extends PageBase {
 
       if (permission.Visible != form.checked) {
         permission.Visible = form.checked;
+        form._submitAttempt = true;
 
         this.pageProvider.save(permission).then((resp: any) => {
           permission.Id = resp.Id;
-
+          form._submitAttempt = false;
           if (form.IDParent && form.checked) {
             let parent = this.formList.find((d) => d.Id == form.IDParent);
             if (parent && !parent.checked) {

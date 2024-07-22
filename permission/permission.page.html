@@ -168,7 +168,7 @@
           <div class="col-checkbox cell">
             <!-- <input [disabled]="i.disabled" (click)="changePermission(i)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox"> -->
             <ion-checkbox
-              [disabled]="i.disabled"
+              [disabled]="i.disabled || i._submitAttempt"
               [(ngModel)]="i.checked"
               (ionChange)="changePermission(i)"
             ></ion-checkbox>
