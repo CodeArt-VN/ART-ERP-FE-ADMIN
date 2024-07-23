@@ -82,6 +82,7 @@
         <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
         <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
         <ion-text class="clickable" (click)="showModal(i)" [color]="i.Color">{{i.Name}}</ion-text>
+        <ion-icon color="warning" *ngIf="i.IsDisabled" name="archive"></ion-icon>
         <ion-text color="medium" *ngIf="i.Remark">
           <small>&nbsp; - {{i.Remark}}</small>
         </ion-text>
