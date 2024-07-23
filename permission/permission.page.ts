@@ -19,6 +19,7 @@ import { FormDetailPage } from '../form-detail/form-detail.page';
 export class PermissionPage extends PageBase {
   showCheckedOnly = false;
   isAllRowOpened = false;
+  ctrlOrCmdPressed = false;
 
   constructor(
     public pageProvider: SYS_PermissionListProvider,
@@ -35,6 +36,17 @@ export class PermissionPage extends PageBase {
     this.query.AllChildren = true;
     this.query.AllParent = true;
     this.pageConfig.isShowFeature = true;
+    window.addEventListener('keydown', (event) => {
+      if (event.ctrlKey || event.metaKey) {
+        this.ctrlOrCmdPressed = true;
+      }
+    });
+
+    window.addEventListener('keyup', (event) => {
+      if (!event.ctrlKey && !event.metaKey) {
+        this.ctrlOrCmdPressed = false;
+      }
+    });
   }
 
   formList = [];
@@ -176,7 +188,7 @@ export class PermissionPage extends PageBase {
             }
           }
 
-          if (!parentOnly) {
+          if (!parentOnly && (this.ctrlOrCmdPressed || !form.checked)) {
             let childrenForms = this.formList.filter((d) => d.IDParent == form.Id);
             if (childrenForms.length) {
               childrenForms.forEach((i) => {
