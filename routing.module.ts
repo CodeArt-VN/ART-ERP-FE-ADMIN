@@ -16,4 +16,5 @@ export const ADMINRoutes: Routes = [
   { path: 'help/:code', loadChildren: () => import('./help-detail/help-detail.module').then(m => m.HelpDetailPageModule), canActivate: [AuthGuard] },
   
   { path: 'form-permission', loadChildren: () => import('./form-permission/form-permission.module').then(m => m.FormPermissionPageModule), canActivate: [AuthGuard] },
+  { path: 'translate', loadChildren: () => import('./translate/translate.module').then(m => m.TranslatePageModule), canActivate: [AuthGuard] },
 ];
