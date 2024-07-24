@@ -27,8 +27,6 @@ export class TranslatePage extends PageBase {
   }
 
   preLoadData(event) {
-    this.pageConfig.canImport = true;
-    this.pageConfig.canExport = true;
     Promise.all([this.env.getType('Languages')]).then((values: any) => {
       this.languageList = values[0];
       super.preLoadData(event);
