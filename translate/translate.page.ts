@@ -45,9 +45,25 @@ export class TranslatePage extends PageBase {
         .export({ Id: this.id })
         .then((response: any) => {
           this.pageProvider.commonService
-            .connect('GET', 'SYS/Translate/i18n/', code)
+            .connect('GET', 'SYS/Translate/i18n/', { code: code })
             .toPromise()
-            .then(() => {
+            .then((data: any) => {
+              let dataConvert = this.convertArrayToObject(
+                data.map((e) => {
+                  return {
+                    [e.Key]: e.Value,
+                  };
+                }),
+              );
+              const blob = new Blob([JSON.stringify(dataConvert)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const anchor = document.createElement('a');
+              anchor.href = url;
+              anchor.download = code;
+              document.body.appendChild(anchor);
+              anchor.click();
+              document.body.removeChild(anchor);
+              URL.revokeObjectURL(url);
               this.env.showTranslateMessage('Download success', 'success');
               if (loading) loading.dismiss();
               this.submitAttempt = false;
@@ -62,5 +78,13 @@ export class TranslatePage extends PageBase {
           this.submitAttempt = false;
         });
     });
+  }
+
+  convertArrayToObject(arr: any[]): any {
+    return arr.reduce((accumulator, currentObject) => {
+      const key = Object.keys(currentObject)[0];
+      const value = currentObject[key];
+      return { ...accumulator, [key]: value };
+    }, {});
   }
 }
