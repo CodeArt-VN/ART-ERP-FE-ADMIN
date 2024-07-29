@@ -8,11 +8,10 @@ import { EnvService } from 'src/app/services/core/env.service';
 import {
   BRA_BranchProvider,
   CRM_ContactProvider,
-  SYS_RoleProvider,
+  SYS_AccountGroupProvider,
 } from 'src/app/services/static/services.service';
 import { FormArray, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
-
 
 @Component({
   selector: 'app-account-group-detail',
@@ -24,7 +23,7 @@ export class AccountGroupDetailPage extends PageBase {
   SelectedOrderList: any;
   SelectedInvoiceList: any;
   constructor(
-    public pageProvider: SYS_RoleProvider,
+    public pageProvider: SYS_AccountGroupProvider,
     public branchProvider: BRA_BranchProvider,
     public env: EnvService,
     public navCtrl: NavController,
@@ -58,15 +57,11 @@ export class AccountGroupDetailPage extends PageBase {
     });
   }
 
-
-
-
   typeDataSource: any;
   preLoadData(event?: any): void {
-    this.typeDataSource = this.env.branchList.filter((d) => d.Type == "PositionType");
+    this.typeDataSource = this.env.branchList.filter((d) => d.Type == 'PositionType');
     super.preLoadData(event);
   }
-
 
   loadedData(event?: any, ignoredFromGroup?: boolean): void {
     super.loadedData(event, ignoredFromGroup);
@@ -74,11 +69,10 @@ export class AccountGroupDetailPage extends PageBase {
     this.patchUserAccountValue();
   }
 
-
   private patchTitlePositionValue() {
     this.formGroup.controls.TitlePosition = new FormArray([]);
     if (this.item.TitlePositions?.length) {
-      this.item.TitlePositions.forEach(i => {
+      this.item.TitlePositions.forEach((i) => {
         this.addTitlePositionValue(i);
       });
     }
@@ -95,19 +89,17 @@ export class AccountGroupDetailPage extends PageBase {
     if (markAsDirty) {
       group.get('Name').markAsDirty();
       group.get('Remark').markAsDirty();
-     
     }
   }
 
   private patchUserAccountValue() {
     this.formGroup.controls.UserAccount = new FormArray([]);
     if (this.item.UserAccount?.length) {
-      this.item.UserAccount.forEach(i => {
+      this.item.UserAccount.forEach((i) => {
         this.addUserAccountValue(i);
       });
     }
   }
-  
 
   private addUserAccountValue(line, markAsDirty = false) {
     let groups = <FormArray>this.formGroup.controls.UserAccount;
@@ -123,18 +115,17 @@ export class AccountGroupDetailPage extends PageBase {
       group.get('Sort').markAsDirty();
     }
   }
-  
+
   isOpenTitlePosition = true;
   changeType(e) {
     console.log(e);
   }
- 
 
-  addTitlePosition(){
+  addTitlePosition() {
     let newTitlePosition = {
       Id: 0,
       Name: '',
-      Remark:''
+      Remark: '',
     };
     this.addTitlePositionValue(newTitlePosition, true);
   }

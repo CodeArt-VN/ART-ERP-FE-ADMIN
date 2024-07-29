@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { BRA_BranchProvider, HRM_StaffProvider, SYS_RoleProvider, SYS_TranslateProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, SYS_AccountGroupProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
 
 
@@ -14,7 +14,7 @@ import { Location } from '@angular/common';
 export class AccountGroupPage extends PageBase {
 
   constructor(
-    public pageProvider: SYS_RoleProvider,
+    public pageProvider: SYS_AccountGroupProvider,
     public branchProvider: BRA_BranchProvider,
     public modalController: ModalController,
     public popoverCtrl: PopoverController,
