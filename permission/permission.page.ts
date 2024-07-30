@@ -10,6 +10,7 @@ import {
 
 import { lib } from 'src/app/services/static/global-functions';
 import { FormDetailPage } from '../form-detail/form-detail.page';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-permission',
@@ -20,6 +21,7 @@ export class PermissionPage extends PageBase {
   showCheckedOnly = false;
   isAllRowOpened = false;
   ctrlOrCmdPressed = false;
+  isDevMode = !environment.production
 
   constructor(
     public pageProvider: SYS_PermissionListProvider,
@@ -60,23 +62,18 @@ export class PermissionPage extends PageBase {
 
   deparmentList = [];
   preLoadData(event = null) {
-    Promise.all([
-      this.formProvider.read(this.formQuery),
-      // this.branchProvider.read({
-      //     Id: this.env.selectedBranchAndChildren
-      // })
-    ]).then((values) => {
-      this.buildFlatTree(values[0]['data'], this.formList, false).then((resp: any) => {
-        this.formList = resp;
+    if (this.pageConfig.canViewAllData) {
+      Promise.all([this.formProvider.read(this.formQuery)]).then((values) => {
+        this.buildFlatTree(values[0]['data'], this.formList, false).then((resp: any) => {
+          this.formList = resp;
+        });
+
+        super.preLoadData(event);
       });
-
-      // this.buildFlatTree(values[1]['data'], this.deparmentList, true).then((resp: any) => {
-      //     this.deparmentList = resp;
-      // });
-
+    } else {
+      this.formList = lib.cloneObject(this.env.user.Forms);
       super.preLoadData(event);
-    });
-    //this.branchSearch();
+    }
   }
 
   loadData(event) {
@@ -162,7 +159,8 @@ export class PermissionPage extends PageBase {
   }
 
   changePermission(form, parentOnly = false, childrenOnly = false) {
-    if (this.isTrackChange && this.selectedBranch && !form._submitAttempt) {
+
+    if (this.isTrackChange && this.selectedBranch && !form._submitAttempt && this.pageConfig.canEdit) {
       let permission = this.items.find((d) => d.IDForm == form.Id);
       if (!permission) {
         permission = {

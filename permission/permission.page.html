@@ -122,6 +122,7 @@
           appendTo=""
           #IDBranch
           labelForId="IDBranch"
+          [disabled]="!pageConfig.canEdit"
           [items]="env.branchList"
           [(ngModel)]="selectedBranch.CanViewDataInObject"
           [multiple]="true"
@@ -168,7 +169,7 @@
           <div class="col-checkbox cell">
             <!-- <input [disabled]="i.disabled" (click)="changePermission(i)" class="c-checkbox" [(ngModel)]="i.checked" type="checkbox"> -->
             <ion-checkbox
-              [disabled]="i.disabled || i._submitAttempt || i.IsDisabled"
+              [disabled]="i.disabled || i._submitAttempt || i.IsDisabled || !pageConfig.canEdit"
               [(ngModel)]="i.checked"
               (ionChange)="changePermission(i)"
             ></ion-checkbox>
@@ -191,9 +192,9 @@
               </ion-text>
             </span>
           </div>
-          <!-- <div class="col-checkbox cell" *ngIf="pageConfig.canEditFunction">
+          <div class="col-checkbox cell" *ngIf="isDevMode">
 						<ion-icon (click)="showForm(i)" title="{{'show-form' | translate}}" class="min-btn" name="pencil-outline"></ion-icon>
-					</div> -->
+					</div>
         </div>
       </ng-container>
     </div>
