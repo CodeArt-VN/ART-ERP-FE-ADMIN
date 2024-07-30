@@ -2,3 +2,11 @@
     min-height: calc(100vh - 97px);
 }
 
+.row .col-name {
+    flex: 1;
+}
+
+.row .col-icon {
+    flex: 0 0 auto; 
+    margin-left: auto;
+}
