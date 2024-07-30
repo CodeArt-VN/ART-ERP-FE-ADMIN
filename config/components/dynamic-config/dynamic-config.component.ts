@@ -96,9 +96,9 @@ export class DynamicConfigComponent extends PageBase {
 
           try {
             let selectOption = JSON.parse(c.SelectOptions);
-            c.multiple = selectOption.Multiple || false;
-            c.bindValue = selectOption.BindValue || '';
-            c.bindLabel = selectOption.BindLabel || 'Name';
+            c.multiple = selectOption?.Multiple || false;
+            c.bindValue = selectOption?.BindValue || '';
+            c.bindLabel = selectOption?.BindLabel || 'Name';
 
             if (selectOption && selectOption.Model == 'SYS_Type') {
               await this.env.getType(selectOption.Key, true).then((data) => {
