@@ -1,4 +1,4 @@
-import { catchError, distinctUntilChanged, map, merge, startWith, switchMap, tap } from 'rxjs/operators';
+import { catchError, distinctUntilChanged, map, merge, switchMap, tap } from 'rxjs/operators';
 import { from, of, Subject } from 'rxjs';
 import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { NavController, ModalController, LoadingController, AlertController } from '@ionic/angular';
@@ -10,7 +10,6 @@ import {
   CRM_ContactProvider,
   SYS_AccountGroupProvider,
   SYS_BranchInGroupProvider,
-  SYS_PermissionListProvider,
   SYS_UserInGroupProvider,
 } from 'src/app/services/static/services.service';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -66,7 +65,6 @@ export class AccountGroupDetailPage extends PageBase {
       CreatedDate: new FormControl({ value: '', disabled: true }),
       ModifiedBy: new FormControl({ value: '', disabled: true }),
       ModifiedDate: new FormControl({ value: '', disabled: true }),
-      DeletedFields: [[]],
     });
   }
 
@@ -80,8 +78,8 @@ export class AccountGroupDetailPage extends PageBase {
       }),
     ]).then((values) => {
       this.roleDataSource = values[0];
-      let titlePosition = values[1]['data'].filter((i) => i.Type == 'TitlePosition');
-      this.buildFlatTree(titlePosition, this.titlePositions, false).then((resp: any) => {
+      let dataTitlePosition = values[1]['data'].filter((i) => i.Type == 'TitlePosition');
+      this.buildFlatTree(dataTitlePosition, this.titlePositions, false).then((resp: any) => {
         this.titlePositions = resp;
       });
       super.preLoadData(null);
@@ -332,5 +330,12 @@ export class AccountGroupDetailPage extends PageBase {
 
   async saveChange() {
     super.saveChange2();
+  }
+
+  savedChange(savedItem = null, form = this.formGroup) {
+    super.savedChange(savedItem, form);
+    if (!this.item.TitlePosition && !this.item.UserAccount) {
+      this.refresh();
+    }
   }
 }
