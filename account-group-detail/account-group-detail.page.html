@@ -63,39 +63,45 @@
               </ion-col>
 
               <ion-col size="12" size-sm size-xl="8">
-                <div class="table-contain">
-                  <section class="table">
-                    <div
-                      class="row"
-                      [ngClass]="{odd: j % 2 != 0 }"
-                      *ngFor="let g of formGroup.get('TitlePosition')['controls']; let j = index;"
-                    >
-                      <div class="col-name cell">
-                        <app-input-control
-                          [field]="{id:'Name', label: 'Name', type : 'text', form : g}"
-                          (click)="presentPopoverTitlePosition($event, g);"
-                        ></app-input-control>
-                      </div>
-
-                      <div class="col-icon cell" *ngIf="pageConfig.canDelete && pageConfig.canEdit">
-                        <ion-icon
-                          color="danger"
-                          (click)="removeTitlePosition(g, j)"
-                          class="min-btn"
-                          name="trash-outline"
-                        ></ion-icon>
-                      </div>
-                    </div>
-                  </section>
-                  <div class="row" *ngIf="pageConfig.canAdd && pageConfig.canEdit">
-                    <div class="cell">
-                      <ion-button fill="clear" size="small" (click)="presentPopoverTitlePosition($event, null)">
-                        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
-                        {{'Add title position' | translate}}
-                      </ion-button>
-                    </div>
-                  </div>
-                </div>
+                <app-data-table
+                  class="box-shadow responsive"
+                  *ngIf="item.TitlePosition?.length > 0"
+                  [rows]="item.TitlePosition"
+                >
+                  <datatable-column class="col-name" property="IDBranch">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <app-branch-breadcrumbs
+                        [maxItems]="2"
+                        [itemsBeforeCollapse]="0"
+                        [itemsAfterCollapse]="2"
+                        [Id]="i.IDBranch"
+                        [Items]="this.titlePositions"
+                        [ngClass]="{'no-check-dirty': noCheckDirty}"
+                        class="c-input disable breadcrumbs"
+                        *ngIf="i.IDBranch"
+                      ></app-branch-breadcrumbs>
+                    </ng-template>
+                  </datatable-column>
+                  <datatable-column class="col-icon" property="Id" *ngIf="pageConfig.canEdit || pageConfig.canDelete">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <ion-icon
+                        color="danger"
+                        (click)="removeTitlePosition(i)"
+                        class="min-btn"
+                        name="trash-outline"
+                      ></ion-icon>
+                    </ng-template>
+                  </datatable-column>
+                </app-data-table>
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  *ngIf="pageConfig.canEdit"
+                  (click)="presentPopoverTitlePosition($event, null)"
+                >
+                  <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                  {{'Add title position' | translate}}
+                </ion-button>
               </ion-col>
             </ion-row>
 
@@ -107,71 +113,76 @@
               </ion-col>
 
               <ion-col size="12" size-sm size-xl="8">
-                <div class="table-contain">
-                  <section class="table">
-                    <div
-                      class="row"
-                      [ngClass]="{odd: j % 2 != 0 }"
-                      *ngFor="let g of formGroup.get('UserAccount')['controls']; let j = index;"
-                    >
-                      <ng-container [formGroup]="g">
-                        <div class="col-name cell">
-                          <ng-select
-                            formControlName="IDUser"
-                            appendTo="#ng-select-holder"
-                            class="c-input"
-                            (change)="changeUser($event, g)"
-                            [labelForId]="'IDUser'+idx"
-                            [items]="g.controls._UserDataSource.value | async"
-                            [clearable]="false"
-                            [typeahead]="g.controls._UserSearchInput.value"
-                            [loading]="g.controls._UserSearchLoading.value"
-                            [virtualScroll]="true"
-                            bindLabel="FullName"
-                            bindValue="Id"
-                            placeholder="{{'Search for username' | translate}}"
-                          >
-                            <ng-template ng-label-tmp let-i="item">
-                              <div>
-                                <span [title]="i.FullName"> {{i.FullName}}</span>
-                              </div>
-                            </ng-template>
-                            <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
-                              <div *ngIf="i">
-                                <div>
-                                  <span [ngOptionHighlight]="search">{{i.FullName}}</span>
-                                </div>
-                                <small
-                                  >#<b
-                                    ><span class="important" [ngOptionHighlight]="search"
-                                      >{{i.Id}} - {{i.UserName}}</span
-                                    ></b
-                                  ></small
-                                >
-                              </div>
-                            </ng-template>
-                          </ng-select>
-                        </div>
-                      </ng-container>
-                      <div class="col-icon cell" *ngIf="pageConfig.canDelete && pageConfig.canEdit">
-                        <ion-icon
-                          color="danger"
-                          (click)="removeUserAccount(g, j)"
-                          class="min-btn"
-                          name="trash-outline"
-                        ></ion-icon>
+                <app-data-table
+                  class="box-shadow responsive"
+                  *ngIf="item.UserAccount?.length > 0"
+                  [rows]="item.UserAccount"
+                >
+                  <datatable-column class="col-name" property="Name">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <ion-avatar class="avatar" slot="start">
+                        <ion-img #img [src]="i?.Avatar" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
+                      </ion-avatar>
+                      <div *ngIf="!i?.isAdd">
+                        <span class="bold">{{i?._User?.FullName}}</span>
+                        <br />
+                        {{i?._User?.UserName}}
                       </div>
-                    </div>
-                  </section>
-                  <div class="row" *ngIf="pageConfig.canAdd && pageConfig.canEdit">
-                    <div class="cell">
-                      <ion-button fill="clear" size="small" (click)="addUserAccountValue( {Id: 0})">
-                        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
-                        {{'Add user account' | translate}}
-                      </ion-button>
-                    </div>
-                  </div>
-                </div>
+                      <ng-container *ngIf="i?.isAdd" [formGroup]="i?._formGroup">
+                        <ng-select
+                          formControlName="IDUser"
+                          appendTo="#ng-select-holder"
+                          class="c-input"
+                          (change)="changeUserAccount($event, i._formGroup)"
+                          [labelForId]="'IDUser'+idx"
+                          [items]="i._formGroup.controls._UserDataSource.value | async"
+                          [clearable]="false"
+                          [typeahead]="i._formGroup.controls._UserSearchInput.value"
+                          [loading]="i._formGroup.controls._UserSearchLoading.value"
+                          [virtualScroll]="true"
+                          bindLabel="FullName"
+                          bindValue="Id"
+                          placeholder="{{'Search for username' | translate}}"
+                        >
+                          <ng-template ng-label-tmp let-i="item">
+                            <div>
+                              <span [title]="i.FullName"> {{i.FullName}}</span>
+                            </div>
+                          </ng-template>
+                          <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
+                            <div *ngIf="i">
+                              <div>
+                                <span [ngOptionHighlight]="search">{{i.FullName}}</span>
+                              </div>
+                              <small
+                                >#<b
+                                  ><span class="important" [ngOptionHighlight]="search"
+                                    >{{i.Id}} - {{i.UserName}}</span
+                                  ></b
+                                ></small
+                              >
+                            </div>
+                          </ng-template>
+                        </ng-select>
+                      </ng-container>
+                    </ng-template>
+                  </datatable-column>
+
+                  <datatable-column class="col-icon" property="Id" *ngIf="pageConfig.canEdit || pageConfig.canDelete">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <ion-icon
+                        color="danger"
+                        (click)="removeUserAccount(i)"
+                        class="min-btn"
+                        name="trash-outline"
+                      ></ion-icon>
+                    </ng-template>
+                  </datatable-column>
+                </app-data-table>
+                <ion-button fill="clear" size="small" *ngIf="pageConfig.canEdit" (click)="addUserAccount()">
+                  <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                  {{'Add user account' | translate}}
+                </ion-button>
               </ion-col>
             </ion-row>
 
@@ -234,7 +245,6 @@
                   bindLabel="Name"
                   bindValue="Id"
                   [clearable]="false"
-                  placeholder="{{ 'id-title-position' | translate }}"
                 >
                   <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
                     <div *ngIf="i">

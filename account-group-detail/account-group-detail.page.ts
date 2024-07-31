@@ -15,6 +15,8 @@ import {
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
 import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
+import { lib } from 'src/app/services/static/global-functions';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-account-group-detail',
@@ -56,8 +58,6 @@ export class AccountGroupDetailPage extends PageBase {
       Code: ['', Validators.required],
       Type: ['', Validators.required],
       Remark: [''],
-      TitlePosition: this.formBuilder.array([]),
-      UserAccount: this.formBuilder.array([]),
       IDUser: [''],
       IsDisabled: new FormControl({ value: '', disabled: true }),
       IsDeleted: new FormControl({ value: '', disabled: true }),
@@ -75,10 +75,14 @@ export class AccountGroupDetailPage extends PageBase {
         Take: 5000,
         AllChildren: true,
         AllParent: true,
+        Type: 'TitlePosition',
       }),
     ]).then((values) => {
       this.roleDataSource = values[0];
-      let dataTitlePosition = values[1]['data'].filter((i) => i.Type == 'TitlePosition');
+      let dataTitlePosition = values[1]['data'];
+      dataTitlePosition.forEach((i) => {
+        i.disabled = i.Type != 'TitlePosition';
+      });
       this.buildFlatTree(dataTitlePosition, this.titlePositions, false).then((resp: any) => {
         this.titlePositions = resp;
       });
@@ -92,36 +96,60 @@ export class AccountGroupDetailPage extends PageBase {
     });
   }
 
+  loadAnItem(event = null) {
+    this.id = typeof this.id == 'string' ? parseInt(this.id) : this.id;
+
+    if (this.id) {
+      this.pageProvider.commonService
+        .connect('GET', 'SYS/AccountGroup/GetAnItem', { Id: this.id })
+        .toPromise()
+        .then((ite: any) => {
+          this.item = ite;
+          this.loadedData(event);
+        })
+        .catch((err) => {
+          console.log(err);
+
+          if ((err.status = 404)) {
+            this.nav('not-found', 'back');
+          } else {
+            this.item = null;
+            this.loadedData(event);
+          }
+        });
+    } else if (this.id == 0) {
+      if (!this.item) this.item = {};
+
+      Object.assign(this.item, this.DefaultItem);
+      this.loadedData(event);
+    } else {
+      this.loadedData(event);
+    }
+  }
+
   loadedData(event?: any, ignoredFromGroup?: boolean): void {
     super.loadedData(event, ignoredFromGroup);
+    if (!this.item.TitlePosition) {
+      this.item.TitlePosition = [];
+    }
+    if (!this.item.UserAccount) {
+      this.item.UserAccount = [];
+    } else {
+      this.item.UserAccount.forEach((i) => {
+        i.Avatar = environment.staffAvatarsServer + i.Code + '.jpg';
+      });
+    }
     if (this.item?.Type && this.item?.Type == 'STAFF') {
       this.isOpenTitlePosition = true;
     } else {
       this.isOpenTitlePosition = false;
     }
-    if (this.item.TitlePosition?.length > 0 || !this.pageConfig.canEdit) {
+    if (this.item.TitlePosition.length > 0 || !this.pageConfig.canEdit) {
       this.formGroup.get('Type').disable();
     } else {
       this.formGroup.get('Type').enable();
     }
     this.roleSelected = this.formGroup.get('Type').value;
-
-    this.patchTitlePositionValue();
-    this.patchUserAccountValue();
-  }
-
-  patchTitlePositionValue() {
-    this.formGroup.controls.TitlePosition = new FormArray([]);
-    if (this.item.TitlePosition?.length) {
-      this.item.TitlePosition.forEach((i) => {
-        this.addTitlePositionValue(i);
-      });
-    }
-    if (!this.pageConfig.canEdit) {
-      this.formGroup.controls.TitlePosition.disable();
-    } else {
-      this.formGroup.controls.TitlePosition.enable();
-    }
   }
 
   changeType(e) {
@@ -137,16 +165,12 @@ export class AccountGroupDetailPage extends PageBase {
   }
 
   presentPopoverTitlePosition(e: Event, fg = null) {
-    if (fg?.value?.IDBranch) {
-      this.formGroupTitle = fg;
-    } else {
-      this.formGroupTitle = this.formBuilder.group({
-        IDBranch: [null],
-        Id: [0],
-        Name: [''],
-        IDAccountGroup: [''],
-      });
-    }
+    this.formGroupTitle = this.formBuilder.group({
+      IDBranch: [fg?.IDBranch],
+      Id: [fg?.Id ?? 0],
+      Name: [fg?.Name ?? ''],
+      IDAccountGroup: [fg?.IDAccountGroup ?? ''],
+    });
     this.popoverTitlePosition.event = e;
     this.isPopoverTitlePositionOpen = true;
   }
@@ -172,12 +196,15 @@ export class AccountGroupDetailPage extends PageBase {
               IDAccountGroup: resp.IDAccountGroup,
               IDBranch: resp.IDBranch,
             };
-            this.addTitlePositionValue(item);
+            this.item.TitlePosition.push(item);
           } else {
-            this.formGroupTitle.get('Name').setValue(name);
+            let item = this.item.TitlePosition.find((i) => i.Id == id);
+            if (item) {
+              item.Name = name;
+              item.IDBranch = idBranch;
+            }
           }
-          const groups = this.formGroup.controls.TitlePosition as FormArray;
-          if (groups.length > 0) {
+          if (this.item.TitlePosition.length > 0) {
             this.formGroup.get('Type').disable();
           } else {
             this.formGroup.get('Type').enable();
@@ -196,28 +223,12 @@ export class AccountGroupDetailPage extends PageBase {
     }
   }
 
-  addTitlePositionValue(line, markAsDirty = false) {
-    let groups = <FormArray>this.formGroup.controls.TitlePosition;
-    let group = this.formBuilder.group({
-      Id: [line.Id],
-      Name: [line?.Name],
-      IDAccountGroup: [this.item.Id],
-      IDBranch: [line?.IDBranch],
-    });
-    groups.push(group);
-    if (markAsDirty) {
-      group.get('Id').markAsDirty();
-      group.get('IDBranch').markAsDirty();
-      group.get('IDAccountGroup').markAsDirty();
-    }
-  }
-
-  removeTitlePosition(fg, j) {
-    let groups = <FormArray>this.formGroup.controls.TitlePosition;
-    let itemToDelete = fg.getRawValue();
+  removeTitlePosition(item) {
+    let groups = this.item.TitlePosition;
+    let index = groups.findIndex((i) => i == item);
     this.env.showPrompt('Bạn chắc muốn xóa ?', null, 'Xóa ' + 1 + ' dòng').then((_) => {
-      this.branchInGroupProvider.delete(itemToDelete).then((result) => {
-        groups.removeAt(j);
+      this.branchInGroupProvider.delete(item).then((result) => {
+        groups.splice(index, 1);
         if (groups.length > 0) {
           this.formGroup.get('Type').disable();
         } else {
@@ -226,35 +237,25 @@ export class AccountGroupDetailPage extends PageBase {
       });
     });
   }
-
-  patchUserAccountValue() {
-    this.formGroup.controls.UserAccount = new FormArray([]);
-    if (this.item.UserAccount?.length) {
-      this.item.UserAccount.forEach((i) => {
-        this.addUserAccountValue(i);
-      });
-    }
-    if (!this.pageConfig.canEdit) {
-      this.formGroup.controls.UserAccount.disable();
-    } else {
-      this.formGroup.controls.UserAccount.enable();
-    }
-  }
-
-  addUserAccountValue(line, markAsDirty = false) {
-    let searchInput$ = new Subject<string>();
-    let groups = <FormArray>this.formGroup.controls.UserAccount;
-    let selected = {
-      Id: line?.IDUser,
-      FullName: line?.Name,
+  
+  addUserAccount(): void {
+    let newUser: any = {
+      Id: 0,
+      IDAccountGroup: this.item.Id,
+      Avatar: environment.staffAvatarsServer + '.jpg',
+      IDUser: null,
+      isAdd: true,
     };
+    this.item.UserAccount.push(newUser);
+    let existedUsers = this.item.UserAccount.map((user) => user.IDUser);
+    let searchInput$ = new Subject<string>();
     let group = this.formBuilder.group({
-      Id: [line?.Id],
+      Id: new FormControl({ value: newUser.Id, disabled: true }),
       _UserSearchLoading: [false],
-      existedUsers: [groups.controls.map((d) => d.get('IDUser').value)],
+      existedUsers: [existedUsers],
       _UserSearchInput: [searchInput$],
       _UserDataSource: [
-        of([selected]).pipe(
+        of([]).pipe(
           merge(
             searchInput$.pipe(
               distinctUntilChanged(),
@@ -279,35 +280,52 @@ export class AccountGroupDetailPage extends PageBase {
           ),
         ),
       ],
-
-      IDAccountGroup: [this.item.Id],
-      IDUser: [line?.IDUser],
-      Name: [line?.Name],
+      Avatar: [newUser.Avatar],
+      IDAccountGroup: [newUser.IDAccountGroup],
+      IDUser: [newUser.IDUser],
     });
-    groups.push(group);
-    if (markAsDirty) {
-      group.get('Id').markAsDirty();
-      group.get('IDAccountGroup').markAsDirty();
-      group.get('IDUser').markAsDirty();
-      group.get('Name').markAsDirty();
+    newUser._formGroup = group;
+  }
+
+  closeAddUserAccount(row) {
+    row.isAdd = false;
+    if (row.Id === 0) {
+      this.item.UserAccount = this.item.UserAccount.filter((e) => e.Id !== 0);
+    } else {
+      row.isAdd = false;
     }
   }
 
-  changeUser(e, fg) {
+  changeUserAccount(e, fg) {
     if (this.submitAttempt == false) {
       this.submitAttempt = true;
       let user = {
         IDAccountGroup: this.item.Id,
         IDUser: e.Id,
-        Name: e.FullName,
         Id: fg.controls.Id.value ?? 0,
+        _User: {
+          FullName: e.FullName,
+          UserName: e.UserName,
+        },
+        Avatar: environment.staffAvatarsServer + e.Code + '.jpg',
       };
       this.userInGroupProvider
         .save(user)
         .then((resp: any) => {
-          fg.get('Id').setValue(resp.Id);
-          fg.markAsPristine();
-          this.cdr.detectChanges();
+          if (!user.Id) {
+            this.closeAddUserAccount(user);
+            const index = this.item.UserAccount.findIndex(
+              (u) => u.IDUser == user.IDUser
+            );
+
+            if (index !== -1) {
+              this.item.UserAccount[index] = {
+                ...resp,
+                _User: user._User,
+                Avatar: user.Avatar,
+              };
+            }
+          }
           this.env.showTranslateMessage('Saving completed!', 'success');
           this.submitAttempt = false;
         })
@@ -318,12 +336,17 @@ export class AccountGroupDetailPage extends PageBase {
     }
   }
 
-  removeUserAccount(fg, j) {
-    let groups = <FormArray>this.formGroup.controls.UserAccount;
-    let itemToDelete = fg.getRawValue();
+  removeUserAccount(item) {
+    let groups = this.item.UserAccount;
+    let index = groups.findIndex((i) => i == item);
     this.env.showPrompt('Bạn chắc muốn xóa ?', null, 'Xóa ' + 1 + ' dòng').then((_) => {
-      this.userInGroupProvider.delete(itemToDelete).then((result) => {
-        groups.removeAt(j);
+      this.userInGroupProvider.delete(item).then((result) => {
+        groups.splice(index, 1);
+        if (groups.length > 0) {
+          this.formGroup.get('Type').disable();
+        } else {
+          this.formGroup.get('Type').enable();
+        }
       });
     });
   }
@@ -334,8 +357,7 @@ export class AccountGroupDetailPage extends PageBase {
 
   savedChange(savedItem = null, form = this.formGroup) {
     super.savedChange(savedItem, form);
-    if (!this.item.TitlePosition && !this.item.UserAccount) {
-      this.refresh();
-    }
+    this.item = savedItem;
+    this.loadedData();
   }
 }
