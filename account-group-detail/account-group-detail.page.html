@@ -118,7 +118,7 @@
                   *ngIf="item.UserAccount?.length > 0"
                   [rows]="item.UserAccount"
                 >
-                  <datatable-column class="col-name" property="Name">
+                  <datatable-column class="col-name" property="Id">
                     <ng-template let-i="row" datatable-cell-template>
                       <ion-avatar class="avatar" slot="start">
                         <ion-img #img [src]="i?.Avatar" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
@@ -133,12 +133,12 @@
                           formControlName="IDUser"
                           appendTo="#ng-select-holder"
                           class="c-input"
-                          (change)="changeUserAccount($event, i._formGroup)"
+                          (change)="changeUserAccount($event, i?._formGroup)"
                           [labelForId]="'IDUser'+idx"
-                          [items]="i._formGroup.controls._UserDataSource.value | async"
+                          [items]="i?._formGroup.controls._UserDataSource.value | async"
                           [clearable]="false"
-                          [typeahead]="i._formGroup.controls._UserSearchInput.value"
-                          [loading]="i._formGroup.controls._UserSearchLoading.value"
+                          [typeahead]="i?._formGroup.controls._UserSearchInput.value"
+                          [loading]="i?._formGroup.controls._UserSearchLoading.value"
                           [virtualScroll]="true"
                           bindLabel="FullName"
                           bindValue="Id"
@@ -167,7 +167,6 @@
                       </ng-container>
                     </ng-template>
                   </datatable-column>
-
                   <datatable-column class="col-icon" property="Id" *ngIf="pageConfig.canEdit || pageConfig.canDelete">
                     <ng-template let-i="row" datatable-cell-template>
                       <ion-icon

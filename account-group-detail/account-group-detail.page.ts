@@ -12,10 +12,9 @@ import {
   SYS_BranchInGroupProvider,
   SYS_UserInGroupProvider,
 } from 'src/app/services/static/services.service';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
 import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
-import { lib } from 'src/app/services/static/global-functions';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -137,6 +136,7 @@ export class AccountGroupDetailPage extends PageBase {
     } else {
       this.item.UserAccount.forEach((i) => {
         i.Avatar = environment.staffAvatarsServer + i.Code + '.jpg';
+        i.isAdd = false;
       });
     }
     if (this.item?.Type && this.item?.Type == 'STAFF') {
@@ -244,9 +244,13 @@ export class AccountGroupDetailPage extends PageBase {
       IDAccountGroup: this.item.Id,
       Avatar: environment.staffAvatarsServer + '.jpg',
       IDUser: null,
+      _User: {
+        FullName: '',
+        UserName: '',
+      },
       isAdd: true,
     };
-    this.item.UserAccount.push(newUser);
+  
     let existedUsers = this.item.UserAccount.map((user) => user.IDUser);
     let searchInput$ = new Subject<string>();
     let group = this.formBuilder.group({
@@ -285,6 +289,7 @@ export class AccountGroupDetailPage extends PageBase {
       IDUser: [newUser.IDUser],
     });
     newUser._formGroup = group;
+    this.item.UserAccount.push(newUser);
   }
 
   closeAddUserAccount(row) {
@@ -314,17 +319,9 @@ export class AccountGroupDetailPage extends PageBase {
         .then((resp: any) => {
           if (!user.Id) {
             this.closeAddUserAccount(user);
-            const index = this.item.UserAccount.findIndex(
-              (u) => u.IDUser == user.IDUser
-            );
-
-            if (index !== -1) {
-              this.item.UserAccount[index] = {
-                ...resp,
-                _User: user._User,
-                Avatar: user.Avatar,
-              };
-            }
+            resp._User = user._User;
+            resp.Avatar = user.Avatar,
+            this.item.UserAccount.push(resp);
           }
           this.env.showTranslateMessage('Saving completed!', 'success');
           this.submitAttempt = false;
