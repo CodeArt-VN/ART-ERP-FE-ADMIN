@@ -2,3 +2,16 @@
     min-height: calc(100vh - 97px);
 }
 
+.row .col-name {
+    flex: 1;
+}
+
+.row .col-icon {
+    flex: 0 0 auto; 
+    margin-left: auto;
+}
+ion-avatar {
+    height: calc(10/16 * 4.0rem);
+    width: calc(10/16 * 4.0rem);
+    margin-right: 8px;
+}

@@ -1,145 +1,273 @@
 <ion-header>
-	<app-toolbar [page]="this"></app-toolbar>
+  <app-toolbar [page]="this"></app-toolbar>
 </ion-header>
 
 <ion-content appScrollbarTheme class="ion-padding">
-	<div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
-		<ion-grid fixed>
-			<ion-row>
-				<ion-col size="12" size-sm>
-					<app-page-title [icon]="person-outline" [color]="warning"
-						[title]="'Account group'"></app-page-title>
-				</ion-col>
-			</ion-row>
-		</ion-grid>
+  <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="12" size-sm>
+          <app-page-title [icon]="person-outline" [color]="warning" [title]="'Account group'"></app-page-title>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-		<div class="row-full shadow full-screen"
-			style="max-width: 1440px; margin: auto; width: 100%; position: relative; z-index: 0">
-			<div class="ion-padding">
-				<ion-grid fixed>
-					<form [formGroup]="formGroup">
-						<ion-row class="hr-group">
-							<ion-col size="12" size-sm="12" size-md="12" size-xl="4">
-								<ion-list-header class="ion-no-padding">
-									<ion-label color="primary">{{'General information' | translate}}</ion-label>
-								</ion-list-header>
-							</ion-col>
+    <div
+      class="row-full shadow full-screen"
+      style="max-width: 1440px; margin: auto; width: 100%; position: relative; z-index: 0"
+    >
+      <div class="ion-padding">
+        <ion-grid fixed>
+          <form [formGroup]="formGroup">
+            <ion-row class="hr-group">
+              <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+                <ion-list-header class="ion-no-padding">
+                  <ion-label color="primary">{{'General information' | translate}}</ion-label>
+                </ion-list-header>
+              </ion-col>
 
-							<ion-col size="12" size-sm size-xl="6">
-								<app-form-control [field]="{id:'Code', label: 'Code', type : 'text', form : formGroup }"
-								(change)="saveChange()">
-								</app-form-control>
-								<app-form-control [field]="{id:'Name', label: 'Name', type : 'text', form : formGroup }">
-									<small label *ngIf="item?.Id">Id: {{item.Id}}</small>
-								</app-form-control>
-							</ion-col>
-							
-						</ion-row>
-						<ion-row class="hr-group">
-							<ion-col size="12" size-sm="12" size-md="12" size-xl="4">
-								<ion-list-header class="ion-no-padding">
-									<ion-label color="primary">{{'System role' | translate}}</ion-label>
-								</ion-list-header>
-							</ion-col>
+              <ion-col size="12" size-sm size-xl="8">
+                <app-form-control
+                  [field]="{id:'Code', label: 'Code', type : 'text', form : formGroup }"
+                  (change)="saveChange()"
+                >
+                </app-form-control>
+                <app-form-control
+                  [field]="{id:'Name', label: 'Name', type : 'text', form : formGroup }"
+                  (change)="saveChange()"
+                >
+                  <small label *ngIf="item?.Id">Id: {{item.Id}}</small>
+                </app-form-control>
+              </ion-col>
+            </ion-row>
+            <ion-row class="hr-group">
+              <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+                <ion-list-header class="ion-no-padding">
+                  <ion-label color="primary">{{'System role' | translate}}</ion-label>
+                </ion-list-header>
+              </ion-col>
 
-							<ion-col size="12" size-sm size-xl="6">
-								<app-form-control
-									[field]="{id:'Type', label: 'Type', type : 'ng-select', dataSource: typeDataSource, bindValue:'Code', bindLabel:'Name', form : formGroup }"
-									(change)="changeType($event)">
-								</app-form-control>
-								
-							</ion-col>
-							
-						</ion-row>
-						<ion-row class="hr-group" *ngIf="isOpenTitlePosition">
-							<ion-col size="12" size-sm="12" size-md="12" size-xl="4">
-								<ion-list-header class="ion-no-padding">
-									<ion-label color="primary">{{'Title position' | translate}}</ion-label>
-								</ion-list-header>
-							</ion-col>
+              <ion-col size="12" size-sm size-xl="8">
+                <app-form-control
+                  [field]="{id:'Type', label: 'Role', type : 'ng-select', dataSource: roleDataSource, bindValue:'Name', bindLabel:'Name', form : formGroup }"
+                  (change)="changeType($event)"
+                >
+                </app-form-control>
+              </ion-col>
+            </ion-row>
+            <ion-row class="hr-group" *ngIf="isOpenTitlePosition">
+              <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+                <ion-list-header class="ion-no-padding">
+                  <ion-label color="primary">{{'Title position' | translate}}</ion-label>
+                </ion-list-header>
+              </ion-col>
 
-							<ion-col size="12" size-sm size-xl="6">
-								<div class="table-contain">
-									<section class="table" style="min-width: 1320px">
-									  <header class="bold" style="padding-right: 0">
-										
-										<div class="col-name cell">{{'Position' | translate}}</div>
-		
-										<div class="col-icon cell" *ngIf="pageConfig.canDelete && pageConfig.canEdit"></div>
-									  </header>
-									  <div class="row" [ngClass]="{odd: j % 2 != 0 }" *ngFor="let i of titlePosition; let j = index;">
+              <ion-col size="12" size-sm size-xl="8">
+                <app-data-table
+                  class="box-shadow responsive"
+                  *ngIf="item.TitlePosition?.length > 0"
+                  [rows]="item.TitlePosition"
+                >
+                  <datatable-column class="col-name" property="IDBranch">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <app-branch-breadcrumbs
+                        [maxItems]="2"
+                        [itemsBeforeCollapse]="0"
+                        [itemsAfterCollapse]="2"
+                        [Id]="i.IDBranch"
+                        [Items]="this.titlePositions"
+                        [ngClass]="{'no-check-dirty': noCheckDirty}"
+                        class="c-input disable breadcrumbs"
+                        *ngIf="i.IDBranch"
+                      ></app-branch-breadcrumbs>
+                    </ng-template>
+                  </datatable-column>
+                  <datatable-column class="col-icon" property="Id" *ngIf="pageConfig.canEdit || pageConfig.canDelete">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <ion-icon
+                        color="danger"
+                        (click)="removeTitlePosition(i)"
+                        class="min-btn"
+                        name="trash-outline"
+                      ></ion-icon>
+                    </ng-template>
+                  </datatable-column>
+                </app-data-table>
+                <ion-button
+                  fill="clear"
+                  size="small"
+                  *ngIf="pageConfig.canEdit"
+                  (click)="presentPopoverTitlePosition($event, null)"
+                >
+                  <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                  {{'Add title position' | translate}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
 
-										
-										<div class="name cell">
-										  <input 
-											class="c-input" type="number"
-											min="0" step="1" max="999999999999999999" />
-										</div>
-										
-										<div class="icon cell" *ngIf="pageConfig.canDeleteUoM && pageConfig.canEditTrans">
-										  <ion-icon color="danger" (click)="deleteUoM(i)" class="min-btn"
-											name="trash-outline"></ion-icon>
-										</div>
-									  </div>
-									</section>
-									<div class="row">
-									  <div class="cell">
-										<ion-button fill="clear" size="small" (click)="addTitlePosition()">
-										  <ion-icon slot="start" name="add-circle-outline"></ion-icon>
-										  {{'Add title' | translate}}
-										</ion-button>
-									  </div>
-									</div>
-								  </div>
-							
-								
-							</ion-col>
-						</ion-row>
-						
-						<ion-row class="hr-group">
-							<ion-col size="12" size-sm="12" size-md="12" size-xl="4">
-								<ion-list-header class="ion-no-padding">
-									<ion-label color="primary">{{'User account' | translate}}</ion-label>
-								</ion-list-header>
-							</ion-col>
+            <ion-row class="hr-group">
+              <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+                <ion-list-header class="ion-no-padding">
+                  <ion-label color="primary">{{'User account' | translate}}</ion-label>
+                </ion-list-header>
+              </ion-col>
 
-							<ion-col size="12" size-sm size-xl="6">
-								
-							
-								
-							</ion-col>
-						</ion-row>
+              <ion-col size="12" size-sm size-xl="8">
+                <app-data-table
+                  class="box-shadow responsive"
+                  *ngIf="item.UserAccount?.length > 0"
+                  [rows]="item.UserAccount"
+                >
+                  <datatable-column class="col-name" property="Id">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <ion-avatar class="avatar" slot="start">
+                        <ion-img #img [src]="i?.Avatar" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
+                      </ion-avatar>
+                      <div *ngIf="!i?.isAdd">
+                        <span class="bold">{{i?._User?.FullName}}</span>
+                        <br />
+                        {{i?._User?.UserName}}
+                      </div>
+                      <ng-container *ngIf="i?.isAdd" [formGroup]="i?._formGroup">
+                        <ng-select
+                          formControlName="IDUser"
+                          appendTo="#ng-select-holder"
+                          class="c-input"
+                          (change)="changeUserAccount($event, i?._formGroup)"
+                          [labelForId]="'IDUser'+idx"
+                          [items]="i?._formGroup.controls._UserDataSource.value | async"
+                          [clearable]="false"
+                          [typeahead]="i?._formGroup.controls._UserSearchInput.value"
+                          [loading]="i?._formGroup.controls._UserSearchLoading.value"
+                          [virtualScroll]="true"
+                          bindLabel="FullName"
+                          bindValue="Id"
+                          placeholder="{{'Search for username' | translate}}"
+                        >
+                          <ng-template ng-label-tmp let-i="item">
+                            <div>
+                              <span [title]="i.FullName"> {{i.FullName}}</span>
+                            </div>
+                          </ng-template>
+                          <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
+                            <div *ngIf="i">
+                              <div>
+                                <span [ngOptionHighlight]="search">{{i.FullName}}</span>
+                              </div>
+                              <small
+                                >#<b
+                                  ><span class="important" [ngOptionHighlight]="search"
+                                    >{{i.Id}} - {{i.UserName}}</span
+                                  ></b
+                                ></small
+                              >
+                            </div>
+                          </ng-template>
+                        </ng-select>
+                      </ng-container>
+                    </ng-template>
+                  </datatable-column>
+                  <datatable-column class="col-icon" property="Id" *ngIf="pageConfig.canEdit || pageConfig.canDelete">
+                    <ng-template let-i="row" datatable-cell-template>
+                      <ion-icon
+                        color="danger"
+                        (click)="removeUserAccount(i)"
+                        class="min-btn"
+                        name="trash-outline"
+                      ></ion-icon>
+                    </ng-template>
+                  </datatable-column>
+                </app-data-table>
+                <ion-button fill="clear" size="small" *ngIf="pageConfig.canEdit" (click)="addUserAccount()">
+                  <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                  {{'Add user account' | translate}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
 
-						<!-- Other information -->
-						<ion-row class="hr-group" *ngIf="item.Id">
-							<ion-col size="12" size-sm="12" size-md="12" size-xl="3">
-								<ion-list-header class="ion-no-padding">
-									<ion-label color="primary">{{'Other information' | translate}}</ion-label>
-								</ion-list-header>
-							</ion-col>
-							<ion-col size="12" size-sm size-xl="4">
-								<app-form-control
-									[field]="{id:'CreatedBy', type : 'text', label: 'Created by', form : formGroup }"></app-form-control>
-								<app-form-control
-									[field]="{id:'CreatedDate', type : 'span-datetime', label: 'Created date', form : formGroup }"></app-form-control>
-								<app-form-control
-									[field]="{id:'ModifiedBy', type : 'text', label: 'Last modified by', form : formGroup }"></app-form-control>
-								<app-form-control
-									[field]="{id:'ModifiedDate', type : 'span-datetime', label: 'Last modified date', form : formGroup }"></app-form-control>
-							</ion-col>
-							<ion-col size="12" size-sm size-xl="4">
-								<app-form-control
-									[field]="{id:'IDBranch', type : 'branch-breadcrumbs', label: 'Branch', form : formGroup, dataSource:env.branchList }"></app-form-control>
-								<app-form-control
-									[field]="{id:'Remark', type : 'textarea', label: 'Remark', form : formGroup }"
-									(change)="saveChange()"></app-form-control>
-							</ion-col>
-						</ion-row>
-					</form>
-				</ion-grid>
-			</div>
-			
-		</div>
-	</div>
-	<app-page-message [itemsLength]="item? 1: 0" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+            <!-- Other information -->
+            <ion-row class="hr-group" *ngIf="item.Id">
+              <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+                <ion-list-header class="ion-no-padding">
+                  <ion-label color="primary">{{'Other information' | translate}}</ion-label>
+                </ion-list-header>
+              </ion-col>
+              <ion-col size="12" size-sm size-xl="4">
+                <app-form-control
+                  [field]="{id:'CreatedBy', type : 'text', label: 'Created by', form : formGroup }"
+                ></app-form-control>
+                <app-form-control
+                  [field]="{id:'CreatedDate', type : 'span-datetime', label: 'Created date', form : formGroup }"
+                ></app-form-control>
+                <app-form-control
+                  [field]="{id:'ModifiedBy', type : 'text', label: 'Last modified by', form : formGroup }"
+                ></app-form-control>
+                <app-form-control
+                  [field]="{id:'ModifiedDate', type : 'span-datetime', label: 'Last modified date', form : formGroup }"
+                ></app-form-control>
+              </ion-col>
+              <ion-col size="12" size-sm size-xl="4">
+                <app-form-control
+                  [field]="{id:'IDBranch', type : 'branch-breadcrumbs', label: 'Branch', form : formGroup, dataSource:env.branchList }"
+                ></app-form-control>
+                <app-form-control
+                  [field]="{id:'Remark', type : 'textarea', label: 'Remark', form : formGroup }"
+                  (change)="saveChange()"
+                ></app-form-control>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+  <ion-popover
+    class="w300"
+    #popoverTitlePosition
+    [isOpen]="isPopoverTitlePositionOpen"
+    (didDismiss)="isPopoverTitlePositionOpen = false"
+  >
+    <ng-template>
+      <ion-content scroll-y="false">
+        <ion-list lines="none">
+          <div class="ion-padding">
+            <form [formGroup]="formGroupTitle">
+              <div class="c-control">
+                <ng-select
+                  appendTo="#ng-select-holder"
+                  formControlName="IDBranch"
+                  class="c-input"
+                  #TitlePosition
+                  labelForId="TitlePosition"
+                  [items]="titlePositions"
+                  [virtualScroll]="true"
+                  bindLabel="Name"
+                  bindValue="Id"
+                  [clearable]="false"
+                >
+                  <ng-template ng-option-tmp let-i="item" let-search="searchTerm">
+                    <div *ngIf="i">
+                      <div>
+                        <span *ngFor="let l of i.levels">&nbsp;&nbsp;&nbsp;</span>
+                        <ion-text [color]="i.Type == 'Company' ? 'primary' : 'dark'" [ngOptionHighlight]="search"
+                          >{{ i.Name }}</ion-text
+                        >
+                      </div>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+
+              <div class="c-control">
+                <ion-button color="primary" expand="block" (click)="onTitlePositionChange($event, formGroupTitle)">
+                  {{ 'Chọn chức danh' | translate }}
+                </ion-button>
+              </div>
+            </form>
+          </div>
+        </ion-list>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+  <app-page-message [itemsLength]="item? 1: 0" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 </ion-content>

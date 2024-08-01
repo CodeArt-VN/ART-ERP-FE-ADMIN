@@ -33,13 +33,4 @@ export class AccountGroupPage extends PageBase {
     this.sortToggle('Id', true);
     super.preLoadData(event);
   }
-
-
-  // loadedData(event) {
-  //   this.items.forEach((i) => {
-  //     i.Avatar = environment.staffAvatarsServer + i.Code + '.jpg';
-  //   });
-
-  //   super.loadedData(event);
-  // }
 }
