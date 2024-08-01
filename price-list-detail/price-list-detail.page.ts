@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { NavController, LoadingController, AlertController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController, PopoverController } from '@ionic/angular';
 import { PageBase } from 'src/app/page-base';
 import { ActivatedRoute } from '@angular/router';
 import { EnvService } from 'src/app/services/core/env.service';
@@ -15,8 +15,6 @@ import {
 import { FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
-import { concat, of, Subject } from 'rxjs';
-import { catchError, distinctUntilChanged, switchMap, tap } from 'rxjs/operators';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 import { lib } from 'src/app/services/static/global-functions';
 
@@ -36,7 +34,8 @@ export class PriceListDetailPage extends PageBase {
     public currencyProvider: SYS_CurrencyProvider,
     public priceListVersion: WMS_PriceListVersionProvider,
     public priceListVersionDetail: WMS_PriceListVersionDetailProvider,
-
+    
+    public popoverCtrl: PopoverController,
     public env: EnvService,
     public navCtrl: NavController,
     public route: ActivatedRoute,
