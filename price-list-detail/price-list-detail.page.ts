@@ -180,7 +180,7 @@ export class PriceListDetailPage extends PageBase {
       .create({
         header: 'Xóa phiên bản này',
         //subHeader: '---',
-        message: 'Bạn chắc muốn xóa phiên bản giá này?',
+        message: 'Bạn có chắc muốn xóa phiên bản giá này?',
         buttons: [
           {
             text: 'Không',
@@ -461,7 +461,7 @@ export class PriceListDetailPage extends PageBase {
         .create({
           header: 'Xóa giá',
           //subHeader: '---',
-          message: 'Bạn chắc muốn xóa giá này?',
+          message: 'Bạn có chắc muốn xóa giá này?',
           buttons: [
             { text: 'Không', role: 'cancel' },
             {

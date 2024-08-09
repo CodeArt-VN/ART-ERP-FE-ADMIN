@@ -44,14 +44,14 @@ export class SyncJobPage extends PageBase {
         };
         if (this.submitAttempt == false) {
             this.submitAttempt = true;
-            this.env.showLoading('Vui lòng chờ load dữ liệu...', this.pageProvider.commonService.connect('POST', 'SYS/SyncJob/Exec/', obj).toPromise())
+            this.env.showLoading2('Vui lòng chờ load dữ liệu...', this.pageProvider.commonService.connect('POST', 'SYS/SyncJob/Exec/', obj).toPromise())
             .then(() => {
-                this.env.showMessage('Sync completed ', 'success');
+                this.env.showTranslateMessage('Sync completed', 'success');
                 this.refresh();
                 this.submitAttempt = false;
 
             }).catch(err => {
-                this.env.showPrompt(err.error.ExceptionMessage, null , err.error.Message, 'Xác nhận', null, null).then(_=>{
+                this.env.showPrompt2(err.error.ExceptionMessage, null , err.error.Message, 'Xác nhận', null, null).then(_=>{
                 }).catch(e => { });
                 console.log(err.error)
                 this.submitAttempt = false;
