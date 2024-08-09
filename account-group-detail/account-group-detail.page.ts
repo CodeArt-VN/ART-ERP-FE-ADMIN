@@ -226,7 +226,7 @@ export class AccountGroupDetailPage extends PageBase {
   removeTitlePosition(item) {
     let groups = this.item.TitlePosition;
     let index = groups.findIndex((i) => i == item);
-    this.env.showPrompt('Bạn chắc muốn xóa ?', null, 'Xóa ' + 1 + ' dòng').then((_) => {
+    this.env.showPrompt2('Bạn có chắc muốn xóa ?', null, 'Xóa 1 dòng').then((_) => {
       this.branchInGroupProvider.delete(item).then((result) => {
         groups.splice(index, 1);
         if (groups.length > 0) {
@@ -336,7 +336,7 @@ export class AccountGroupDetailPage extends PageBase {
   removeUserAccount(item) {
     let groups = this.item.UserAccount;
     let index = groups.findIndex((i) => i == item);
-    this.env.showPrompt('Bạn chắc muốn xóa ?', null, 'Xóa ' + 1 + ' dòng').then((_) => {
+    this.env.showPrompt2('Bạn có chắc muốn xóa ?', null, 'Xóa 1 dòng').then((_) => {
       this.userInGroupProvider.delete(item).then((result) => {
         groups.splice(index, 1);
         if (groups.length > 0) {
