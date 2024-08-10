@@ -200,7 +200,7 @@ export class PriceListDetailPage extends PageBase {
                 this.env.publishEvent({
                   Code: this.pageConfig.pageName,
                 });
-                this.env.showTranslateMessage('Deleted!', 'success');
+                this.env.showMessage('Deleted!', 'success');
               });
             },
           },
@@ -298,7 +298,7 @@ export class PriceListDetailPage extends PageBase {
         p.Price1 = resp['Price1'];
         p.Price2 = resp['Price2'];
 
-        this.env.showTranslateMessage('Changes saved', 'success');
+        this.env.showMessage('Changes saved', 'success');
       });
   }
 
@@ -313,7 +313,7 @@ export class PriceListDetailPage extends PageBase {
       .connect(apiPath.method, apiPath.url(), this.item)
       .toPromise()
       .then((data: any) => {
-        this.env.showTranslateMessage('Changes saved', 'success');
+        this.env.showMessage('Changes saved', 'success');
         this.loadItemsPrice();
       });
   }
@@ -345,7 +345,7 @@ export class PriceListDetailPage extends PageBase {
 
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
-      message: 'Vui lòng chờ import dữ liệu',
+      message: 'Please wait for a few moments',
     });
     await loading.present().then(() => {
       this.pageProvider['importPriceList'](event.target.files[0], this.importId)
@@ -387,7 +387,7 @@ export class PriceListDetailPage extends PageBase {
                 alert.present();
               });
           } else {
-            this.env.showTranslateMessage('Import completed!', 'success');
+            this.env.showMessage('Import completed!', 'success');
             this.env.publishEvent({
               Code: this.pageConfig.pageName,
             });
@@ -474,7 +474,7 @@ export class PriceListDetailPage extends PageBase {
                   p.Price1 = 0;
                   p.Price2 = 0;
                   p.IsManual = false;
-                  this.env.showTranslateMessage('Changes saved', 'success');
+                  this.env.showMessage('Changes saved', 'success');
                 });
               },
             },

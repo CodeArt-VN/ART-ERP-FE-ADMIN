@@ -96,9 +96,9 @@ export class TranslatePage extends PageBase {
       .catch((err) => {
         if (err.error?.InnerException?.InnerException?.ExceptionMessage?.includes('Cannot insert duplicate key row')) {
           debugger;
-          this.env.showTranslateMessage('Cannot insert duplicate key resource', 'danger');
+          this.env.showMessage('Cannot insert duplicate key resource', 'danger');
         } else {
-          this.env.showTranslateMessage('Cannot save, please try again', 'danger');
+          this.env.showMessage('Cannot save, please try again', 'danger');
         }
       });
   }
@@ -134,12 +134,12 @@ export class TranslatePage extends PageBase {
               anchor.click();
               document.body.removeChild(anchor);
               URL.revokeObjectURL(url);
-              this.env.showTranslateMessage('Download success', 'success');
+              this.env.showMessage('Download success', 'success');
               if (loading) loading.dismiss();
               this.submitAttempt = false;
             })
             .catch((err) => {
-              this.env.showTranslateMessage('Cannot download, please try again', 'danger');
+              this.env.showMessage('Cannot download, please try again', 'danger');
               if (loading) loading.dismiss();
               this.submitAttempt = false;
             });

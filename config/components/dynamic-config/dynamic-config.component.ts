@@ -267,7 +267,7 @@ export class DynamicConfigComponent extends PageBase {
       config.Value = JSON.stringify(config.ValueObject);
       this.pageProvider.save(config).then((resp) => {
         config.Id = resp['Id'];
-        this.env.showTranslateMessage('Saving completed!', 'success');
+        this.env.showMessage('Saving completed!', 'success');
         this.emit('savedConfig', this.configItems);
       });
     });

@@ -77,9 +77,9 @@ export class HelpPage extends PageBase {
           })
           .catch((err) => {
             if (err.message != null) {
-              this.env.showTranslateMessage(err.message, 'danger');
+              this.env.showMessage(err.message, 'danger');
             } else {
-              this.env.showTranslateMessage('Cannot extract data', 'danger');
+              this.env.showMessage('Cannot extract data', 'danger');
             }
 
             this.loadedData(event);

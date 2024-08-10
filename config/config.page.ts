@@ -67,7 +67,7 @@ export class ConfigPage extends PageBase {
     if (this.selectedBranch && this.subOptions) {
       this.query.Code_in = this.subOptions.flatMap((a) => a.children).map((m) => m.Code);
       this.query.IDBranch = this.selectedBranch.Id;
-      this.env.showLoading2('Please wait a moment!', this.pageProvider.read(this.query)).then((resp) => {
+      this.env.showLoading('Please wait for a few moments', this.pageProvider.read(this.query)).then((resp) => {
         this.items = resp['data'];
         this.loadedConfig = true;
         this.loadedData(event);
