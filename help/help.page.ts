@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
@@ -9,6 +9,7 @@ import { FormDetailPage } from '../form-detail/form-detail.page';
   selector: 'app-help',
   templateUrl: 'help.page.html',
   styleUrls: ['help.page.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class HelpPage extends PageBase {
   itemsState: any = [];
@@ -28,14 +29,6 @@ export class HelpPage extends PageBase {
     this.query.Take = 5000;
     this.query.AllChildren = true;
     this.query.AllParent = true;
-  }
-
-  loadedData(event) {
-    this.buildFlatTree(this.items, this.itemsState, this.isAllRowOpened).then((resp: any) => {
-      this.itemsState = resp;
-      this.itemsView = this.itemsState.filter((d) => d.show);
-    });
-    super.loadedData(event);
   }
 
   loadData(event = null) {
@@ -88,6 +81,14 @@ export class HelpPage extends PageBase {
         this.loadedData(event);
       }
     }
+  }
+
+  loadedData(event) {
+    this.buildFlatTree(this.items, this.itemsState, this.isAllRowOpened).then((resp: any) => {
+      this.itemsState = resp;
+      this.itemsView = this.itemsState.filter((d) => d.show);
+    });
+    super.loadedData(event);
   }
 
   toggleRowAll() {

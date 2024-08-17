@@ -1,83 +1,103 @@
 <ion-header>
-  <app-toolbar
-    [page]="this"
-  ></app-toolbar>
-
-  <section class="table">
-    <header class="bold">
-      <div class="col-name cell" (click)="toggleRowAll()">
-        <ion-icon class="min-btn" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"></ion-icon>
-        {{'Name' | translate}}
-        <ion-icon *ngIf="sort.Name" [name]="sort.Name == 'Name'?'arrow-down': 'arrow-up'"></ion-icon>
-        <ion-icon
-          (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
-          *ngIf="query.Keyword"
-          name="search"
-          color="primary"
-        ></ion-icon>
-      </div>
-      <!-- <div class="col-code cell">
-        {{'Code' | translate}}
-        <ion-icon *ngIf="sort.Code" [name]="sort.Code == 'Code'?'arrow-down': 'arrow-up'"></ion-icon>
-        <ion-icon
-          (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
-          *ngIf="query.Code"
-          name="search"
-          color="primary"
-        ></ion-icon>
-      </div> -->
-    </header>
-    <form (submit)="refresh()" action="#">
-      <header class="filter" *ngIf="pageConfig.isShowSearch">
-        <div class="col-checkbox cell"></div>
-        <div class="col-name cell">
-          <input
-            [ngModelOptions]="{standalone: true}"
-            [(ngModel)]="query.Keyword"
-            class="c-input"
-            [ngClass]="{active: query.Keyword}"
-            type="text"
-          />
-          <ion-icon (click)="query.Keyword=''; refresh()" *ngIf="query.Keyword" name="close"></ion-icon>
-        </div>
-        <!-- <div class="col-code cell">
-          <input
-            [ngModelOptions]="{standalone: true}"
-            [(ngModel)]="query.Code"
-            class="c-input"
-            [ngClass]="{active: query.Code}"
-            type="text"
-          />
-          <ion-icon (click)="query.Code=''; refresh()" *ngIf="query.Code" name="close"></ion-icon>
-        </div> -->
-        <button mat-raised-button type="submit" style="display: none">Search</button>
-      </header>
-    </form>
-  </section>
+  <app-toolbar [ShowAdd]="false" [ShowArchive]="false" [page]="this"></app-toolbar>
 </ion-header>
+<ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
+  <!-- <ion-refresher [disabled]="!pageConfig.refresher" slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher> -->
 
-<ion-content appScrollbarTheme class="header-table">
-  <app-page-message [itemsLength]="itemsState.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
-  <div class="table">
-    <div *ngFor="let i of itemsView; let j = index;" class="row" [ngClass]="{selected: i.checked}">
-      <div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
-        <ng-container *ngFor="let w of i.levels; let k = index;"
-          ><span class="spacing" *ngIf="k>0"></span
-        ></ng-container>
-        <ion-icon
-          (click)="toggleRow(itemsState, i, true);"
-          class="min-btn clickable"
-          [name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
-          *ngIf="i.HasChild"
-        ></ion-icon>
-        <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
-        <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
-        <ion-text class="clickable" [color]="i.Color"><a [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]">{{i.Name}}</a></ion-text>
-        <ion-text color="medium" *ngIf="i.Remark">
-          <small>&nbsp; - {{i.Remark}}</small>
-        </ion-text>
-      </div>
-      <!-- <div class="col-code cell">{{i.Code}}</div> -->
+  <div class="help-page-title">
+    
+    <div class="ion-text-center">
+      <h1>{{ pageConfig.pageTitle | translate }}</h1>
+      <p>{{ pageConfig.pageRemark | translate }}</p>
+    </div>
+    <div class="title-img">
+      <img appSvgImage src="/assets/undraw_navigator.svg" />
     </div>
   </div>
+
+  <div style="max-width: 1440px; margin: auto; width: 100%">
+    <app-data-table
+      style="width: fit-content; min-width: calc(100% - 32px)"
+      class="box-shadow responsive"
+      [rows]="itemsState"
+      [trackBy]="'Id'"
+      [isTreeList]="true"
+      [(selectedRows)]="selectedItems"
+      [showSpinner]="pageConfig.showSpinner"
+      [showFilter]="pageConfig.isShowSearch"
+      [(query)]="query"
+      (dataInfinite)="loadData($event)"
+      (filter)="onDatatableFilter($event)"
+      (sort)="onSort($event)"
+    >
+      <!-- <datatable-column [checkbox]="true" name=""></datatable-column>
+      <datatable-column class="col-id" name="#" property="Id"></datatable-column> -->
+      <datatable-column class="col-icon large" name="" property="Id">
+        <ng-template let-i="row" datatable-cell-template>
+          <ion-icon
+            class="clickable"
+            [name]="i.Icon || 'flash'"
+            [color]="i.Color || 'primary'"
+            [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
+          ></ion-icon>
+        </ng-template>
+      </datatable-column>
+
+      <datatable-column class="col-name" name="Name" property="Name">
+        <ng-template datatable-header-template>
+          <ion-icon
+            class="min-btn"
+            [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"
+            (click)="toggleRowAll()"
+          ></ion-icon>
+          <span (click)="toggleRowAll()">{{'Name' | translate}}</span>
+        </ng-template>
+        <ng-template let-i="row" datatable-cell-template>
+          <ng-container *ngFor="let w of i.levels; let k = index;"
+            ><span class="spacing" *ngIf="k>0"></span
+          ></ng-container>
+          <ion-icon
+            (click)="toggleRow(items, i, true);"
+            class="min-btn clickable"
+            [name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
+            *ngIf="i.HasChild"
+          ></ion-icon>
+          <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
+          <!-- <ion-icon class="min-btn" [name]="i.Icon || 'flash'"></ion-icon> -->
+          <ion-text
+            class="clickable"
+            [ngClass]="i.HasChild? ('bold ') : ('')"
+            [color]="i.Color"
+            [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
+            >{{i.Name}}</ion-text
+          >
+        </ng-template>
+      </datatable-column>
+      <!-- <datatable-column class="col-code" name="Method" property="Method"></datatable-column> -->
+
+      <!-- <datatable-column class="col-name" name="Name" property="Name">
+        <ng-template let-i="row" datatable-cell-template>
+          <div [routerLink]="['/'+pageConfig.pageName+'/'+i.Id]">
+            <a class="bold">
+              <ion-text color="dark">{{i.Name}}</ion-text>
+              <small *ngIf="i.IsTriggerable">{{'Triggerable'}}</small>
+            </a>
+            <div *ngIf="i.Remark">{{i.Remark}}</div>
+          </div>
+        </ng-template>
+      </datatable-column> -->
+    </app-data-table>
+  </div>
+
+  <div class="ion-padding"></div>
+  <!-- <ion-infinite-scroll
+    color="primary"
+    threshold="30%"
+    (ionInfinite)="loadData($event)"
+    [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData"
+  >
+    <ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
 </ion-content>
