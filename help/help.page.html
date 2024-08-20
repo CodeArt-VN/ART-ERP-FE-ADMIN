@@ -52,7 +52,7 @@
             [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"
             (click)="toggleRowAll()"
           ></ion-icon>
-          <span (click)="toggleRowAll()">{{'Name' | translate}}</span>
+          <span (click)="toggleRowAll()">{{'Forms' | translate}}</span>
         </ng-template>
         <ng-template let-i="row" datatable-cell-template>
           <ng-container *ngFor="let w of i.levels; let k = index;"
@@ -71,7 +71,7 @@
             [ngClass]="i.HasChild? ('bold ') : ('')"
             [color]="i.Color"
             [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
-            >{{i.Name}}</ion-text
+            >{{i.Name | translate}}</ion-text
           >
         </ng-template>
       </datatable-column>
