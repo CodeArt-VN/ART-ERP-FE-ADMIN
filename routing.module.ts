@@ -20,4 +20,7 @@ export const ADMINRoutes: Routes = [
   { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserPageModule), canActivate: [AuthGuard] },
   { path: 'account-group', loadChildren: () => import('./account-group/account-group.module').then(m => m.AccountGroupPageModule), canActivate: [AuthGuard] },
   { path: 'account-group/:id', loadChildren: () => import('./account-group-detail/account-group-detail.module').then(m => m.AccountGroupDetailPageModule), canActivate: [AuthGuard] },
+  
+  { path: 'config-grid', loadChildren: () => import('./config-grid/config-grid.module').then(m => m.ConfigGridPageModule), canActivate: [AuthGuard] },
+
 ];
