@@ -75,9 +75,13 @@ export class ConfigGridPage extends PageBase {
     .then((result:any) => {
       if(result?.data?.length>0){
         this.configOptions = result.data;
-        this.columns = [...new Map(this.configOptions.map((i) => [i['Code'], { Code: i.Code, Name: i.Name }])).values()];
-        let cols = this.columns;
-      
+        this.columns = [...new Map(
+          this.configOptions
+              .map((i) => [i['Code'], { Code: i.Code, Name: i.Name, Sort: i.Sort }])
+              .sort((a, b) => a[1].Sort - b[1].Sort)
+      ).values()];
+        console.log(this.columns);
+        
         this.columns.map(c=>c.Code).forEach(async code =>{
        
             let configOption =  this.configOptions.find(d=> d.Code == code);
@@ -269,11 +273,15 @@ export class ConfigGridPage extends PageBase {
     }
   }
   saveChangeDetail(formGroup, config){
+    let saveValue = ''
    
     if(config.type == 'ionChange'){
       config = config.detail.checked;
     }
-    let saveValue =  JSON.stringify(config);
+    else if(config.type == 'change'){
+      config = formGroup.get('ParsedValue').value;
+    }
+    saveValue =  JSON.stringify(config);
     formGroup.get('Value').setValue(saveValue);
     
     return new Promise((resolve, reject) => {
