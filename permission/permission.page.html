@@ -76,8 +76,35 @@
     <!-- <ion-list-header lines="inset">
 			<ion-label color="dark">Đơn vị / Chức danh</ion-label>
 		</ion-list-header> -->
-
-    <div class="ion-padding" style="padding-bottom: 0">
+    <ion-toolbar color="primary">
+      <ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
+        <ion-segment-button value="s1">
+          <ion-label>{{'Group' | translate}}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="s2">
+          <ion-label>{{'Unit/Job title' | translate}}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+    <div class="ion-padding" style="padding-bottom: 0" *ngIf="segmentView == 's1'">
+      <div class="c-control">
+        <label class="c-label" for="IDBranch">
+          <ion-text color="primary"> {{'Group' | translate}} </ion-text>
+        </label>
+      <ng-select
+      class="c-input no-check-dirty"
+      (change)="selectGroup();"
+      [(ngModel)]="selectedGroup"
+      labelForId="IDBranch"
+      [items]="accountGroupList"
+      [virtualScroll]="true"
+      bindLabel="Name"
+      bindValue=""
+      placeholder="{{'Select unit' | translate}}"
+    ></ng-select>
+    </div>
+    </div>
+    <div class="ion-padding" style="padding-bottom: 0" *ngIf="segmentView == 's2'">
       <div class="c-control">
         <label class="c-label" for="IDBranch">
           <ion-text color="primary"> {{'Unit/Job title' | translate}} </ion-text>
@@ -108,12 +135,12 @@
         </ng-select>
       </div>
     </div>
-
-    <ion-list-header lines="inset" *ngIf="selectedBranch">
+  
+    <ion-list-header lines="inset" *ngIf="selectedBranch && segmentView == 's2'">
       <ion-label color="dark">{{'Data authorization' | translate}}</ion-label>
     </ion-list-header>
 
-    <div class="ion-padding" style="padding-bottom: 0" *ngIf="selectedBranch">
+    <div class="ion-padding" style="padding-bottom: 0" *ngIf="selectedBranch && segmentView == 's2'">
       <div class="c-control">
         <label class="c-label" for="IDBranch">{{'Branch data permission' | translate}}</label>
         <ng-select
@@ -159,7 +186,7 @@
   </ion-fab>
 
   <section class="table" *ngIf="pageConfig.showSpinner==false">
-    <div class="table-body">
+    <div class="table-body" *ngIf="(selectBranch && segmentView=='s2') || (selectedGroup && segmentView == 's1')">
       <ng-container *ngFor="let i of formList; let j = index;">
         <div
           class="row"
