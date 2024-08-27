@@ -270,7 +270,7 @@ export class AccountGroupDetailPage extends PageBase {
                     SortBy: ['Id_desc'],
                     Take: 20,
                     Skip: 0,
-                    FullName: term,
+                    Keyword: term,
                     Role: this.roleSelected,
                     Id_ne: group.controls.existedUsers.value.length > 0 ? group.controls.existedUsers.value : [],
                   }),

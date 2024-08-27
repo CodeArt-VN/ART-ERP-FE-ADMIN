@@ -70,8 +70,9 @@ export class ConfigGridPage extends PageBase {
 
   async loadedData(event?: any, ignoredFromGroup?: boolean) {
     super.loadedData(event, ignoredFromGroup);
-    this.env
-    .showLoading('Please wait for a few moments',  this.configOptionProvider.read(this.query))
+    if(this.query.Code_in){
+      
+    this.env .showLoading('Please wait for a few moments',  this.configOptionProvider.read(this.query))
     .then((result:any) => {
       if(result?.data?.length>0){
         this.configOptions = result.data;
@@ -259,6 +260,8 @@ export class ConfigGridPage extends PageBase {
         });
       }
     })
+    
+  }
     console.log(this.columns);
     console.log(this.itemsState);
     
