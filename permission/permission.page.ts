@@ -25,6 +25,7 @@ export class PermissionPage extends PageBase {
   ctrlOrCmdPressed = false;
   isDevMode = !environment.production
   accountGroupList;
+  jobTitleList;
   isTrackChangeGroup = false;
   selectedGroup : any;
   constructor(
@@ -85,6 +86,7 @@ export class PermissionPage extends PageBase {
 
   loadData(event) {
     // super.loadedData(); 
+    this.jobTitleList = [...this.env.jobTitleList];
     if(this.segmentView == 's1'){
       this.env.getStorage('permission_selectedAccountGroupID').then((value) => {
         if (value) {
@@ -112,7 +114,6 @@ export class PermissionPage extends PageBase {
       });
     }
   }
-
   refresh() {
     this.preLoadData();
   }
@@ -182,11 +183,11 @@ export class PermissionPage extends PageBase {
   }
 
   selectGroup(){
-    if(this.isTrackChangeGroup)
-    this.selectedBranch = null;
+    //if(this.isTrackChangeGroup)
+    //this.selectedBranch = null;
     this.query.IDBranch = undefined;
-    this.query.IDAccountGroup = this.selectedGroup.Id;
-    this.env .showLoading('Please wait for a few moments',    this.pageProvider.read(this.query))
+    this.query.IDAccountGroup = this.selectedGroup?.Id;
+    this.env .showLoading('Please wait for a few moments', this.pageProvider.read(this.query))
     .then((resp: any) => {
       this.items = resp.data;
       this.formList.forEach((form) => {
@@ -222,7 +223,7 @@ export class PermissionPage extends PageBase {
       if (permission.Visible != form.checked) {
         permission.Visible = form.checked;
         form._submitAttempt = true;
-        if(this.selectedBranch) permission.IDAccountGroup = null;
+        if(this.query.IDBranch) permission.IDAccountGroup = null;
         else permission.IDBranch = null;
         this.pageProvider.save(permission).then((resp: any) => {
           permission.Id = resp.Id;
@@ -256,7 +257,7 @@ export class PermissionPage extends PageBase {
   searchShowAllChildren = (term: string, item: any) => {
     if (this.searchResultIdList.term != term) {
       this.searchResultIdList.term = term;
-      this.searchResultIdList.ids = lib.searchTreeReturnId(this.env.jobTitleList, term);
+      this.searchResultIdList.ids = lib.searchTreeReturnId(this.jobTitleList, term);
     }
     return this.searchResultIdList.ids.indexOf(item.Id) > -1;
   };
