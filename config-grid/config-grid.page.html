@@ -23,7 +23,7 @@
           color="primary"
         ></ion-icon>
       </div>
-      <div class="col-name cell" [class]="c.Code" *ngFor="let c of columns">{{c.Name}}</div>
+      <div class="col-name cell" [ngClass]="{'col-checkbox':  c.DataType =='toggle'}"[class]="c.Code" *ngFor="let c of columns">{{c.Name}}</div>
     </header>
    
     <!-- <app-page-message [itemsLength]="itemsState.length" [showSpinner]="pageConfig.showSpinner"></app-page-message> -->
@@ -43,13 +43,13 @@
           <span> {{i.Name}} </span>
         </div>
         <ng-container  *ngFor="let c of columns">
-          <div class="col-name cell">
-            <app-input-control *ngIf="i[c.Code] && i[c.Code]._field &&  i[c.Code]._field.showed"
+          <div class="col-name cell" [ngClass]="{'col-checkbox':  i[c.Code]?._field?.type =='toggle'}">
+            <app-input-control *ngIf="i[c.Code] && i[c.Code]._field &&  i[c.Code]._field?.showed"
             [field]="i[c.Code]._field" 
-            (change)="saveChangeDetail(i[c.Code]._field.form,$event)"
-            (inputChange)="saveChangeDetail(i[c.Code]._field.form,$event)"
+            (change)="saveChangeDetail(i[c.Code]._field,$event)"
+            (inputChange)="saveChangeDetail(i[c.Code]._field,$event)"
             ></app-input-control>
-            <ion-icon slot="end" *ngIf="i[c.Code]._field.showEdit && pageConfig.canEdit" name="pencil-outline"(click)="i[c.Code]._field.showEdit = false;  i[c.Code]._field.showed = true" ></ion-icon>
+            <ion-icon slot="end" *ngIf="i[c.Code]?._field?.showEdit && pageConfig.canEdit" name="pencil-outline"(click)="i[c.Code]._field.showEdit = false;  i[c.Code]._field.showed = true" ></ion-icon>
         </div>
         </ng-container>
        

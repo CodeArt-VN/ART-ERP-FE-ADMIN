@@ -9,7 +9,11 @@ import {
   FINANCE_TaxDefinitionProvider,
   HRM_StaffProvider,
   SYS_ConfigProvider,
+  WMS_AllocationStrategyProvider,
+  WMS_LocationProvider,
   WMS_PriceListProvider,
+  WMS_PutawayStrategyProvider,
+  WMS_ZoneProvider,
 } from 'src/app/services/static/services.service';
 import { concat, of, Subject } from 'rxjs';
 import { catchError, distinctUntilChanged, switchMap, mergeMap, tap } from 'rxjs/operators';
@@ -24,6 +28,10 @@ import { environment } from 'src/environments/environment';
 export class DynamicConfigComponent extends PageBase {
   configItems = null;
   priceList = [];
+  locationList :[]= null;
+  zoneList :[]= null;
+  putawayStrategyList :[]= null;
+  allocationStrategyList:[]= null;
   taxDefinitionList = [];
   selectedBranch;
   optionList = null;
@@ -52,6 +60,10 @@ export class DynamicConfigComponent extends PageBase {
     public taxDefinitionProvider: FINANCE_TaxDefinitionProvider,
     public staffProvider: HRM_StaffProvider,
     public contactProvider: CRM_ContactProvider,
+    public zoneProvider: WMS_ZoneProvider,
+    public locationProvider: WMS_LocationProvider,
+    public putawayStrategyProvider: WMS_PutawayStrategyProvider,
+    public allocationStrategyProvider: WMS_AllocationStrategyProvider,
 
     public env: EnvService,
     public route: ActivatedRoute,
@@ -79,6 +91,26 @@ export class DynamicConfigComponent extends PageBase {
       return;
     }
     this.item = {};
+    if(this.optionList.some(d=>d.children && d.children.some( s=> s.SelectOptions && s.SelectOptions.includes('"Model": "WMS_Location"')))){
+      await this.locationProvider.read({ Skip: 0, Take: 5000, IDBranch : this.selectedBranch.Id}).then((resp) => {
+       this.locationList = resp['data'];
+     });
+    }
+     if(this.optionList.some(d=>d.children && d.children.some( s=> s.SelectOptions && s.SelectOptions.includes('"Model": "WMS_Zone"')))){
+      await this.zoneProvider.read({ Skip: 0, Take: 5000, IDBranch : this.selectedBranch.Id}).then((resp) => {
+       this.zoneList = resp['data'];
+     });
+    }
+    if(this.optionList.some(d=>d.children && d.children.some( s=> s.SelectOptions && s.SelectOptions.includes('"Model": "WMS_PutawayStrategy"')))){
+      await this.putawayStrategyProvider.read({ Skip: 0, Take: 5000, IDBranch : this.selectedBranch.Id}).then((resp) => {
+       this.putawayStrategyList = resp['data'];
+     });
+    }
+     if(this.optionList.some(d=>d.children && d.children.some( s=> s.SelectOptions && s.SelectOptions.includes('"Model": "WMS_AllocationStrategy"')))){
+      await this.allocationStrategyProvider.read({ Skip: 0, Take: 5000, IDBranch : this.selectedBranch.Id}).then((resp) => {
+       this.allocationStrategyList = resp['data'];
+     });
+    }
     for (let i = 0; i < this.optionList.length; i++) {
       const g = this.optionList[i];
 
@@ -99,83 +131,131 @@ export class DynamicConfigComponent extends PageBase {
             c.multiple = selectOption?.Multiple || false;
             c.bindValue = selectOption?.BindValue || '';
             c.bindLabel = selectOption?.BindLabel || 'Name';
+            if(selectOption){
+              switch(selectOption.Model){
+                  case 'SYS_Type':
+                    await this.env.getType(selectOption.Key, true).then((data) => {
+                      c.items = data;
+                    });
+                  break;
+                  case 'SYS_Status':
+                    await this.env.getStatus(selectOption.Key).then((data) => {
+                      c.items = data;
+                    });
+                    break;
+                  case 'HRM_Staff':
+                    c.imgPath = environment.staffAvatarsServer;
+                    c.type = 'select-staff';
+                    c.bindLabel = 'FullName';
+                    let searchInput$ = new Subject<string>();
+                    c.SearchLoading = false;
+                    c.SearchInput = searchInput$;
+                    c.SelectedList = [];
+                    c.DataSource = concat(
+                      of(c.SelectedList),
+                      c.SearchInput.pipe(
+                        distinctUntilChanged(),
+                        tap(() => (c.SearchLoading = true)),
+                        switchMap((term) =>
+                          this.staffProvider
+                            .search({
+                              Take: 20,
+                              Skip: 0,
+                              IDDepartment: this.env.selectedBranchAndChildren,
+                              Term: term,
+                            })
+                            .pipe(
+                              catchError(() => of([])),
+                              tap(() => (c.SearchLoading = false)),
+                            ),
+                        ),
+                      ),
+                    );
+                    break;
+                  case 'CRM_Contact':
+                    c.imgPath = environment.staffAvatarsServer;
+                    c.type = 'select-contact';
+                    c.bindLabel = 'Name';
+                    let searchInputContact$ = new Subject<string>();
+                    c.SearchLoading = false;
+                    c.SearchInput = searchInputContact$;
+                    c.SelectedList = [];
+                    c.DataSource = concat(
+                      of(c.SelectedList),
+                      c.SearchInput.pipe(
+                        distinctUntilChanged(),
+                        tap(() => (c.SearchLoading = true)),
+                        switchMap((term) =>
+                          this.contactProvider
+                            .search({
+                              Take: 20,
+                              Skip: 0,
+                              IDDepartment: this.env.selectedBranchAndChildren,
+                              Term: term,
+                            })
+                            .pipe(
+                              catchError(() => of([])),
+                              tap(() => (c.SearchLoading = false)),
+                            ),
+                        ),
+                      ),
+                    );
+                  break;
+                  case 'FINANCE_TaxDefinition':
+                    c.items = this.taxDefinitionList.filter((d) => d.Category == selectOption.Category);
+                    break;
+                  case 'WMS_PriceList':
+                    c.items = this.priceList.filter((d) => d.IsPriceListForVendor == selectOption.IsPriceListForVendor);
+                  break;
+                  case 'BRA_Branch':
+                    if(selectOption.BranchType == 'Warehouse'){
+                      this.env.getBranch(this.selectedBranch.Id,true).then(result =>{
+                        c.items = [this.selectedBranch]
+                        c.items.push(...result);
+                        c.items.forEach((i) => {
+                              i.disabled = true;
+                              if(i.Type == 'Warehouse' && i.Id ==  (this.selectedBranch.Id)) i.disabled = false;
+                            });
+                        this.markNestedNode(  c.items, this.selectedBranch.Id,'Warehouse');
+                      })
+                    }
+                    else{
+                      this.env.getBranch(this.selectedBranch.Id,true).then(result =>{
+                        c.items =  [{ ...this.selectedBranch }, ...result];
+                      })
+                    }
+                    c.type = 'select-branch';
+                    c.bindValue = 'Id';
+                  break;
+                  case 'BRA_BranchJobTitle':
+                    this.env.getJobTitle(this.selectedBranch.Id,true).then(result =>{
+                      c.items = [...result];
+                    });
+                    c.type = 'select-branch';
+                    c.bindValue = 'Id';
+                    break;
+                  case 'WMS_Location':
+                    c.items = [... this.locationList];
+                    c.type = 'select';
+                    c.bindValue = 'Id'
+                  break;
+                  case 'WMS_Zone':
+                    c.items = [... this.zoneList];
+                    c.type = 'select';
+                    c.bindValue = 'Id';
+                  break;
+                  case 'WMS_PutawayStrategy':
+                    c.items = [... this.putawayStrategyList];
+                    c.type = 'select';
+                    c.bindValue = 'Id'
+                  break;
+                  case 'WMS_AllocationStrategy':
+                    c.items = [... this.allocationStrategyList];
+                    c.type = 'select';
+                    c.bindValue = 'Id'
+                  break;
 
-            if (selectOption && selectOption.Model == 'SYS_Type') {
-              await this.env.getType(selectOption.Key, true).then((data) => {
-                c.items = data;
-              });
-            } else if (selectOption && selectOption.Model == 'SYS_Status') {
-              await this.env.getStatus(selectOption.Key).then((data) => {
-                c.items = data;
-              });
-            } else if (selectOption && selectOption.Model == 'HRM_Staff') {
-              c.imgPath = environment.staffAvatarsServer;
-              c.type = 'select-staff';
-              c.bindLabel = 'FullName';
-              let searchInput$ = new Subject<string>();
-              c.SearchLoading = false;
-              c.SearchInput = searchInput$;
-              c.SelectedList = [];
-              c.DataSource = concat(
-                of(c.SelectedList),
-                c.SearchInput.pipe(
-                  distinctUntilChanged(),
-                  tap(() => (c.SearchLoading = true)),
-                  switchMap((term) =>
-                    this.staffProvider
-                      .search({
-                        Take: 20,
-                        Skip: 0,
-                        IDDepartment: this.env.selectedBranchAndChildren,
-                        Term: term,
-                      })
-                      .pipe(
-                        catchError(() => of([])),
-                        tap(() => (c.SearchLoading = false)),
-                      ),
-                  ),
-                ),
-              );
-            } else if (selectOption && selectOption.Model == 'CRM_Contact') {
-              c.imgPath = environment.staffAvatarsServer;
-              c.type = 'select-contact';
-              c.bindLabel = 'Name';
-              let searchInput$ = new Subject<string>();
-              c.SearchLoading = false;
-              c.SearchInput = searchInput$;
-              c.SelectedList = [];
-              c.DataSource = concat(
-                of(c.SelectedList),
-                c.SearchInput.pipe(
-                  distinctUntilChanged(),
-                  tap(() => (c.SearchLoading = true)),
-                  switchMap((term) =>
-                    this.contactProvider
-                      .search({
-                        Take: 20,
-                        Skip: 0,
-                        IDDepartment: this.env.selectedBranchAndChildren,
-                        Term: term,
-                      })
-                      .pipe(
-                        catchError(() => of([])),
-                        tap(() => (c.SearchLoading = false)),
-                      ),
-                  ),
-                ),
-              );
-            } else if (selectOption && selectOption.Model == 'FINANCE_TaxDefinition') {
-              c.items = this.taxDefinitionList.filter((d) => d.Category == selectOption.Category);
-            } else if (selectOption && selectOption.Model == 'WMS_PriceList') {
-              c.items = this.priceList.filter((d) => d.IsPriceListForVendor == selectOption.IsPriceListForVendor);
-            } else if (selectOption && selectOption.Model == 'BRA_Branch') {
-              c.type = 'select-branch';
-              c.bindValue = 'Id';
-              c.items = this.env.branchList;
-            } else if (selectOption && selectOption.Model == 'BRA_BranchJobTitle') {
-              c.type = 'select-branch';
-              c.bindValue = 'Id';
-              c.items = this.env.jobTitleList;
+              }
             }
           } catch (error) {
             console.log(error);
@@ -197,6 +277,7 @@ export class DynamicConfigComponent extends PageBase {
           this.configItems.push(setting);
         }
         if (setting?.Value) {
+          setting.ValueObject = setting.Value;
           try {
             setting.ValueObject = JSON.parse(setting.Value);
           } catch (error) {
@@ -272,4 +353,12 @@ export class DynamicConfigComponent extends PageBase {
       });
     });
   }
+
+  markNestedNode(ls, Id, openType) {
+    ls.filter((d) => d.IDParent == Id).forEach((i) => {
+      if (openType.includes(i.Type )) i.disabled = false;
+      this.markNestedNode(ls, i.Id,openType);
+    });
+  }
+
 }

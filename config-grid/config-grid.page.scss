@@ -14,16 +14,22 @@ header.filter {
   top: 60px;
 }
 
-.table .col-number {
-  max-width: 200px;
-  min-width: 200px;
+.table .col-checkbox {
+  max-width: 150px;
+  min-width: 150px;
+  text-align: center;
 }
-
-.cell.thucLanh {
-  color: var(--ion-color-primary);
-  font-weight: bold;
+.col-name{
+  max-width: 250px;
 }
 
 app-field-control{
   width:100%
+}
+::ng-deep ng-dropdown-panel {
+  max-height: 400px;          /* Set a max height */
+  width: fit-content !important;
+}
+::ng-deep ion-toggle{
+  z-index: 0 !important;
 }
