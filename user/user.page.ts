@@ -33,7 +33,21 @@ export class UserPage extends PageBase {
     this.items.forEach((i) => {
       i.Avatar = environment.staffAvatarsServer + i.Code + '.jpg';
     });
-
     super.loadedData(event);
   }
+  archiveItems(publishEventCode = this.pageConfig.pageName) {
+    if (this.pageConfig.canArchive){
+      if (this.query.IsDisabled) {
+        this.pageProvider.commonService.connect('PUT','Account/EnableAccount/'+this.selectedItems.map(s=>s.Id).join(','),null).toPromise().then(() => {
+          this.env.showMessage('Reopened {{value}} lines!', 'success', this.selectedItems.length);
+        })
+      }
+      else{
+        this.pageProvider.commonService.connect('PUT','Account/DisableAccount/'+this.selectedItems.map(s=>s.Id).join(','),null).toPromise().then(() => {
+          this.env.showMessage('Archived {{value}} lines!', 'success', this.selectedItems.length);
+        })
+      }
+        this.removeSelectedItems();
+    }
+    }
 }
