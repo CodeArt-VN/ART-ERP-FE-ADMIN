@@ -50,4 +50,31 @@ export class UserPage extends PageBase {
         this.removeSelectedItems();
     }
     }
+    deleteItems(publishEventCode = this.pageConfig.pageName) {
+      if (this.pageConfig.canDelete) {
+        this.env
+          .showPrompt(
+            {
+              code: 'You can not undo this action.',
+              value: this.selectedItems.length,
+            },
+            null,
+            { code: 'Are you sure you want to delete the {{value}} selected item(s)?', value: this.selectedItems.length },
+          )
+          .then((_) => {
+            this.env
+              .showLoading('Please wait for a few moments',  this.pageProvider.commonService.connect('PUT','Account/DeleteAccount/'+this.selectedItems.map(s=>s.Id).join(','),null).toPromise())
+              .then((_) => {
+                this.removeSelectedItems();
+                this.env.showMessage('Deleted!', 'success');
+                this.env.publishEvent({ Code: publishEventCode });
+              })
+              .catch((err) => {
+                this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
+                console.log(err);
+              });
+          });
+      }
+    }
+  
 }
