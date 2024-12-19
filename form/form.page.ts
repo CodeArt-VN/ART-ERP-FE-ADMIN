@@ -6,9 +6,10 @@ import { SYS_FormProvider } from 'src/app/services/static/services.service';
 import { FormDetailPage } from '../form-detail/form-detail.page';
 
 @Component({
-  selector: 'app-form',
-  templateUrl: 'form.page.html',
-  styleUrls: ['form.page.scss'],
+    selector: 'app-form',
+    templateUrl: 'form.page.html',
+    styleUrls: ['form.page.scss'],
+    standalone: false
 })
 export class FormPage extends PageBase {
   itemsState: any = [];

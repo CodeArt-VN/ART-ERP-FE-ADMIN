@@ -10,6 +10,7 @@ import { SortConfig } from 'src/app/models/options-interface';
     selector: 'app-sync-job',
     templateUrl: 'sync-job.page.html',
     styleUrls: ['sync-job.page.scss'],
+    standalone: false
 })
 export class SyncJobPage extends PageBase {
     constructor(

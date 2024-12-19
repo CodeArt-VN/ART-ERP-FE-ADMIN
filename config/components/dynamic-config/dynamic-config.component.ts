@@ -21,9 +21,10 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-dynamic-config',
-  templateUrl: './dynamic-config.component.html',
-  styleUrls: ['./dynamic-config.component.scss'],
+    selector: 'app-dynamic-config',
+    templateUrl: './dynamic-config.component.html',
+    styleUrls: ['./dynamic-config.component.scss'],
+    standalone: false
 })
 export class DynamicConfigComponent extends PageBase {
   configItems = null;

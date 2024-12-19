@@ -7,9 +7,10 @@ import { Location } from '@angular/common';
 import { lib } from 'src/app/services/static/global-functions';
 
 @Component({
-  selector: 'app-price-list',
-  templateUrl: 'price-list.page.html',
-  styleUrls: ['price-list.page.scss'],
+    selector: 'app-price-list',
+    templateUrl: 'price-list.page.html',
+    styleUrls: ['price-list.page.scss'],
+    standalone: false
 })
 export class PriceListPage extends PageBase {
   constructor(

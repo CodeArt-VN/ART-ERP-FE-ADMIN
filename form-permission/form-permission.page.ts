@@ -9,9 +9,10 @@ import {
 } from 'src/app/services/static/services.service';
 
 @Component({
-  selector: 'app-form-permission',
-  templateUrl: 'form-permission.page.html',
-  styleUrls: ['form-permission.page.scss'],
+    selector: 'app-form-permission',
+    templateUrl: 'form-permission.page.html',
+    styleUrls: ['form-permission.page.scss'],
+    standalone: false
 })
 export class FormPermissionPage extends PageBase {
   showCheckedOnly = false;

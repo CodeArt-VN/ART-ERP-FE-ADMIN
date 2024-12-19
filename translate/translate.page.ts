@@ -9,9 +9,10 @@ import { SYS_Translate } from 'src/app/models/model-list-interface';
 import { lib } from 'src/app/services/static/global-functions';
 
 @Component({
-  selector: 'app-translate',
-  templateUrl: 'translate.page.html',
-  styleUrls: ['translate.page.scss'],
+    selector: 'app-translate',
+    templateUrl: 'translate.page.html',
+    styleUrls: ['translate.page.scss'],
+    standalone: false
 })
 export class TranslatePage extends PageBase {
   languageList: [];

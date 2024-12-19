@@ -7,9 +7,10 @@ import { SYS_FormProvider } from 'src/app/services/static/services.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-form-detail',
-  templateUrl: './form-detail.page.html',
-  styleUrls: ['./form-detail.page.scss'],
+    selector: 'app-form-detail',
+    templateUrl: './form-detail.page.html',
+    styleUrls: ['./form-detail.page.scss'],
+    standalone: false
 })
 export class FormDetailPage extends PageBase {
   formGroup: FormGroup;

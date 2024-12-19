@@ -12,9 +12,10 @@ import { Subject, catchError, concat, distinctUntilChanged, of, switchMap, tap }
 import { FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-config-grid',
-  templateUrl: 'config-grid.page.html',
-  styleUrls: ['config-grid.page.scss'],
+    selector: 'app-config-grid',
+    templateUrl: 'config-grid.page.html',
+    styleUrls: ['config-grid.page.scss'],
+    standalone: false
 })
 export class ConfigGridPage extends PageBase {
   itemsState = [];

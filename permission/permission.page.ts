@@ -15,9 +15,10 @@ import { environment } from 'src/environments/environment';
 import { isForOfStatement } from 'typescript';
 
 @Component({
-  selector: 'app-permission',
-  templateUrl: 'permission.page.html',
-  styleUrls: ['permission.page.scss'],
+    selector: 'app-permission',
+    templateUrl: 'permission.page.html',
+    styleUrls: ['permission.page.scss'],
+    standalone: false
 })
 export class PermissionPage extends PageBase {
   showCheckedOnly = false;

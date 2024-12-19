@@ -12,9 +12,10 @@ import {
 } from 'src/app/services/static/services.service';
 
 @Component({
-  selector: 'app-config',
-  templateUrl: 'config.page.html',
-  styleUrls: ['config.page.scss'],
+    selector: 'app-config',
+    templateUrl: 'config.page.html',
+    styleUrls: ['config.page.scss'],
+    standalone: false
 })
 export class ConfigPage extends PageBase {
   branchList = [];

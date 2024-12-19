@@ -15,9 +15,10 @@ import { CommonService } from 'src/app/services/core/common.service';
 import { DynamicScriptLoaderService } from 'src/app/services/custom.service';
 
 @Component({
-  selector: 'app-help-detail-page',
-  templateUrl: './help-detail.page.html',
-  styleUrls: ['./help-detail.page.scss'],
+    selector: 'app-help-detail-page',
+    templateUrl: './help-detail.page.html',
+    styleUrls: ['./help-detail.page.scss'],
+    standalone: false
 })
 export class HelpDetailPage extends PageBase {
    

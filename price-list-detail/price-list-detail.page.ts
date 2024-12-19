@@ -19,9 +19,10 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { lib } from 'src/app/services/static/global-functions';
 
 @Component({
-  selector: 'app-price-list-detail',
-  templateUrl: './price-list-detail.page.html',
-  styleUrls: ['./price-list-detail.page.scss'],
+    selector: 'app-price-list-detail',
+    templateUrl: './price-list-detail.page.html',
+    styleUrls: ['./price-list-detail.page.scss'],
+    standalone: false
 })
 export class PriceListDetailPage extends PageBase {
   @ViewChild('importfile') importfile: any;

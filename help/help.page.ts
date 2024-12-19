@@ -6,10 +6,11 @@ import { SYS_FormProvider } from 'src/app/services/static/services.service';
 import { FormDetailPage } from '../form-detail/form-detail.page';
 
 @Component({
-  selector: 'app-help',
-  templateUrl: 'help.page.html',
-  styleUrls: ['help.page.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-help',
+    templateUrl: 'help.page.html',
+    styleUrls: ['help.page.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class HelpPage extends PageBase {
   itemsState: any = [];

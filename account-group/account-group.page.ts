@@ -7,9 +7,10 @@ import { Location } from '@angular/common';
 
 
 @Component({
-  selector: 'app-account-group',
-  templateUrl: 'account-group.page.html',
-  styleUrls: ['account-group.page.scss'],
+    selector: 'app-account-group',
+    templateUrl: 'account-group.page.html',
+    styleUrls: ['account-group.page.scss'],
+    standalone: false
 })
 export class AccountGroupPage extends PageBase {
 
