@@ -18,6 +18,7 @@ export const ADMINRoutes: Routes = [
   { path: 'form-permission', loadChildren: () => import('./form-permission/form-permission.module').then(m => m.FormPermissionPageModule), canActivate: [AuthGuard] },
   { path: 'translate', loadChildren: () => import('./translate/translate.module').then(m => m.TranslatePageModule), canActivate: [AuthGuard] },
   { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserPageModule), canActivate: [AuthGuard] },
+  { path: 'user/:id', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailPageModule), canActivate: [AuthGuard] },
   { path: 'account-group', loadChildren: () => import('./account-group/account-group.module').then(m => m.AccountGroupPageModule), canActivate: [AuthGuard] },
   { path: 'account-group/:id', loadChildren: () => import('./account-group-detail/account-group-detail.module').then(m => m.AccountGroupDetailPageModule), canActivate: [AuthGuard] },
   

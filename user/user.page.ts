@@ -6,6 +6,8 @@ import { BRA_BranchProvider, SYS_TranslateProvider } from 'src/app/services/stat
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
+import { ApiSetting } from 'src/app/services/static/api-setting';
+import { APIList } from 'src/app/services/static/global-variable';
 
 @Component({
     selector: 'app-user',
@@ -76,6 +78,61 @@ export class UserPage extends PageBase {
               });
           });
       }
+    }
+    async export(): Promise<void> {
+    if (this.submitAttempt) return;
+    this.submitAttempt = true;
+    this.env
+      .showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('DOWNLOAD',"ACCOUNT/ApplicationUsers/Export" , this.query).toPromise())
+      .then((response: any) => {
+        this.downloadURLContent(response);
+        this.submitAttempt = false;
+      })
+      .catch((err) => {
+        this.submitAttempt = false;
+      });
+   
+    }
+    async import(event) {
+      if (event.target.files.length == 0) return;
+      let apiPath = {postImport:{
+        method: "UPLOAD",
+        url: function(){return "ACCOUNT/ApplicationUsers/Import"}  
+    }};
+      this.env
+        .showLoading('Please wait for a few moments', this.pageProvider.commonService.import(apiPath,event.target.files[0]))
+        .then((resp:any) => {
+          this.refresh();
+          if (resp.ErrorList && resp.ErrorList.length) {
+            let message = '';
+            for (let i = 0; i < resp.ErrorList.length && i <= 5; i++)
+              if (i == 5) message += '<br> Còn nữa...';
+              else {
+                const e = resp.ErrorList[i];
+                message += '<br> ' + e.Id + '. Tại dòng ' + e.Line + ': ' + e.Message;
+              }
+            this.env
+              .showPrompt(
+                {
+                  code: 'Có {{value}} lỗi khi import: {{value1}}',
+                  value: resp.ErrorList.length,value1: message ,
+                },
+                'Bạn có muốn xem lại các mục bị lỗi?',
+                'Có lỗi import dữ liệu',
+              )
+              .then((_) => {
+                this.downloadURLContent(resp.FileUrl);
+              })
+              .catch((e) => {});
+          } else {
+            this.env.showMessage('Import completed!', 'success');
+          }
+        })
+        .catch((err) => {
+          if (err.statusText == 'Conflict') {
+            this.downloadURLContent(err._body);
+          }
+        });
     }
   
 }
