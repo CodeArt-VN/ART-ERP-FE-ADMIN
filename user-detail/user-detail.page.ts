@@ -85,7 +85,8 @@ export class UserDetailPage extends PageBase {
       SkipMCP: true, SkipAddress: true, 
       IsVendor:that.formGroup.get('SysRoles')?.value.includes('VENDOR')?true:undefined,
       IsStorer:that.formGroup.get('SysRoles')?.value.includes('STORER')?true:undefined,
-      IsCustomer:that.formGroup.get('SysRoles')?.value.includes('CUSTOMER')?true:undefined
+      IsCustomer:that.formGroup.get('SysRoles')?.value.includes('CUSTOMER')?true:undefined,
+      IsBranch:false
     });
   });
   preLoadData(event?: any): void {
@@ -146,7 +147,8 @@ loadData(){
       SkipMCP: true, SkipAddress: true, 
       IsVendor:this.formGroup.get('SysRoles')?.value.includes('VENDOR')?true:undefined,
       IsStorer:this.formGroup.get('SysRoles')?.value.includes('STORER')?true:undefined,
-      IsCustomer:this.formGroup.get('SysRoles')?.value.includes('CUSTOMER')?true:undefined
+      IsCustomer:this.formGroup.get('SysRoles')?.value.includes('CUSTOMER')?true:undefined,
+      IsBranch:false
     }),this.staffProvider.read({Take:20})])
   .then((values : any)=>{
       if(values){
@@ -176,7 +178,9 @@ loadData(){
               SkipMCP: true, SkipAddress: true, 
               IsVendor:this.formGroup.get('SysRoles')?.value.includes('VENDOR')?true:undefined,
               IsStorer:this.formGroup.get('SysRoles')?.value.includes('STORER')?true:undefined,
-              IsCustomer:this.formGroup.get('SysRoles')?.value.includes('CUSTOMER')?true:undefined
+              IsCustomer:this.formGroup.get('SysRoles')?.value.includes('CUSTOMER')?true:undefined,
+              IsBranch:false
+
             }).then((result:any)=>{
               if(result && result.data?.length > 0){
                 this._businessPartnerDataSource.selected = [...result.data];
@@ -195,7 +199,14 @@ loadData(){
         this.formGroup.get('StaffID')?.updateValueAndValidity();
       });
     });
-  
+    if(this.item.Id == 0){
+      this.formGroup.get('Password').setValidators([Validators.required]);
+      this.formGroup.get('Password')?.updateValueAndValidity();
+    }
+    else{
+      this.formGroup.get('Password').setValidators([]);
+      this.formGroup.get('Password')?.updateValueAndValidity();
+    }
 
   
   }
@@ -206,7 +217,6 @@ loadData(){
       this.formGroup.get('UserName').markAsDirty();
     }
   }
- 
   async saveChange() {
     return new Promise( (resolve, reject) => {
       this.formGroup.updateValueAndValidity();
@@ -227,8 +237,30 @@ loadData(){
           .save(submitItem, this.pageConfig.isForceCreate)
           .then((savedItem: any) => {
             resolve(savedItem);
+            if(this.formGroup.get('Id').value != 0 &&  this.formGroup.get('Password').value){
+              let obj =  this.formGroup.getRawValue();
+              this.pageProvider
+              .resetPassword(
+                obj.Id,
+                obj.Password,
+                obj.ConfirmPassword,
+              )
+              .then((savedItem: any) => {
+                this.env.showMessage('Password changed', 'success');
+                this.cdr.detectChanges();
+                this.formGroup.markAsPristine();
+              })
+              .catch((err) => {
+                if (err._body?.indexOf('confirmation password do not match') > -1) {
+                  this.env.showMessage('log-in password does not match', 'danger');
+                } else if (err._body?.indexOf('least 6 characters') > -1) {
+                  this.env.showMessage('Password must contain more than 6 characters', 'danger');
+                } else {
+                  this.env.showMessage('Cannot save, please try again', 'danger');
+                }
+              });
+            }
             this.savedChange(savedItem, this.formGroup);
-          
           })
           .catch((err) => {
             this.env.showMessage(err.error?.ExceptionMessage || 'Cannot save, please try again', 'danger');
@@ -256,10 +288,9 @@ loadData(){
         }
       }
     }
-
-    form.markAsPristine();
-    this.cdr.detectChanges();
-    this.submitAttempt = false;
+    this.formGroup.get('Password').setValue('');
+    this.formGroup.get('ConfirmPassword').setValue('');
+    this.loadedData();
     this.env.showMessage('Saving completed!', 'success');
   }
   segmentView = 's1';

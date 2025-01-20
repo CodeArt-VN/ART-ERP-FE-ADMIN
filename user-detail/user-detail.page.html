@@ -47,11 +47,14 @@
   
               <app-form-control [field]="{id:'PhoneNumber',label:'Phone', type : 'text', form : formGroup }">
               </app-form-control>
-  
-              <app-form-control [field]="{id:'Password',label:'Password', type : passwordViewType, form : formGroup }">
-              </app-form-control>
-              <app-form-control [field]="{id:'ConfirmPassword',label:'Confirm password', type : passwordViewType, form : formGroup }">
-              </app-form-control>
+              <ng-container *ngIf="pageConfig.canChangePassword || item.Id == 0">
+                  
+                <app-form-control [field]="{id:'Password',label:'Password', type : passwordViewType, form : formGroup }">
+                </app-form-control>
+                <app-form-control [field]="{id:'ConfirmPassword',label:'Confirm password', type : passwordViewType, form : formGroup }">
+                </app-form-control>
+                
+              </ng-container>
               <div class="c-control">
 
                 <ion-button size="small"  (click)="saveChange()">
@@ -62,7 +65,7 @@
                   {{'Update account' | translate}}
                  </ng-container>
                 </ion-button>
-                <ion-button
+                <ion-button  *ngIf="pageConfig.canChangePassword || item.Id == 0"
                   size="small"
                   (click)="passwordViewType = passwordViewType=='password'?'text':'password'"
                   color="warning"
