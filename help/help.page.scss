@@ -6,46 +6,7 @@
   position: sticky;
   left: 0;
 
-  h1 {
-    font-size: calc(10 / 16 * 3.8rem);
-    font-weight: 700;
-    font-family: univia-pro;
-    color: var(--ion-color-medium);
-    margin: -3px 16px 0 0;
-
-    @media screen and (max-width: calc(1024px)) {
-      margin-right: 0;
-      font-size: calc(10 / 16 * 2rem);
-    }
-
-    @media screen and (max-width: calc(768px)) {
-      margin-right: 0;
-      font-size: calc(10 / 16 * 1.9rem);
-    }
-
-    @media screen and (max-width: calc(425px)) {
-      margin-right: 0;
-      font-size: calc(10 / 16 * 1.9rem);
-    }
-
-    @media screen and (max-width: calc(320px)) {
-      margin-right: 0;
-      font-size: calc(10 / 16 * 1.8rem);
-    }
-  }
-  p {
-    font-size: calc(10 / 16 * 1.6rem);
-    color: var(--ion-color-medium);
-    font-weight: 400;
-    line-height: calc(10 / 16 * 2.4rem);
-    opacity: 0.5;
-    margin: 0;
-
-    @media screen and (max-width: calc(768px)) {
-      font-size: calc(10 / 16 * 1.3rem);
-      line-height: calc(10 / 16 * 1.5rem);
-    }
-  }
+  
 
   .title-img {
     display: flex;
@@ -55,6 +16,18 @@
     > * {
       max-height: 220px;
       max-width: 400px;
+      width: 100%;
     }
   }
 }
+
+app-data-table{
+  .row{
+
+    .col-name{
+      min-width: auto !important;
+    }
+  }
+}
+
+
