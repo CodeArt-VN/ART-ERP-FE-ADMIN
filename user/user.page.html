@@ -3,7 +3,6 @@
 </ion-header>
 
 <ion-content appScrollbarTheme class="header-table">
-  <app-page-message [itemsLength]="items.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
   <ion-refresher [disabled]="!pageConfig.refresher" [disabled]="!pageConfig.refresher" slot="fixed" (ionRefresh)="refresh($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
@@ -27,16 +26,18 @@
 
 	<datatable-column class="col-name" name="Name" property="UserName">
 		<ng-template let-i="row" datatable-cell-template>
-			<ng-container>
-				<ion-avatar class="avatar" slot="start">
-					<ion-img #img [src]="i.Avatar" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
-				  </ion-avatar>
-				  <div>
-					<span class="bold">{{i.FullName}}</span>
-					<br/>
-					{{i.Email}}
-				  </div>
-			</ng-container>
+				<div (click)="nav('/'+pageConfig.pageName+'/'+i.Id,'forward')" class="col-name cell">
+					<ion-avatar class="avatar" slot="start">
+					  <ion-img #img [src]="i.Avatar" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
+					</ion-avatar>
+					<div>
+					  <span class="bold">{{i.FullName}}</span>
+					   <small *ngIf="i.Code" class="no-warp"> {{i.Code}}</small>
+					  <br/>
+					  {{i.Email}}
+					</div>
+					
+				</div>
 		</ng-template>
 	</datatable-column>
 

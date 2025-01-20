@@ -1,0 +1,102 @@
+<ion-header>
+  <app-toolbar [page]="this"></app-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="ion-padding">
+  <div class="main-view" *ngIf="item && pageConfig.showSpinner==false">
+    <ion-grid fixed>
+      <form [formGroup]="formGroup">
+        <ion-row>
+          <ion-col size="12" class="ion-padding-vertical">
+            <app-page-title
+              [icon]="pageConfig.pageIcon"
+              [title]="'User'"
+              [remark]="'User detail'"
+            >
+            </app-page-title>
+          </ion-col>
+        </ion-row>
+      </form>
+    </ion-grid>
+
+    <div class="row-full shadow full-screen">
+      <div id="ng-select-header" style="position: absolute; z-index: 30005"></div>
+
+      <ion-toolbar color="primary">
+        <ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
+          <ion-segment-button value="s1">
+            <ion-label>{{'User' | translate }}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-toolbar>
+      <div class="ion-padding" *ngIf="segmentView == 's1'">
+        <ion-grid fixed>
+          <form [formGroup]="formGroup">
+            <!-- Header information -->
+            <ion-row class="hr-group">
+              <ion-col size="12" size-sm="12" size-md="12" size-xl="3">
+                <ion-list-header class="ion-no-padding">
+                  <ion-label color="primary">{{'General information' | translate}}</ion-label>
+                </ion-list-header>
+              </ion-col>
+              <ion-col size="12" size-sm="12" size-md="4">
+              <app-form-control [field]="{id:'Email', label:'Email', type : 'email', form : formGroup }" (change)="changeEmail()">
+              </app-form-control>
+              <app-form-control [field]="{id:'UserName',label:'Username', type : 'text', form : formGroup }">
+              </app-form-control>
+  
+              <app-form-control [field]="{id:'PhoneNumber',label:'Phone', type : 'text', form : formGroup }">
+              </app-form-control>
+              <ng-container *ngIf="pageConfig.canChangePassword || item.Id == 0">
+                  
+                <app-form-control [field]="{id:'Password',label:'Password', type : passwordViewType, form : formGroup }">
+                </app-form-control>
+                <app-form-control [field]="{id:'ConfirmPassword',label:'Confirm password', type : passwordViewType, form : formGroup }">
+                </app-form-control>
+                
+              </ng-container>
+              <div class="c-control">
+
+                <ion-button size="small"  (click)="saveChange()">
+                 <ng-container *ngIf="!formGroup.get('Id').value">
+                  {{'Create account' | translate}}
+                 </ng-container>
+                 <ng-container *ngIf="formGroup.get('Id').value">
+                  {{'Update account' | translate}}
+                 </ng-container>
+                </ion-button>
+                <ion-button  *ngIf="pageConfig.canChangePassword || item.Id == 0"
+                  size="small"
+                  (click)="passwordViewType = passwordViewType=='password'?'text':'password'"
+                  color="warning"
+                >
+                  <ion-icon slot="icon-only" [name]="passwordViewType=='password'?'eye':'eye-off'"></ion-icon>
+                </ion-button>
+              </div>
+             </ion-col>
+
+             <ion-col size="12" size-sm="12" size-md="4">
+              <app-form-control [field]="{id:'SysRoles',label:'Group', type : 'ng-select',dataSource:roleList,bindLabel:'Name',bindValue:'Id',multiple:true,clearable:true, form : formGroup,appendTo:'#ng-select-header' }">
+              </app-form-control>
+              <app-form-control *ngIf="displayMappingSelectBox('STAFF')" [field]="{id:'StaffID',label:'Staff', type : 'ng-select-staff',dataSource:_staffDataSource,bindLabel:'Name',bindValue:'Id',clearable:true, form : formGroup,appendTo:'#ng-select-header' }" >
+              </app-form-control>
+
+              <app-form-control *ngIf="displayMappingSelectBox('BUSINESSPARTNER')" [field]="{id:'IDBusinessPartner',label:'Business partner', type : 'ng-select-bp',dataSource:_businessPartnerDataSource,bindLabel:'Name',bindValue:'Id',clearable:true, form : formGroup,appendTo:'#ng-select-header' }">
+              </app-form-control>
+              
+              <app-form-control [field]="{id:'GroupIds',label:'Add to group', type : 'ng-select',dataSource:groupList,bindLabel:'Name',bindValue:'Id',clearable:true,multiple:true, form : formGroup,appendTo:'#ng-select-header' }">
+              </app-form-control>
+            </ion-col>
+          </ion-row>
+           
+          </form>
+        
+        </ion-grid>
+        
+      </div>
+     
+    </div>
+  </div>
+
+  <app-page-message [itemsLength]="item? 1: 0" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+</ion-content>
