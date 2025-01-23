@@ -324,6 +324,7 @@ export class AccountGroupDetailPage extends PageBase {
             resp.Avatar = user.Avatar,
             this.item.UserAccount.push(resp);
           }
+          this.env.publishEvent({ Code: 'account-group' });
           this.env.showMessage('Saving completed!', 'success');
           this.submitAttempt = false;
         })
@@ -340,6 +341,7 @@ export class AccountGroupDetailPage extends PageBase {
     this.env.showPrompt('Bạn có chắc muốn xóa ?', null, 'Xóa 1 dòng').then((_) => {
       this.userInGroupProvider.delete(item).then((result) => {
         groups.splice(index, 1);
+        this.env.publishEvent({ Code: 'account-group' });
         if (groups.length > 0) {
           this.formGroup.get('Type').disable();
         } else {
