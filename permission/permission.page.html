@@ -5,8 +5,7 @@
     [pageConfig]="pageConfig"
     selectedTitle="{{selectedItems.length}} {{'Access authorazation' | translate}}" 
     [selectedItems]="selectedItems"
-    [query]="query"
-    [ShowFeature] = "true">
+    [query]="query">
   </app-toolbar>
 
   <div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}">

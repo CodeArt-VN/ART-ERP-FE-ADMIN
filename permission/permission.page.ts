@@ -45,6 +45,7 @@ export class PermissionPage extends PageBase {
     this.query.AllChildren = true;
     this.query.AllParent = true;
     this.pageConfig.isShowFeature = true;
+    this.pageConfig.ShowFeature = true;
     window.addEventListener('keydown', (event) => {
       if (event.ctrlKey || event.metaKey) {
         this.ctrlOrCmdPressed = true;

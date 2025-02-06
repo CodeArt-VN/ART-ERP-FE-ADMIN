@@ -42,6 +42,7 @@ export class ConfigPage extends PageBase {
     super();
     this.item = {};
     this.pageConfig.isShowFeature = true;
+    this.pageConfig.ShowArchive = false;
     this.pageConfig.isFeatureAsMain = true;
     this.segmentView = this.route.snapshot?.paramMap?.get('segment');
   }
