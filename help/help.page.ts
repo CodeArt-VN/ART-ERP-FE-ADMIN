@@ -27,6 +27,8 @@ export class HelpPage extends PageBase {
     public navCtrl: NavController,
   ) {
     super();
+    this.pageConfig.ShowAdd = false;
+    this.pageConfig.ShowArchive = false;
     this.query.Take = 5000;
     this.query.AllChildren = true;
     this.query.AllParent = true;
