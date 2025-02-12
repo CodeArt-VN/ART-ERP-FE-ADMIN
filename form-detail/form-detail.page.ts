@@ -66,13 +66,13 @@ export class FormDetailPage extends PageBase {
 
     if (this.navParams) {
       this.items = JSON.parse(JSON.stringify(this.navParams.data.items));
-      this.items.forEach((i) => {
-        let prefix = '';
-        for (let j = 1; j < i.level; j++) {
-          prefix += '- ';
-        }
-        i.Name = prefix + i.Name;
-      });
+      // this.items.forEach((i) => {
+      //   let prefix = '';
+      //   for (let j = 1; j < i.level; j++) {
+      //     prefix += '- ';
+      //   }
+      //   i.Name = prefix + i.Name;
+      // });
 
       this.item = JSON.parse(JSON.stringify(this.navParams.data.item));
       if (this.navParams.data.copyFrom) {
