@@ -1,20 +1,20 @@
 <app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 <div class="main-view" *ngIf="pageConfig.showSpinner == false">
-  <div class="row-full shadow full-screen ion-padding" *ngIf="optionList">
-    <ion-grid fixed>
-      <app-group-control
-        [title]="o.Name"
-        [fields]="o.children"
-        (onChange)="saveChange($event)"
-        [hideBorder]="idx == optionList.length - 1"
-        *ngFor="let o of optionList; let idx = index"
-      >
-        <ion-item class="ion-no-padding" *ngIf="o.Remark">
-          <ion-label color="medium" class="ion-text-wrap">
-            {{ o.Remark }}
-          </ion-label>
-        </ion-item>
-      </app-group-control>
-    </ion-grid>
-  </div>
+	<div class="row-full shadow full-screen ion-padding" *ngIf="optionList">
+		<ion-grid fixed>
+			<app-group-control
+				[title]="o.Name"
+				[fields]="o.children"
+				(onChange)="saveChange($event)"
+				[hideBorder]="idx == optionList.length - 1"
+				*ngFor="let o of optionList; let idx = index"
+			>
+				<ion-item class="ion-no-padding" *ngIf="o.Remark">
+					<ion-label color="medium" class="ion-text-wrap">
+						{{ o.Remark }}
+					</ion-label>
+				</ion-item>
+			</app-group-control>
+		</ion-grid>
+	</div>
 </div>

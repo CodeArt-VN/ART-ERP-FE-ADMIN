@@ -7,14 +7,7 @@ import { PermissionPage } from './permission.page';
 import { ShareModule } from 'src/app/share.module';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ShareModule,
-    ReactiveFormsModule,
-    RouterModule.forChild([{ path: '', component: PermissionPage }]),
-  ],
-  declarations: [PermissionPage],
+	imports: [IonicModule, CommonModule, FormsModule, ShareModule, ReactiveFormsModule, RouterModule.forChild([{ path: '', component: PermissionPage }])],
+	declarations: [PermissionPage],
 })
 export class PermissionPageModule {}

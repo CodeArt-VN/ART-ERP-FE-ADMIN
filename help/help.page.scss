@@ -1,33 +1,28 @@
 .help-page-title {
-  max-width: 1440px;
-  margin: auto;
-  padding: 16px;
-  width: 100%;
-  position: sticky;
-  left: 0;
+	max-width: 1440px;
+	margin: auto;
+	padding: 16px;
+	width: 100%;
+	position: sticky;
+	left: 0;
 
-  
+	.title-img {
+		display: flex;
+		justify-content: center;
+		margin: 40px 0 20px 0;
 
-  .title-img {
-    display: flex;
-    justify-content: center;
-    margin: 40px 0 20px 0;
-
-    > * {
-      max-height: 220px;
-      max-width: 400px;
-      width: 100%;
-    }
-  }
+		> * {
+			max-height: 220px;
+			max-width: 400px;
+			width: 100%;
+		}
+	}
 }
 
-app-data-table{
-  .row{
-
-    .col-name{
-      min-width: auto !important;
-    }
-  }
+app-data-table {
+	.row {
+		.col-name {
+			min-width: auto !important;
+		}
+	}
 }
-
-

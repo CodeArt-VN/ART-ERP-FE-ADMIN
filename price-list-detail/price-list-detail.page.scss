@@ -3,23 +3,23 @@
 // }
 
 .col-uom.cell {
-  max-width: 90px;
+	max-width: 90px;
 }
 
 .col-price.cell {
-  max-width: 100px;
-  justify-content: flex-end;
+	max-width: 100px;
+	justify-content: flex-end;
 
-  .c-input {
-    text-align: right;
-  }
+	.c-input {
+		text-align: right;
+	}
 }
 
 #itemList {
-  .row {
-    border: none;
-    &.border {
-      border-top: solid 1px var(--menu-right-border-color);
-    }
-  }
+	.row {
+		border: none;
+		&.border {
+			border-top: solid 1px var(--menu-right-border-color);
+		}
+	}
 }

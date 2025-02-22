@@ -7,56 +7,56 @@ import { Location } from '@angular/common';
 import { SortConfig } from 'src/app/models/options-interface';
 
 @Component({
-    selector: 'app-sync-job',
-    templateUrl: 'sync-job.page.html',
-    styleUrls: ['sync-job.page.scss'],
-    standalone: false
+	selector: 'app-sync-job',
+	templateUrl: 'sync-job.page.html',
+	styleUrls: ['sync-job.page.scss'],
+	standalone: false,
 })
 export class SyncJobPage extends PageBase {
-    constructor(
-        public pageProvider: SYS_SyncJobProvider,
-        public branchProvider: BRA_BranchProvider,
-        public modalController: ModalController,
+	constructor(
+		public pageProvider: SYS_SyncJobProvider,
+		public branchProvider: BRA_BranchProvider,
+		public modalController: ModalController,
 		public popoverCtrl: PopoverController,
-        public alertCtrl: AlertController,
-        public loadingController: LoadingController,
-        public env: EnvService,
-        public navCtrl: NavController,
-        public location: Location,
-    ) {
-        super();
-        this.pageConfig.canSync = true;
-        
-    }
+		public alertCtrl: AlertController,
+		public loadingController: LoadingController,
+		public env: EnvService,
+		public navCtrl: NavController,
+		public location: Location
+	) {
+		super();
+		this.pageConfig.canSync = true;
+	}
 
-    preLoadData(event?: any): void {
-        let sorted: SortConfig[] = [
-            { Dimension: 'Id', Order: 'DESC' }
-        ];
-        this.pageConfig.sort = sorted;
-        super.preLoadData(event);
-    }
-    
-    sync(){
-        if (this.submitAttempt) return;
-        let obj = {
-            RefNums: [],
-            JIds: this.selectedItems.map(p => p.Id)
-        };
-        if (this.submitAttempt == false) {
-            this.submitAttempt = true;
-            this.env.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('POST', 'SYS/SyncJob/Exec/', obj).toPromise())
-            .then(() => {
-                this.env.showMessage('Sync completed', 'success');
-                this.refresh();
-                this.submitAttempt = false;
+	preLoadData(event?: any): void {
+		let sorted: SortConfig[] = [{ Dimension: 'Id', Order: 'DESC' }];
+		this.pageConfig.sort = sorted;
+		super.preLoadData(event);
+	}
 
-            }).catch(err => {
-                this.env.showPrompt(err.error.ExceptionMessage, null , err.error.Message, 'Xác nhận', null, null).then(_=>{
-                }).catch(e => { });
-                console.log(err.error)
-                this.submitAttempt = false;
-            });
-        }
-    }
+	sync() {
+		if (this.submitAttempt) return;
+		let obj = {
+			RefNums: [],
+			JIds: this.selectedItems.map((p) => p.Id),
+		};
+		if (this.submitAttempt == false) {
+			this.submitAttempt = true;
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('POST', 'SYS/SyncJob/Exec/', obj).toPromise())
+				.then(() => {
+					this.env.showMessage('Sync completed', 'success');
+					this.refresh();
+					this.submitAttempt = false;
+				})
+				.catch((err) => {
+					this.env
+						.showPrompt(err.error.ExceptionMessage, null, err.error.Message, 'Xác nhận', null, null)
+						.then((_) => {})
+						.catch((e) => {});
+					console.log(err.error);
+					this.submitAttempt = false;
+				});
+		}
+	}
 }

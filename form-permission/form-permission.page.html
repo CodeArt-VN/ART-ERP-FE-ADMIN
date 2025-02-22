@@ -1,111 +1,87 @@
 <ion-header>
-  <app-toolbar [page]="this">
-    <ion-button tollbarSelected (click)="viewPermission()">
-      <label>{{ 'View' | translate }}</label>
-    </ion-button>
-  </app-toolbar>
+	<app-toolbar [page]="this">
+		<ion-button tollbarSelected (click)="viewPermission()">
+			<label>{{ 'View' | translate }}</label>
+		</ion-button>
+	</app-toolbar>
 
-  <section class="table">
-    <header class="bold">
-      <div class="col-checkbox cell"></div>
-      <div class="col-name cell" (click)="toggleRowAll()">
-        <ion-icon class="min-btn" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"></ion-icon>
-        {{'Name' | translate}}
-        <ion-icon *ngIf="sort.Name" [name]="sort.Name == 'Name'?'arrow-down': 'arrow-up'"></ion-icon>
-        <ion-icon
-          (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
-          *ngIf="query.Keyword"
-          name="search"
-          color="primary"
-        ></ion-icon>
-      </div>
-      <div class="col-code cell">
-        {{'Code' | translate}}
-        <ion-icon *ngIf="sort.Code" [name]="sort.Code == 'Code'?'arrow-down': 'arrow-up'"></ion-icon>
-        <ion-icon
-          (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch"
-          *ngIf="query.Code"
-          name="search"
-          color="primary"
-        ></ion-icon>
-      </div>
-    </header>
-    <form (submit)="refresh()" action="#">
-      <header class="filter" *ngIf="pageConfig.isShowSearch">
-        <div class="col-checkbox cell"></div>
-        <div class="col-name cell">
-          <input
-            [ngModelOptions]="{standalone: true}"
-            [(ngModel)]="query.Keyword"
-            class="c-input"
-            [ngClass]="{active: query.Keyword}"
-            type="text"
-          />
-          <ion-icon (click)="query.Keyword=''; refresh()" *ngIf="query.Keyword" name="close"></ion-icon>
-        </div>
-        <div class="col-code cell">
-          <input
-            [ngModelOptions]="{standalone: true}"
-            [(ngModel)]="query.Code"
-            class="c-input"
-            [ngClass]="{active: query.Code}"
-            type="text"
-          />
-          <ion-icon (click)="query.Code=''; refresh()" *ngIf="query.Code" name="close"></ion-icon>
-        </div>
-        <button mat-raised-button type="submit" style="display: none">Search</button>
-      </header>
-    </form>
-  </section>
+	<section class="table">
+		<header class="bold">
+			<div class="col-checkbox cell"></div>
+			<div class="col-name cell" (click)="toggleRowAll()">
+				<ion-icon class="min-btn" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"></ion-icon>
+				{{'Name' | translate}}
+				<ion-icon *ngIf="sort.Name" [name]="sort.Name == 'Name'?'arrow-down': 'arrow-up'"></ion-icon>
+				<ion-icon (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Keyword" name="search" color="primary"></ion-icon>
+			</div>
+			<div class="col-code cell">
+				{{'Code' | translate}}
+				<ion-icon *ngIf="sort.Code" [name]="sort.Code == 'Code'?'arrow-down': 'arrow-up'"></ion-icon>
+				<ion-icon (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Code" name="search" color="primary"></ion-icon>
+			</div>
+		</header>
+		<form (submit)="refresh()" action="#">
+			<header class="filter" *ngIf="pageConfig.isShowSearch">
+				<div class="col-checkbox cell"></div>
+				<div class="col-name cell">
+					<input [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Keyword" class="c-input" [ngClass]="{active: query.Keyword}" type="text" />
+					<ion-icon (click)="query.Keyword=''; refresh()" *ngIf="query.Keyword" name="close"></ion-icon>
+				</div>
+				<div class="col-code cell">
+					<input [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Code" class="c-input" [ngClass]="{active: query.Code}" type="text" />
+					<ion-icon (click)="query.Code=''; refresh()" *ngIf="query.Code" name="close"></ion-icon>
+				</div>
+				<button mat-raised-button type="submit" style="display: none">Search</button>
+			</header>
+		</form>
+	</section>
 </ion-header>
 
-<ion-content appScrollbarTheme >
-  <app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
+<ion-content appScrollbarTheme>
+	<app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 
-  <section class="table" *ngIf="pageConfig.showSpinner==false">
-    <div class="table">
-      <div *ngFor="let i of itemsView; let j = index;" class="row">
-        <div class="col-checkbox cell">
-          <input
-            (click)="changeSelection(i, $event)"
-            class="c-checkbox"
-            [(ngModel)]="i.checked"
-            type="checkbox"
-            [disabled]="!(i.Type == 1 || i.Type == 2 || i.Type == 3)"
-          />
-        </div>
-        <div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
-          <ng-container *ngFor="let w of i.levels; let k = index;"
-            ><span class="spacing" *ngIf="k>0"></span
-          ></ng-container>
-          <ion-icon
-            (click)="toggleRow(itemsState, i, true);"
-            class="min-btn clickable"
-            [name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
-            *ngIf="i.HasChild"
-          ></ion-icon>
-          <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
-          <ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
-          <ion-text class="clickable" [color]="i.Color">{{i.Name}}</ion-text>
-        </div>
+	<section class="table" *ngIf="pageConfig.showSpinner==false">
+		<div class="table">
+			<div *ngFor="let i of itemsView; let j = index;" class="row">
+				<div class="col-checkbox cell">
+					<input
+						(click)="changeSelection(i, $event)"
+						class="c-checkbox"
+						[(ngModel)]="i.checked"
+						type="checkbox"
+						[disabled]="!(i.Type == 1 || i.Type == 2 || i.Type == 3)"
+					/>
+				</div>
+				<div [ngClass]="i.HasChild? ('bold ') : ('')" class="col-name cell">
+					<ng-container *ngFor="let w of i.levels; let k = index;"><span class="spacing" *ngIf="k>0"></span></ng-container>
+					<ion-icon
+						(click)="toggleRow(itemsState, i, true);"
+						class="min-btn clickable"
+						[name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
+						*ngIf="i.HasChild"
+					></ion-icon>
+					<ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
+					<ion-icon class="min-btn" [name]="i.Icon"></ion-icon>
+					<ion-text class="clickable" [color]="i.Color">{{i.Name}}</ion-text>
+				</div>
 
-        <div class="col-name cell">
-          <div>
-            <div *ngFor="let j of i._groups;" class="row">
-              <app-branch-breadcrumbs
-                [maxItems]="2"
-                [itemsBeforeCollapse]="0"
-                [itemsAfterCollapse]="2"
-                [Id]="j.IDBranch"
-                [Items]="env.jobTitleList"
-                [ngClass]="{'no-check-dirty': noCheckDirty}"
-                class="c-input disable breadcrumbs"
-                *ngIf="j.IDBranch"
-              ></app-branch-breadcrumbs>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+				<div class="col-name cell">
+					<div>
+						<div *ngFor="let j of i._groups;" class="row">
+							<app-branch-breadcrumbs
+								[maxItems]="2"
+								[itemsBeforeCollapse]="0"
+								[itemsAfterCollapse]="2"
+								[Id]="j.IDBranch"
+								[Items]="env.jobTitleList"
+								[ngClass]="{'no-check-dirty': noCheckDirty}"
+								class="c-input disable breadcrumbs"
+								*ngIf="j.IDBranch"
+							></app-branch-breadcrumbs>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 </ion-content>

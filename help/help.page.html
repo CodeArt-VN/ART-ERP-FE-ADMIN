@@ -1,74 +1,59 @@
 <ion-header>
-  <app-toolbar [page]="this"></app-toolbar>
+	<app-toolbar [page]="this"></app-toolbar>
 </ion-header>
 <ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
-  <div class="help-page-title">
-    <div class="ion-text-center">
-      <h1>{{ pageConfig.pageTitle | translate }}</h1>
-      <p>{{ pageConfig.pageRemark | translate }}</p>
-    </div>
-    <div class="title-img">
-      <img appSvgImage src="./assets/undraw_navigator.svg" />
-    </div>
-  </div>
+	<div class="help-page-title">
+		<div class="ion-text-center">
+			<h1>{{ pageConfig.pageTitle | translate }}</h1>
+			<p>{{ pageConfig.pageRemark | translate }}</p>
+		</div>
+		<div class="title-img">
+			<img appSvgImage src="./assets/undraw_navigator.svg" />
+		</div>
+	</div>
 
-  <div style="max-width: 1440px; margin: auto; width: 100%">
-    <app-data-table
-      style="width: fit-content; min-width: calc(100% - 32px) !important;"
-      class="box-shadow responsive"
-      [rows]="itemsState"
-      [trackBy]="'Id'"
-      [isTreeList]="true"
-      [(selectedRows)]="selectedItems"
-      [showSpinner]="pageConfig.showSpinner"
-      [showFilter]="pageConfig.isShowSearch"
-      [(query)]="query"
-      (dataInfinite)="loadData($event)"
-      (filter)="onDatatableFilter($event)"
-      (sort)="onSort($event)"
-    >
-      <datatable-column class="col-icon large" name="" property="Id">
-        <ng-template let-i="row" datatable-cell-template>
-          <ion-icon
-            class="clickable"
-            [name]="i.Icon || 'flash'"
-            [color]="i.Color || 'primary'"
-            [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
-          ></ion-icon>
-        </ng-template>
-      </datatable-column>
+	<div style="max-width: 1440px; margin: auto; width: 100%">
+		<app-data-table
+			style="width: fit-content; min-width: calc(100% - 32px) !important"
+			class="box-shadow responsive"
+			[rows]="itemsState"
+			[trackBy]="'Id'"
+			[isTreeList]="true"
+			[(selectedRows)]="selectedItems"
+			[showSpinner]="pageConfig.showSpinner"
+			[showFilter]="pageConfig.isShowSearch"
+			[(query)]="query"
+			(dataInfinite)="loadData($event)"
+			(filter)="onDatatableFilter($event)"
+			(sort)="onSort($event)"
+		>
+			<datatable-column class="col-icon large" name="" property="Id">
+				<ng-template let-i="row" datatable-cell-template>
+					<ion-icon class="clickable" [name]="i.Icon || 'flash'" [color]="i.Color || 'primary'" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"></ion-icon>
+				</ng-template>
+			</datatable-column>
 
-      <datatable-column class="col-name" name="Name" property="Name">
-        <ng-template datatable-header-template>
-          <ion-icon
-            class="min-btn"
-            [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'"
-            (click)="toggleRowAll()"
-          ></ion-icon>
-          <span (click)="toggleRowAll()">{{'Forms' | translate}}</span>
-        </ng-template>
-        <ng-template let-i="row" datatable-cell-template>
-          <ng-container *ngFor="let w of i.levels; let k = index;"
-            ><span class="spacing" *ngIf="k>0"></span
-          ></ng-container>
-          <ion-icon
-            (click)="toggleRow(items, i, true);"
-            class="min-btn clickable"
-            [name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
-            *ngIf="i.HasChild"
-          ></ion-icon>
-          <ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
-          <ion-text
-            class="clickable"
-            [ngClass]="i.HasChild? ('bold ') : ('')"
-            [color]="i.Color"
-            [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
-            >{{i.Name | translate}}</ion-text
-          >
-        </ng-template>
-      </datatable-column>
-    </app-data-table>
-  </div>
+			<datatable-column class="col-name" name="Name" property="Name">
+				<ng-template datatable-header-template>
+					<ion-icon class="min-btn" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'" (click)="toggleRowAll()"></ion-icon>
+					<span (click)="toggleRowAll()">{{'Forms' | translate}}</span>
+				</ng-template>
+				<ng-template let-i="row" datatable-cell-template>
+					<ng-container *ngFor="let w of i.levels; let k = index;"><span class="spacing" *ngIf="k>0"></span></ng-container>
+					<ion-icon
+						(click)="toggleRow(items, i, true);"
+						class="min-btn clickable"
+						[name]="!i.showdetail? 'chevron-forward-outline':'chevron-down-outline'"
+						*ngIf="i.HasChild"
+					></ion-icon>
+					<ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
+					<ion-text class="clickable" [ngClass]="i.HasChild? ('bold ') : ('')" [color]="i.Color" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
+						>{{i.Name | translate}}</ion-text
+					>
+				</ng-template>
+			</datatable-column>
+		</app-data-table>
+	</div>
 
-  <div class="ion-padding"></div>
+	<div class="ion-padding"></div>
 </ion-content>

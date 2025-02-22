@@ -7,13 +7,7 @@ import { ConfigGridPage } from './config-grid.page';
 import { ShareModule } from 'src/app/share.module';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ShareModule,
-    RouterModule.forChild([{ path: '', component: ConfigGridPage }]),
-  ],
-  declarations: [ConfigGridPage],
+	imports: [IonicModule, CommonModule, FormsModule, ShareModule, RouterModule.forChild([{ path: '', component: ConfigGridPage }])],
+	declarations: [ConfigGridPage],
 })
 export class ConfigGridPageModule {}

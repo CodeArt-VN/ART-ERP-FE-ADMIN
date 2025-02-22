@@ -7,13 +7,7 @@ import { SyncJobPage } from './sync-job.page';
 import { ShareModule } from 'src/app/share.module';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ShareModule,
-    RouterModule.forChild([{ path: '', component: SyncJobPage }]),
-  ],
-  declarations: [SyncJobPage],
+	imports: [IonicModule, CommonModule, FormsModule, ShareModule, RouterModule.forChild([{ path: '', component: SyncJobPage }])],
+	declarations: [SyncJobPage],
 })
 export class SyncJobPageModule {}

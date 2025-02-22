@@ -10,129 +10,138 @@ import { ApiSetting } from 'src/app/services/static/api-setting';
 import { APIList } from 'src/app/services/static/global-variable';
 
 @Component({
-    selector: 'app-user',
-    templateUrl: 'user.page.html',
-    styleUrls: ['user.page.scss'],
-    standalone: false
+	selector: 'app-user',
+	templateUrl: 'user.page.html',
+	styleUrls: ['user.page.scss'],
+	standalone: false,
 })
 export class UserPage extends PageBase {
+	constructor(
+		public pageProvider: ACCOUNT_ApplicationUserProvider,
+		public branchProvider: BRA_BranchProvider,
+		public modalController: ModalController,
+		public popoverCtrl: PopoverController,
+		public alertCtrl: AlertController,
+		public loadingController: LoadingController,
+		public env: EnvService,
+		public navCtrl: NavController,
+		public location: Location
+	) {
+		super();
+	}
 
-  constructor(
-    public pageProvider: ACCOUNT_ApplicationUserProvider,
-    public branchProvider: BRA_BranchProvider,
-    public modalController: ModalController,
-    public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController,
-    public loadingController: LoadingController,
-    public env: EnvService,
-    public navCtrl: NavController,
-    public location: Location,
-  ) {
-    super();
-    
-  }
-
-  loadedData(event) {
-    this.items.forEach((i) => {
-      i.Avatar = environment.staffAvatarsServer + i.Code + '.jpg';
-    });
-    super.loadedData(event);
-  }
-  archiveItems(publishEventCode = this.pageConfig.pageName) {
-    if (this.pageConfig.canArchive){
-      if (this.query.IsDisabled) {
-        this.pageProvider.commonService.connect('PUT','Account/EnableAccount/'+this.selectedItems.map(s=>s.Id).join(','),null).toPromise().then(() => {
-          this.env.showMessage('Reopened {{value}} lines!', 'success', this.selectedItems.length);
-        })
-      }
-      else{
-        this.pageProvider.commonService.connect('PUT','Account/DisableAccount/'+this.selectedItems.map(s=>s.Id).join(','),null).toPromise().then(() => {
-          this.env.showMessage('Archived {{value}} lines!', 'success', this.selectedItems.length);
-        })
-      }
-        this.removeSelectedItems();
-    }
-    }
-    deleteItems(publishEventCode = this.pageConfig.pageName) {
-      if (this.pageConfig.canDelete) {
-        this.env
-          .showPrompt(
-            {
-              code: 'You can not undo this action.',
-              value: this.selectedItems.length,
-            },
-            null,
-            { code: 'Are you sure you want to delete the {{value}} selected item(s)?', value: this.selectedItems.length },
-          )
-          .then((_) => {
-            this.env
-              .showLoading('Please wait for a few moments',  this.pageProvider.commonService.connect('PUT','Account/DeleteAccount/'+this.selectedItems.map(s=>s.Id).join(','),null).toPromise())
-              .then((_) => {
-                this.removeSelectedItems();
-                this.env.showMessage('Deleted!', 'success');
-                this.env.publishEvent({ Code: publishEventCode });
-              })
-              .catch((err) => {
-                this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
-                console.log(err);
-              });
-          });
-      }
-    }
-    async export(): Promise<void> {
-    if (this.submitAttempt) return;
-    this.submitAttempt = true;
-    this.env
-      .showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('DOWNLOAD',"ACCOUNT/ApplicationUsers/Export" , this.query).toPromise())
-      .then((response: any) => {
-        this.downloadURLContent(response);
-        this.submitAttempt = false;
-      })
-      .catch((err) => {
-        this.submitAttempt = false;
-      });
-   
-    }
-    async import(event) {
-      if (event.target.files.length == 0) return;
-      let apiPath = {postImport:{
-        method: "UPLOAD",
-        url: function(){return "ACCOUNT/ApplicationUsers/Import"}  
-    }};
-      this.env
-        .showLoading('Please wait for a few moments', this.pageProvider.commonService.import(apiPath,event.target.files[0]))
-        .then((resp:any) => {
-          this.refresh();
-          if (resp.ErrorList && resp.ErrorList.length) {
-            let message = '';
-            for (let i = 0; i < resp.ErrorList.length && i <= 5; i++)
-              if (i == 5) message += '<br> Còn nữa...';
-              else {
-                const e = resp.ErrorList[i];
-                message += '<br> ' + e.Id + '. Tại dòng ' + e.Line + ': ' + e.Message;
-              }
-            this.env
-              .showPrompt(
-                {
-                  code: 'Có {{value}} lỗi khi import: {{value1}}',
-                  value: resp.ErrorList.length,value1: message ,
-                },
-                'Bạn có muốn xem lại các mục bị lỗi?',
-                'Có lỗi import dữ liệu',
-              )
-              .then((_) => {
-                this.downloadURLContent(resp.FileUrl);
-              })
-              .catch((e) => {});
-          } else {
-            this.env.showMessage('Import completed!', 'success');
-          }
-        })
-        .catch((err) => {
-          if (err.statusText == 'Conflict') {
-            this.downloadURLContent(err._body);
-          }
-        });
-    }
-  
+	loadedData(event) {
+		this.items.forEach((i) => {
+			i.Avatar = environment.staffAvatarsServer + i.Code + '.jpg';
+		});
+		super.loadedData(event);
+	}
+	archiveItems(publishEventCode = this.pageConfig.pageName) {
+		if (this.pageConfig.canArchive) {
+			if (this.query.IsDisabled) {
+				this.pageProvider.commonService
+					.connect('PUT', 'Account/EnableAccount/' + this.selectedItems.map((s) => s.Id).join(','), null)
+					.toPromise()
+					.then(() => {
+						this.env.showMessage('Reopened {{value}} lines!', 'success', this.selectedItems.length);
+					});
+			} else {
+				this.pageProvider.commonService
+					.connect('PUT', 'Account/DisableAccount/' + this.selectedItems.map((s) => s.Id).join(','), null)
+					.toPromise()
+					.then(() => {
+						this.env.showMessage('Archived {{value}} lines!', 'success', this.selectedItems.length);
+					});
+			}
+			this.removeSelectedItems();
+		}
+	}
+	deleteItems(publishEventCode = this.pageConfig.pageName) {
+		if (this.pageConfig.canDelete) {
+			this.env
+				.showPrompt(
+					{
+						code: 'You can not undo this action.',
+						value: this.selectedItems.length,
+					},
+					null,
+					{ code: 'Are you sure you want to delete the {{value}} selected item(s)?', value: this.selectedItems.length }
+				)
+				.then((_) => {
+					this.env
+						.showLoading(
+							'Please wait for a few moments',
+							this.pageProvider.commonService.connect('PUT', 'Account/DeleteAccount/' + this.selectedItems.map((s) => s.Id).join(','), null).toPromise()
+						)
+						.then((_) => {
+							this.removeSelectedItems();
+							this.env.showMessage('Deleted!', 'success');
+							this.env.publishEvent({ Code: publishEventCode });
+						})
+						.catch((err) => {
+							this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
+							console.log(err);
+						});
+				});
+		}
+	}
+	async export(): Promise<void> {
+		if (this.submitAttempt) return;
+		this.submitAttempt = true;
+		this.env
+			.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('DOWNLOAD', 'ACCOUNT/ApplicationUsers/Export', this.query).toPromise())
+			.then((response: any) => {
+				this.downloadURLContent(response);
+				this.submitAttempt = false;
+			})
+			.catch((err) => {
+				this.submitAttempt = false;
+			});
+	}
+	async import(event) {
+		if (event.target.files.length == 0) return;
+		let apiPath = {
+			postImport: {
+				method: 'UPLOAD',
+				url: function () {
+					return 'ACCOUNT/ApplicationUsers/Import';
+				},
+			},
+		};
+		this.env
+			.showLoading('Please wait for a few moments', this.pageProvider.commonService.import(apiPath, event.target.files[0]))
+			.then((resp: any) => {
+				this.refresh();
+				if (resp.ErrorList && resp.ErrorList.length) {
+					let message = '';
+					for (let i = 0; i < resp.ErrorList.length && i <= 5; i++)
+						if (i == 5) message += '<br> Còn nữa...';
+						else {
+							const e = resp.ErrorList[i];
+							message += '<br> ' + e.Id + '. Tại dòng ' + e.Line + ': ' + e.Message;
+						}
+					this.env
+						.showPrompt(
+							{
+								code: 'Có {{value}} lỗi khi import: {{value1}}',
+								value: resp.ErrorList.length,
+								value1: message,
+							},
+							'Bạn có muốn xem lại các mục bị lỗi?',
+							'Có lỗi import dữ liệu'
+						)
+						.then((_) => {
+							this.downloadURLContent(resp.FileUrl);
+						})
+						.catch((e) => {});
+				} else {
+					this.env.showMessage('Import completed!', 'success');
+				}
+			})
+			.catch((err) => {
+				if (err.statusText == 'Conflict') {
+					this.downloadURLContent(err._body);
+				}
+			});
+	}
 }

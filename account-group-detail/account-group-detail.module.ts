@@ -6,21 +6,14 @@ import { IonicModule } from '@ionic/angular';
 import { ShareModule } from 'src/app/share.module';
 import { AccountGroupDetailPage } from './account-group-detail.page';
 const routes: Routes = [
-  {
-    path: '',
-    component: AccountGroupDetailPage
-  }
+	{
+		path: '',
+		component: AccountGroupDetailPage,
+	},
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ReactiveFormsModule,
-    ShareModule,
-    RouterModule.forChild(routes)
-  ],
-  declarations: [AccountGroupDetailPage]
+	imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
+	declarations: [AccountGroupDetailPage],
 })
-export class AccountGroupDetailPageModule { }
+export class AccountGroupDetailPageModule {}

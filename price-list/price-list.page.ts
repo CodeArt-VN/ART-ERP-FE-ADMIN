@@ -7,30 +7,30 @@ import { Location } from '@angular/common';
 import { lib } from 'src/app/services/static/global-functions';
 
 @Component({
-    selector: 'app-price-list',
-    templateUrl: 'price-list.page.html',
-    styleUrls: ['price-list.page.scss'],
-    standalone: false
+	selector: 'app-price-list',
+	templateUrl: 'price-list.page.html',
+	styleUrls: ['price-list.page.scss'],
+	standalone: false,
 })
 export class PriceListPage extends PageBase {
-  constructor(
-    public pageProvider: WMS_PriceListProvider,
-    public branchProvider: BRA_BranchProvider,
-    public modalController: ModalController,
-    public popoverCtrl: PopoverController,
-    public alertCtrl: AlertController,
-    public loadingController: LoadingController,
-    public env: EnvService,
-    public navCtrl: NavController,
-    public location: Location,
-  ) {
-    super();
-  }
+	constructor(
+		public pageProvider: WMS_PriceListProvider,
+		public branchProvider: BRA_BranchProvider,
+		public modalController: ModalController,
+		public popoverCtrl: PopoverController,
+		public alertCtrl: AlertController,
+		public loadingController: LoadingController,
+		public env: EnvService,
+		public navCtrl: NavController,
+		public location: Location
+	) {
+		super();
+	}
 
-  loadedData(event) {
-    this.items.forEach((i) => {
-      i.BasePriceListName = lib.getAttrib(i.IDBasePriceList, this.items);
-    });
-    super.loadedData(event);
-  }
+	loadedData(event) {
+		this.items.forEach((i) => {
+			i.BasePriceListName = lib.getAttrib(i.IDBasePriceList, this.items);
+		});
+		super.loadedData(event);
+	}
 }

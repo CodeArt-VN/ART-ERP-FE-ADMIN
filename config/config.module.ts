@@ -11,15 +11,7 @@ import { ConfigComponentsModule } from './components/config-components.module';
 const routes: Routes = [{ path: '', component: ConfigPage }];
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    ShareModule,
-    ConfigComponentsModule,
-    ReactiveFormsModule,
-    RouterModule.forChild(routes),
-  ],
-  declarations: [ConfigPage],
+	imports: [IonicModule, CommonModule, FormsModule, ShareModule, ConfigComponentsModule, ReactiveFormsModule, RouterModule.forChild(routes)],
+	declarations: [ConfigPage],
 })
 export class ConfigPageModule {}
