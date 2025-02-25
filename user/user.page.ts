@@ -56,7 +56,7 @@ export class UserPage extends PageBase {
 			this.removeSelectedItems();
 		}
 	}
-	deleteItems(publishEventCode = this.pageConfig.pageName) {
+	delete(publishEventCode = this.pageConfig.pageName) {
 		if (this.pageConfig.canDelete) {
 			this.env
 				.showPrompt(
@@ -79,7 +79,7 @@ export class UserPage extends PageBase {
 							this.env.publishEvent({ Code: publishEventCode });
 						})
 						.catch((err) => {
-							this.env.showMessage('Không xóa được, xin vui lòng kiểm tra lại.');
+							this.env.showMessage('DELETE_RESULT_FAIL', 'danger');;
 							console.log(err);
 						});
 				});
