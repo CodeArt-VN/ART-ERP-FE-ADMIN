@@ -79,7 +79,7 @@ export class UserPage extends PageBase {
 							this.env.publishEvent({ Code: publishEventCode });
 						})
 						.catch((err) => {
-							this.env.showMessage('DELETE_RESULT_FAIL', 'danger');;
+							this.env.showMessage('DELETE_RESULT_FAIL', 'danger');
 							console.log(err);
 						});
 				});
