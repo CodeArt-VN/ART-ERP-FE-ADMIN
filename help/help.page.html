@@ -1,5 +1,7 @@
 <ion-header>
-	<app-toolbar [page]="this"></app-toolbar>
+	<app-toolbar [page]="this">
+		<ion-toggle *ngIf="pageConfig.canAdd" [checked]="isShowAll" (ionChange)="showAll($event)">{{'All' | translate}}</ion-toggle>
+	</app-toolbar>
 </ion-header>
 <ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
 	<div class="help-page-title">
@@ -10,6 +12,7 @@
 		<div class="title-img">
 			<img appSvgImage src="./assets/undraw_navigator.svg" />
 		</div>
+		
 	</div>
 
 	<div style="max-width: 1440px; margin: auto; width: 100%">
@@ -28,6 +31,10 @@
 			(sort)="onSort($event)"
 		>
 			<datatable-column class="col-icon large" name="" property="Id">
+				<ng-template *ngIf="pageConfig.canAdd" datatable-header-template>
+					<ion-toggle  [checked]="isShowAll" (ionChange)="showAll($event)">{{'All' | translate}}</ion-toggle>
+
+				</ng-template>
 				<ng-template let-i="row" datatable-cell-template>
 					<ion-icon class="clickable" [name]="i.Icon || 'flash'" [color]="i.Color || 'primary'" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"></ion-icon>
 				</ng-template>
@@ -52,6 +59,8 @@
 					>
 				</ng-template>
 			</datatable-column>
+
+			
 		</app-data-table>
 	</div>
 
