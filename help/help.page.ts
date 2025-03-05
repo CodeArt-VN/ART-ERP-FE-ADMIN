@@ -19,7 +19,7 @@ export class HelpPage extends PageBase {
 	isAllRowOpened = false;
 	typeList = [];
 	webContentList = [];
-	isShowAll=false;
+	isShowAll = false;
 
 	constructor(
 		public pageProvider: SYS_FormProvider,
@@ -136,22 +136,23 @@ export class HelpPage extends PageBase {
 	}
 
 	loadedData(event) {
-		if(!this.isShowAll){
+		if (!this.isShowAll) {
 			this.webContentList.forEach((d) => {
 				const regex = /help\/(.+)/;
 				const match = d.Code.match(regex);
 				if (match && (match[1].match(/\//g) || []).length == 1) {
-					this.items.find(x=> x.Code == match[1].split('/')[1])._WebContent = d;
+					this.items.find((x) => x.Code == match[1].split('/')[1])._WebContent = d;
 				}
 			});
 			let parents = new Set();
-			 this.items.filter(d=> d._WebContent).forEach((d)=>{
-				parents = new Set([...parents, ...this.getParent(d.IDParent)]);
-	
-			 });
-			 this.items = [...this.items.filter(d=> d._WebContent), ...[...parents].filter((p:any) => !this.items.some(d => d.Id === p.Id && d._WebContent))];
+			this.items
+				.filter((d) => d._WebContent)
+				.forEach((d) => {
+					parents = new Set([...parents, ...this.getParent(d.IDParent)]);
+				});
+			this.items = [...this.items.filter((d) => d._WebContent), ...[...parents].filter((p: any) => !this.items.some((d) => d.Id === p.Id && d._WebContent))];
 		}
-	
+
 		this.buildFlatTree(this.items, this.itemsState, this.isAllRowOpened).then((resp: any) => {
 			this.itemsState = resp;
 			this.itemsView = this.itemsState.filter((d) => d.show);
@@ -159,7 +160,7 @@ export class HelpPage extends PageBase {
 		super.loadedData(event);
 	}
 
-	showAll(e:any){
+	showAll(e: any) {
 		this.isShowAll = e.target.checked;
 		this.items = [];
 		this.loadData();
@@ -190,5 +191,4 @@ export class HelpPage extends PageBase {
 		}
 		return result;
 	}
-
 }
