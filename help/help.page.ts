@@ -20,10 +20,10 @@ export class HelpPage extends PageBase {
 	typeList = [];
 	webContentList = [];
 	isShowAll = false;
+	formList=[];
 
 	constructor(
-		public pageProvider: SYS_FormProvider,
-		public webContentProvider: WEB_ContentProvider,
+		public pageProvider: WEB_ContentProvider,
 		public modalController: ModalController,
 		public alertCtrl: AlertController,
 		public loadingController: LoadingController,
@@ -38,119 +38,70 @@ export class HelpPage extends PageBase {
 		this.query.AllParent = true;
 	}
 
+	preLoadData(event?: any): void {
+		//Lay danh sach cac Form
+		this.env
+			.getStorage('UserProfile')
+			.then((userProfile) => {
+				let result = userProfile.Forms;
+
+				const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
+
+				if (shouldFilter) {
+					result = result.filter((e) => e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase()));
+				}
+
+				result = result.filter((d) => !d.Code.startsWith('can'));
+
+				if (result.length === 0) {
+					this.pageConfig.isEndOfData = true;
+				}
+
+				if (result.length > 0) {
+					let firstRow = result[0];
+
+					// Fix duplicate rows
+					if (this.formList.findIndex((d) => d.Id === firstRow.Id) === -1) {
+						this.formList = [...this.formList, ...result];
+					}
+				}
+				super.preLoadData(event);
+			})
+			.catch((err) => {
+				if (err.message != null) {
+					this.env.showMessage(err.message, 'danger');
+				} else {
+					this.env.showMessage('Cannot extract data', 'danger');
+				}
+			});
+	}
+
 	loadData(event = null) {
-		if (this.pageConfig.isDetailPage) {
-			this.loadAnItem(event);
-		} else {
-			this.parseSort();
+		this.query.Language = this.env.language.current;
+		this.query.Type = 'Help';
 
-			if (this.pageProvider && !this.pageConfig.isEndOfData) {
-				this.env.getStorage('lang').then((lang) => {
-					Promise.all([this.webContentProvider.read(), this.env.getStorage('UserProfile')])
-						.then(([webContent, userProfile]: any) => {
-							console.log('WEB CONTENT : ', webContent);
-							this.webContentList = webContent.data.filter((d: any) => d.Code?.includes(lang));
-							let result = userProfile.Forms;
-
-							const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
-
-							if (shouldFilter) {
-								result = result.filter((e) => e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase()));
-							}
-
-							result = result.filter((d) => !d.Code.startsWith('can'));
-
-							if (result.length === 0) {
-								this.pageConfig.isEndOfData = true;
-							}
-
-							if (result.length > 0) {
-								let firstRow = result[0];
-
-								// Fix duplicate rows
-								if (this.items.findIndex((d) => d.Id === firstRow.Id) === -1) {
-									this.items = [...this.items, ...result];
-								}
-							}
-
-							this.loadedData(event);
-						})
-						.catch((err) => {
-							if (err.message != null) {
-								this.env.showMessage(err.message, 'danger');
-							} else {
-								this.env.showMessage('Cannot extract data', 'danger');
-							}
-
-							this.loadedData(event);
-						});
-				});
-
-				// this.webContentProvider.read().then((data) => {
-				// 	console.log('WEB CONTENT : ' , data);
-				// });
-
-				// this.env
-				// 	.getStorage('UserProfile')
-				// 	.then((i) => {
-				// 		let result = i.Forms;
-
-				// 		const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
-
-				// 		if (shouldFilter) {
-				// 			result = result.filter((e) => {
-				// 				const queryKeyword = e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase());
-				// 				return queryKeyword;
-				// 			});
-				// 		}
-				// 		result = result.filter((d) => !d.Code.startsWith('can'));
-				// 		return result;
-				// 	})
-				// 	.then((data) => {
-				// 		if (data.length == 0) {
-				// 			this.pageConfig.isEndOfData = true;
-				// 		}
-				// 		if (data.length > 0) {
-				// 			let firstRow = data[0];
-
-				// 			//Fix dupplicate rows
-				// 			if (this.items.findIndex((d) => d.Id == firstRow.Id) == -1) {
-				// 				this.items = [...this.items, ...data];
-				// 			}
-				// 		}
-				// 		this.loadedData(event);
-				// 	})
-				// 	.catch((err) => {
-				// 		if (err.message != null) {
-				// 			this.env.showMessage(err.message, 'danger');
-				// 		} else {
-				// 			this.env.showMessage('Cannot extract data', 'danger');
-				// 		}
-
-				// 		this.loadedData(event);
-				// 	});
-			} else {
-				this.loadedData(event);
-			}
-		}
+		super.loadData(event);
 	}
 
 	loadedData(event) {
+		let forms = [...this.formList];
 		if (!this.isShowAll) {
-			this.webContentList.forEach((d) => {
+			this.items.forEach((d) => {
 				const regex = /help\/(.+)/;
 				const match = d.Code.match(regex);
 				if (match && (match[1].match(/\//g) || []).length == 1) {
-					this.items.find((x) => x.Code == match[1].split('/')[1])._WebContent = d;
+					forms.find((x) => x.Code == match[1].split('/')[1])._WebContent = d;
 				}
 			});
 			let parents = new Set();
-			this.items
+			forms
 				.filter((d) => d._WebContent)
 				.forEach((d) => {
 					parents = new Set([...parents, ...this.getParent(d.IDParent)]);
 				});
-			this.items = [...this.items.filter((d) => d._WebContent), ...[...parents].filter((p: any) => !this.items.some((d) => d.Id === p.Id && d._WebContent))];
+			this.items = [...forms.filter((d) => d._WebContent), ...[...parents].filter((p: any) => !forms.some((d) => d.Id === p.Id && d._WebContent))];
+		}else{
+			this.items = forms;
 		}
 
 		this.buildFlatTree(this.items, this.itemsState, this.isAllRowOpened).then((resp: any) => {
@@ -182,7 +133,7 @@ export class HelpPage extends PageBase {
 	}
 
 	getParent(Id: number, result = []) {
-		let parent = this.items.find((d) => d.Id == Id);
+		let parent = this.formList.find((d) => d.Id == Id);
 		if (parent) {
 			result.unshift(parent);
 			if (parent.IDParent) {

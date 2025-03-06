@@ -30,9 +30,7 @@
 			(sort)="onSort($event)"
 		>
 			<datatable-column class="col-icon large" name="" property="Id">
-				<ng-template *ngIf="pageConfig.canAdd" datatable-header-template>
-					<ion-toggle [checked]="isShowAll" (ionChange)="showAll($event)">{{'All' | translate}}</ion-toggle>
-				</ng-template>
+
 				<ng-template let-i="row" datatable-cell-template>
 					<ion-icon class="clickable" [name]="i.Icon || 'flash'" [color]="i.Color || 'primary'" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"></ion-icon>
 				</ng-template>
