@@ -20,7 +20,7 @@ export class HelpPage extends PageBase {
 	typeList = [];
 	webContentList = [];
 	isShowAll = false;
-	formList=[];
+	formList = [];
 
 	constructor(
 		public pageProvider: WEB_ContentProvider,
@@ -79,28 +79,38 @@ export class HelpPage extends PageBase {
 	loadData(event = null) {
 		this.query.Language = this.env.language.current;
 		this.query.Type = 'Help';
-
 		super.loadData(event);
 	}
-
 	loadedData(event) {
 		let forms = lib.cloneObject(this.formList);
 		if (!this.isShowAll) {
 			this.items.forEach((d) => {
-				const regex = /help\/(.+)/;
-				const match = d.Code.match(regex);
-				if (match && (match[1].match(/\//g) || []).length == 1) {
-					forms.find((x) => x.Code == match[1].split('/')[1])._WebContent = d;
+				let f = forms.find((x) => 'help/' + x.Code == d.URL);
+				if (f) {
+					f._isHasWebContent = true;
+					let index = forms.indexOf(f);
+					if (index != -1) forms.push({ ...d, IDParent: f.Id, _isWebContent: true, Sort: -1 });
 				}
 			});
 			let parents = new Set();
 			forms
-				.filter((d) => d._WebContent)
+				.filter((d) => d._isHasWebContent || d._isWebContent)
 				.forEach((d) => {
 					parents = new Set([...parents, ...this.getParent(d.IDParent)]);
 				});
-			this.items = [...forms.filter((d) => d._WebContent), ...[...parents].filter((p: any) => !forms.some((d) => d.Id === p.Id && d._WebContent))];
-		}else{
+			this.items = [
+				...forms.filter((d) => d._isHasWebContent || d._isWebContent),
+				...[...parents].filter((p: any) => !forms.some((d) => d.Id === p.Id && (d._isHasWebContent || d._isWebContent))),
+			];
+		} else {
+			this.items.forEach((d) => {
+				let f = forms.find((x) => 'help/' + x.Code == d.URL);
+				if (f) {
+					f._isHasWebContent = true;
+					let index = forms.indexOf(f);
+					if (index != -1) forms.push({ ...d, IDParent: f.Id, _isWebContent: true, Sort: -1 });
+				}
+			});
 			this.items = forms;
 		}
 

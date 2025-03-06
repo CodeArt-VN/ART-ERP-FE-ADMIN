@@ -28,14 +28,15 @@
 			(dataInfinite)="loadData($event)"
 			(filter)="onDatatableFilter($event)"
 			(sort)="onSort($event)"
+			[isQueryLocalOnly]="true"
 		>
 			<datatable-column class="col-icon large" name="" property="Id">
-
 				<ng-template let-i="row" datatable-cell-template>
-					<ion-icon class="clickable" [name]="i.Icon || 'flash'" [color]="i.Color || 'primary'" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"></ion-icon>
+					<ion-icon (click)="toggleRow(items, i, true);" *ngIf="!i._isWebContent" class="clickable" [name]="i.Icon || 'flash'" [color]="i.Color || 'primary'"></ion-icon>
+					<ion-icon *ngIf="i._isWebContent" class="clickable" [name]="'document-text-outline'" [color]="i.Color || 'primary'"></ion-icon>
 				</ng-template>
 			</datatable-column>
-
+			<!-- [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]" -->
 			<datatable-column class="col-name" name="Name" property="Name">
 				<ng-template datatable-header-template>
 					<ion-icon class="min-btn" [name]="!isAllRowOpened? 'add-circle-outline':'remove-circle-outline'" (click)="toggleRowAll()"></ion-icon>
@@ -50,11 +51,21 @@
 						*ngIf="i.HasChild"
 					></ion-icon>
 					<ion-icon class="min-btn clickable" [name]="''" *ngIf="!i.HasChild"></ion-icon>
-					<ion-text class="clickable" [ngClass]="i.HasChild? ('bold ') : ('')" [color]="i.Color" [routerLink]="['/'+pageConfig.pageName+'/'+i.Code]"
+					<ion-text (click)="toggleRow(items, i, true);" *ngIf="!i._isWebContent" class="clickable" [ngClass]="i.HasChild? ('bold ') : ('')" [color]="i.Color"
 						>{{i.Name | translate}}</ion-text
 					>
+					<a *ngIf="i._isWebContent" href="/#/{{i.URL}}" class="clickable" (click)="nav('/' + i.URL)" (mousedown)="$event.stopPropagation()">{{i.Name | translate}} </a>
 				</ng-template>
 			</datatable-column>
+
+			<datatable-column *ngIf="pageConfig.canEdit" class="col-icon" name="" property="Id">
+				<ng-template let-i="row" datatable-cell-template>
+					<ion-button *ngIf="!i._isHasWebContent && !i._isWebContent" (click)="nav('/help/' + i.Code)" size="small" title="{{'Add new' | translate}}" fill="clear">
+						<ion-icon slot="icon-only" name="pencil"></ion-icon>
+					</ion-button>
+				</ng-template>
+			</datatable-column>
+
 		</app-data-table>
 	</div>
 
