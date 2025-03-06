@@ -84,7 +84,7 @@ export class HelpPage extends PageBase {
 	}
 
 	loadedData(event) {
-		let forms = [...this.formList];
+		let forms = lib.cloneObject(this.formList);
 		if (!this.isShowAll) {
 			this.items.forEach((d) => {
 				const regex = /help\/(.+)/;
