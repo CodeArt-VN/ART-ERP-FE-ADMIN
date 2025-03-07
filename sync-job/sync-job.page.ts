@@ -51,7 +51,7 @@ export class SyncJobPage extends PageBase {
 				})
 				.catch((err) => {
 					this.env
-						.showPrompt(err.error.ExceptionMessage, null, err.error.Message, 'Xác nhận', null, null)
+						.showPrompt(err.error.ExceptionMessage, null, err.error.Message, 'Confirm', null, null)
 						.then((_) => {})
 						.catch((e) => {});
 					console.log(err.error);
