@@ -60,7 +60,7 @@
 
 			<datatable-column *ngIf="pageConfig.canEdit" class="col-icon" name="" property="Id">
 				<ng-template let-i="row" datatable-cell-template>
-					<ion-button *ngIf="!i._isHasWebContent && !i._isWebContent" (click)="nav('/help/' + i.Code)" size="small" title="{{'Add new' | translate}}" fill="clear">
+					<ion-button *ngIf="!i._isHasWebContent && !i._isWebContent" (click)="nav('/help/' + i.Code)" size="small" title="{{'Add' | translate}}" fill="clear">
 						<ion-icon slot="icon-only" name="pencil"></ion-icon>
 					</ion-button>
 				</ng-template>
