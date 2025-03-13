@@ -1,5 +1,9 @@
 <ion-header>
-	<app-toolbar [page]="this"></app-toolbar>
+	<app-toolbar [page]="this">
+		<ion-button *ngIf="!pageConfig.showSpinner" title="{{'Lock/Unlock' | translate}}" (click)="lockAccount()">
+			<ion-icon slot="icon-only" [color]="item.LockoutEnabled?'danger':'success'" size="medium" [name]="item.LockoutEnabled?'lock-closed':'lock-open'"></ion-icon>
+		</ion-button>
+	</app-toolbar>
 </ion-header>
 
 <ion-content appScrollbarTheme class="ion-padding">
@@ -61,7 +65,7 @@
 
 							<ion-col size="12" size-sm="12" size-md="4">
 								<app-form-control
-									[field]="{id:'SysRoles',label:'Group', type : 'ng-select',dataSource:roleList,bindLabel:'Name',bindValue:'Id',multiple:true,clearable:true, form : formGroup,appendTo:'#ng-select-header' }"
+									[field]="{id:'SysRoles',label:'System role', type : 'ng-select',dataSource:roleList,bindLabel:'Name',bindValue:'Id',multiple:true,clearable:true, form : formGroup,appendTo:'#ng-select-header' }"
 								>
 								</app-form-control>
 								<app-form-control
@@ -77,7 +81,7 @@
 								</app-form-control>
 
 								<app-form-control
-									[field]="{id:'GroupIds',label:'Add to group', type : 'ng-select',dataSource:groupList,bindLabel:'Name',bindValue:'Id',clearable:true,multiple:true, form : formGroup,appendTo:'#ng-select-header' }"
+									[field]="{id:'GroupIds',label:'User group', type : 'ng-select',dataSource:groupList,bindLabel:'Name',bindValue:'Id',clearable:true,multiple:true, form : formGroup,appendTo:'#ng-select-header' }"
 								>
 								</app-form-control>
 							</ion-col>

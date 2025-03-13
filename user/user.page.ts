@@ -144,4 +144,30 @@ export class UserPage extends PageBase {
 				}
 			});
 	}
+
+	lockAccount(i) {
+		if (!i.LockoutEnabled) {
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('PUT', 'Account/DisableAccount/'+ i.Id, null).toPromise())
+				.then((res) => {
+					this.env.showMessage('Locked', 'success');
+					this.refresh();
+				})
+				.catch((err) => {
+					console.log(err);
+					this.env.showMessage(err, 'danger');
+				});
+		} else {
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('PUT', 'Account/EnableAccount/' + i.Id,null).toPromise())
+				.then((res) => {
+					this.env.showMessage('Unlocked', 'success');
+					this.refresh();
+				})
+				.catch((err) => {
+					console.log(err);
+					this.env.showMessage(err, 'danger');
+				});
+		}
+	}
 }

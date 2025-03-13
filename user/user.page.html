@@ -24,7 +24,8 @@
 		<datatable-column [checkbox]="true"></datatable-column>
 		<datatable-column class="col-icon" property="LockoutEnabled">
 			<ng-template let-i="row" datatable-cell-template>
-				<ion-icon [color]="i.LockoutEnabled?'danger':'success'" class="min-btn" [name]="i.LockoutEnabled?'lock-closed':'lock-open'"></ion-icon>
+				<ion-icon slot="icon-only" [color]="i.LockoutEnabled?'danger':'success'" class="min-btn" [name]="i.LockoutEnabled?'lock-closed':'lock-open'"
+				(click)="lockAccount(i)"></ion-icon>
 			</ng-template>
 		</datatable-column>
 
@@ -46,17 +47,17 @@
 
 		<datatable-column class="col-name" name="PhoneNumber" property="PhoneNumber"> </datatable-column>
 
-		<datatable-column class="col-remark" name="Roles" property="Roles">
+		<datatable-column class="col-remark" name="System role" property="Roles">
 			<ng-template let-i="row" datatable-cell-template>
 				<div *ngFor="let role of i?.Roles">
 					<small class="no-warp"> {{ role.RoleId }}</small>
 				</div>
 			</ng-template>
 		</datatable-column>
-		<datatable-column class="col-remark" name="Groups" property="Groups">
+		<datatable-column class="col-remark" name="Groups" property="Groups" >
 			<ng-template let-i="row" datatable-cell-template>
 				<div *ngFor="let group of i?.Groups">
-					<small class="no-warp"> {{ group.GroupId }}</small>
+					<small class="no-warp"> {{ group.Code }}</small>
 				</div>
 			</ng-template>
 		</datatable-column>

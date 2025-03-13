@@ -12,12 +12,12 @@ import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service
 import { environment } from 'src/environments/environment';
 
 @Component({
-	selector: 'app-account-group-detail',
-	templateUrl: './account-group-detail.page.html',
-	styleUrls: ['./account-group-detail.page.scss'],
+	selector: 'app-user-group-detail',
+	templateUrl: './user-group-detail.page.html',
+	styleUrls: ['./user-group-detail.page.scss'],
 	standalone: false,
 })
-export class AccountGroupDetailPage extends PageBase {
+export class UserGroupDetailPage extends PageBase {
 	@ViewChild('popoverTitlePosition') popoverTitlePosition;
 
 	roleDataSource: any;

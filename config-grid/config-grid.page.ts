@@ -168,36 +168,45 @@ export class ConfigGridPage extends PageBase {
 													field.imgPath = environment.staffAvatarsServer;
 													field.type = 'ng-select-staff';
 													field.bindLabel = 'FullName';
-													field.dataSource = {
-														page: this,
-														loading: false,
-														input$: new Subject<string>(),
-														selected: [],
-														items$: null,
-														initSearch() {
-															this.loading = false;
-															this.items$ = concat(
-																of(this.selected),
-																this.input$.pipe(
-																	distinctUntilChanged(),
-																	tap(() => (this.loading = true)),
-																	switchMap((term) =>
-																		this.page.staffProvider
-																			.search({
-																				Take: 20,
-																				Skip: 0,
-																				IDDepartment: this.page.env.selectedBranchAndChildren,
-																				Term: term,
-																			})
-																			.pipe(
-																				catchError(() => of([])),
-																				tap(() => (this.loading = false))
-																			)
-																	)
-																)
-															);
-														},
-													};
+													field.dataSource = this.buildSelectDataSource((term) => {
+														return this.staffProvider.search({
+															Take: 20,
+															Skip: 0,
+															IDDepartment: this.env.selectedBranchAndChildren,
+															Term: term,
+														});
+													});
+
+													// {
+													// 	page: this,
+													// 	loading: false,
+													// 	input$: new Subject<string>(),
+													// 	selected: [],
+													// 	items$: null,
+													// 	initSearch() {
+													// 		this.loading = false;
+													// 		this.items$ = concat(
+													// 			of(this.selected),
+													// 			this.input$.pipe(
+													// 				distinctUntilChanged(),
+													// 				tap(() => (this.loading = true)),
+													// 				switchMap((term) =>
+													// 					this.page.staffProvider
+													// 						.search({
+													// 							Take: 20,
+													// 							Skip: 0,
+													// 							IDDepartment: this.page.env.selectedBranchAndChildren,
+													// 							Term: term,
+													// 						})
+													// 						.pipe(
+													// 							catchError(() => of([])),
+													// 							tap(() => (this.loading = false))
+													// 						)
+													// 				)
+													// 			)
+													// 		);
+													// 	},
+													// };
 													field.saveObject = true;
 													isLoadingAsync = true;
 													break;
@@ -205,36 +214,46 @@ export class ConfigGridPage extends PageBase {
 													field.imgPath = environment.staffAvatarsServer;
 													field.type = 'ng-select-bp';
 													field.bindLabel = 'Name';
-													field.dataSource = {
-														page: this,
-														loading: false,
-														input$: new Subject<string>(),
-														selected: [],
-														items$: null,
-														initSearch() {
-															this.loading = false;
-															this.items$ = concat(
-																of(this.selected),
-																this.input$.pipe(
-																	distinctUntilChanged(),
-																	tap(() => (this.loading = true)),
-																	switchMap((term) =>
-																		this.page.contactProvider
-																			.search({
-																				Take: 20,
-																				Skip: 0,
-																				IDDepartment: this.page.env.selectedBranchAndChildren,
-																				Term: term,
-																			})
-																			.pipe(
-																				catchError(() => of([])),
-																				tap(() => (this.loading = false))
-																			)
-																	)
-																)
-															);
-														},
-													};
+													field.dataSource = this.buildSelectDataSource((term) => {
+														return this.contactProvider.search({
+															Take: 20,
+															Skip: 0,
+															IDDepartment: this.env.selectedBranchAndChildren,
+															Term: term,
+														});
+													});
+
+													// {
+
+													// 	page: this,
+													// 	loading: false,
+													// 	input$: new Subject<string>(),
+													// 	selected: [],
+													// 	items$: null,
+													// 	initSearch() {
+													// 		this.loading = false;
+													// 		this.items$ = concat(
+													// 			of(this.selected),
+													// 			this.input$.pipe(
+													// 				distinctUntilChanged(),
+													// 				tap(() => (this.loading = true)),
+													// 				switchMap((term) =>
+													// 					this.page.contactProvider
+													// 						.search({
+													// 							Take: 20,
+													// 							Skip: 0,
+													// 							IDDepartment: this.page.env.selectedBranchAndChildren,
+													// 							Term: term,
+													// 						})
+													// 						.pipe(
+													// 							catchError(() => of([])),
+													// 							tap(() => (this.loading = false))
+													// 						)
+													// 				)
+													// 			)
+													// 		);
+													// 	},
+													// };
 													field.saveObject = true;
 													isLoadingAsync = true;
 													break;
