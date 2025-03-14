@@ -41,7 +41,7 @@ export class UserDetailPage extends PageBase {
 		this.formGroup = formBuilder.group({
 			Id: [''],
 			Email: ['', [Validators.required, Validators.email]],
-			UserName: ['', Validators.required],
+			UserName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._\\-@]+$')]],
 			PhoneNumber: [''],
 			Fullname: [''],
 			Password: [''],
@@ -215,6 +215,9 @@ export class UserDetailPage extends PageBase {
 			this.formGroup.get('Password').setValidators([]);
 			this.formGroup.get('Password')?.updateValueAndValidity();
 		}
+		if(this.item.LockoutEnabled)this.formGroup.disable();
+		else this.formGroup.enable();
+		 
 	}
 
 	changeEmail() {

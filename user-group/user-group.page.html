@@ -32,13 +32,23 @@
 
 			<datatable-column class="col-name" name="Name" property="Name"> </datatable-column>
 
-			<datatable-column class="col-code" name="System role" property="Type" filterControlType="ng-select" [filterDataSource]="roleDataSource" filterBindValue="Id",filterBindLabel ="Name">
+			<datatable-column
+				class="col-code"
+				name="System role"
+				property="Type"
+				filterControlType="ng-select"
+				[filterDataSource]="roleDataSource"
+				filterBindValue="Id"
+				filterBindLabel="Name"
+			>
 				<ng-template let-i="row" datatable-cell-template>
 					<small class="no-warp"> {{ i.Type }}</small>
 				</ng-template>
 			</datatable-column>
 
-			<datatable-column class="col-qty" name="Member(s)" property="Members"> </datatable-column>
+			<datatable-column class="col-number" name="User account(s)" property="Members"> 
+
+			</datatable-column>
 		</app-data-table>
 	</div>
 	<div class="ion-padding"></div>

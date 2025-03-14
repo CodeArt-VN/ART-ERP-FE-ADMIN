@@ -34,8 +34,6 @@ export class UserGroupPage extends PageBase {
 		this.sortToggle('Id', true);
 		Promise.all([this.accountUserProvider.commonService.connect('GET', 'Account/GetRoles', null).toPromise()]).then((values) => {
 			this.roleDataSource = values[0];
-			this.roleDataSource = this.roleDataSource.map(d=> {return {...d,Code:d.Id}});
-			console.log(this.roleDataSource);
 		});
 		super.preLoadData(event);
 	}
