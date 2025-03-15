@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, ModalController, AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
-import { BRA_BranchProvider, SYS_TranslateProvider } from 'src/app/services/static/services.service';
+import { BRA_BranchProvider, SYS_AccountGroupProvider, SYS_TranslateProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
@@ -16,9 +16,12 @@ import { APIList } from 'src/app/services/static/global-variable';
 	standalone: false,
 })
 export class UserPage extends PageBase {
+	roleList: any = [];
+	groupList: any = [];
 	constructor(
 		public pageProvider: ACCOUNT_ApplicationUserProvider,
 		public branchProvider: BRA_BranchProvider,
+		public accountGroup: SYS_AccountGroupProvider,
 		public modalController: ModalController,
 		public popoverCtrl: PopoverController,
 		public alertCtrl: AlertController,
@@ -28,6 +31,17 @@ export class UserPage extends PageBase {
 		public location: Location
 	) {
 		super();
+	}
+	preLoadData(event?: any): void {
+		Promise.all([this.pageProvider.commonService.connect('GET', 'Account/GetRoles', null).toPromise(), this.accountGroup.read()]).then((values: any) => {
+			if (values && values[0]) {
+				this.roleList = values[0];
+			}
+			if (values[1] && values[1].data) {
+				this.groupList = values[1].data;
+			}
+			super.preLoadData(event);
+		});
 	}
 
 	loadedData(event) {
@@ -143,5 +157,31 @@ export class UserPage extends PageBase {
 					this.downloadURLContent(err._body);
 				}
 			});
+	}
+
+	lockAccount(i) {
+		if (!i.LockoutEnabled) {
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('PUT', 'Account/DisableAccount/' + i.Id, null).toPromise())
+				.then((res) => {
+					this.env.showMessage('Locked', 'success');
+					this.refresh();
+				})
+				.catch((err) => {
+					console.log(err);
+					this.env.showMessage(err, 'danger');
+				});
+		} else {
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('PUT', 'Account/EnableAccount/' + i.Id, null).toPromise())
+				.then((res) => {
+					this.env.showMessage('Unlocked', 'success');
+					this.refresh();
+				})
+				.catch((err) => {
+					console.log(err);
+					this.env.showMessage(err, 'danger');
+				});
+		}
 	}
 }

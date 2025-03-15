@@ -19,8 +19,8 @@ export const ADMINRoutes: Routes = [
   { path: 'translate', loadChildren: () => import('./translate/translate.module').then(m => m.TranslatePageModule), canActivate: [AuthGuard] },
   { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserPageModule), canActivate: [AuthGuard] },
   { path: 'user/:id', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailPageModule), canActivate: [AuthGuard] },
-  { path: 'account-group', loadChildren: () => import('./account-group/account-group.module').then(m => m.AccountGroupPageModule), canActivate: [AuthGuard] },
-  { path: 'account-group/:id', loadChildren: () => import('./account-group-detail/account-group-detail.module').then(m => m.AccountGroupDetailPageModule), canActivate: [AuthGuard] },
+  { path: 'user-group', loadChildren: () => import('./user-group/user-group.module').then(m => m.UserGroupPageModule), canActivate: [AuthGuard] },
+  { path: 'user-group/:id', loadChildren: () => import('./user-group-detail/user-group-detail.module').then(m => m.UserGroupDetailPageModule), canActivate: [AuthGuard] },
   
   { path: 'config-grid', loadChildren: () => import('./config-grid/config-grid.module').then(m => m.ConfigGridPageModule), canActivate: [AuthGuard] },
 

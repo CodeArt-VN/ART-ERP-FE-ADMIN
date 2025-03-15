@@ -41,7 +41,7 @@ export class UserDetailPage extends PageBase {
 		this.formGroup = formBuilder.group({
 			Id: [''],
 			Email: ['', [Validators.required, Validators.email]],
-			UserName: ['', Validators.required],
+			UserName: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._\\-@]+$')]],
 			PhoneNumber: [''],
 			Fullname: [''],
 			Password: [''],
@@ -215,6 +215,9 @@ export class UserDetailPage extends PageBase {
 			this.formGroup.get('Password').setValidators([]);
 			this.formGroup.get('Password')?.updateValueAndValidity();
 		}
+		if(this.item.LockoutEnabled)this.formGroup.disable();
+		else this.formGroup.enable();
+		 
 	}
 
 	changeEmail() {
@@ -264,7 +267,8 @@ export class UserDetailPage extends PageBase {
 						this.savedChange(savedItem, this.formGroup);
 					})
 					.catch((err) => {
-						this.env.showMessage(err.error?.ExceptionMessage || 'Cannot save, please try again', 'danger');
+						if (err.error?.ExceptionMessage) this.env.showMessage(err.error?.ExceptionMessage || 'Cannot save, please try again', 'danger');
+						else this.env.showMessage(err.error?.Message || 'Cannot save, please try again', 'danger');
 						this.cdr.detectChanges();
 						this.submitAttempt = false;
 						reject(err);
@@ -300,6 +304,32 @@ export class UserDetailPage extends PageBase {
 			return this.formGroup.get('SysRoles')?.value?.some((d) => ['VENDOR', 'CUSTOMER', 'STORER'].includes(d));
 		} else {
 			return this.formGroup.get('SysRoles')?.value?.some((d) => d == type);
+		}
+	}
+
+	lockAccount() {
+		if (!this.item.LockoutEnabled) {
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('PUT', 'Account/DisableAccount/' + this.item.Id, null).toPromise())
+				.then((res) => {
+					this.env.showMessage('Locked', 'success');
+					this.refresh();
+				})
+				.catch((err) => {
+					console.log(err);
+					this.env.showMessage(err, 'danger');
+				});
+		} else {
+			this.env
+				.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('PUT', 'Account/EnableAccount/' + this.item.Id, null).toPromise())
+				.then((res) => {
+					this.env.showMessage('Unlocked', 'success');
+					this.refresh();
+				})
+				.catch((err) => {
+					console.log(err);
+					this.env.showMessage(err, 'danger');
+				});
 		}
 	}
 }

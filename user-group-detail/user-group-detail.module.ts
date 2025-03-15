@@ -4,16 +4,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { ShareModule } from 'src/app/share.module';
-import { AccountGroupDetailPage } from './account-group-detail.page';
+import { UserGroupDetailPage } from './user-group-detail.page';
 const routes: Routes = [
 	{
 		path: '',
-		component: AccountGroupDetailPage,
+		component: UserGroupDetailPage,
 	},
 ];
 
 @NgModule({
 	imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, ShareModule, RouterModule.forChild(routes)],
-	declarations: [AccountGroupDetailPage],
+	declarations: [UserGroupDetailPage],
 })
-export class AccountGroupDetailPageModule {}
+export class UserGroupDetailPageModule {}

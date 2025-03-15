@@ -47,7 +47,7 @@
 		<ion-toolbar color="primary">
 			<ion-segment scrollable="true" (ionChange)="segmentChanged($event)" [value]="segmentView">
 				<ion-segment-button value="s1">
-					<ion-label>{{'Group' | translate}}</ion-label>
+					<ion-label>{{'User groups' | translate}}</ion-label>
 				</ion-segment-button>
 				<ion-segment-button value="s2">
 					<ion-label>{{'Unit/Job title' | translate}}</ion-label>
@@ -57,7 +57,7 @@
 		<div class="ion-padding" style="padding-bottom: 0" *ngIf="segmentView == 's1'">
 			<div class="c-control">
 				<label class="c-label" for="IDBranch">
-					<ion-text color="primary"> {{'Group' | translate}} </ion-text>
+					<ion-text color="primary"> {{'User groups' | translate}} </ion-text>
 				</label>
 				<ng-select
 					class="c-input no-check-dirty"
