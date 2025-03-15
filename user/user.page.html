@@ -38,7 +38,7 @@
 			<ng-template let-i="row" datatable-cell-template>
 				<div (click)="nav('/'+pageConfig.pageName+'/'+i.Id,'forward')" class="col-name cell">
 					<ion-avatar class="avatar" slot="start">
-						<ion-img #img [src]="i.Avatar" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
+						<ion-img #img [src]="i.Avatar || 'assets/avartar-empty.jpg'" (ionError)="img.src = 'assets/avartar-empty.jpg'"></ion-img>
 					</ion-avatar>
 					<div>
 						<span class="bold">{{i.FullName}}</span>
