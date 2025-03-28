@@ -215,9 +215,8 @@ export class UserDetailPage extends PageBase {
 			this.formGroup.get('Password').setValidators([]);
 			this.formGroup.get('Password')?.updateValueAndValidity();
 		}
-		if(this.item.LockoutEnabled)this.formGroup.disable();
+		if (this.item.LockoutEnabled) this.formGroup.disable();
 		else this.formGroup.enable();
-		 
 	}
 
 	changeEmail() {
@@ -267,8 +266,7 @@ export class UserDetailPage extends PageBase {
 						this.savedChange(savedItem, this.formGroup);
 					})
 					.catch((err) => {
-						if (err.error?.ExceptionMessage) this.env.showMessage(err.error?.ExceptionMessage || 'Cannot save, please try again', 'danger');
-						else this.env.showMessage(err.error?.Message || 'Cannot save, please try again', 'danger');
+						this.env.showErrorMessage(err);
 						this.cdr.detectChanges();
 						this.submitAttempt = false;
 						reject(err);
