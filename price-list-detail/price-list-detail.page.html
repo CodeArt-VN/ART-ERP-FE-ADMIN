@@ -398,6 +398,7 @@
 															</a>
 														</div>
 														<div class="col-checkbox cell" *ngIf="pageConfig.canImport"></div>
+														<div class="col-checkbox cell"></div>
 
 														<div class="col-code cell"></div>
 														<div class="col-date cell">{{'Applied date' | translate}}</div>
@@ -422,7 +423,7 @@
 														<ion-icon
 															(click)="exportPriceListVersion(g.controls.Id.value)"
 															color="primary"
-															class="min-btn"
+															class="min-btn clickable"
 															name="cloud-download-outline"
 															*ngIf="g.controls.Id.value"
 														></ion-icon>
@@ -431,11 +432,22 @@
 														<ion-icon
 															(click)="importClick(g.controls.Id.value)"
 															color="primary"
-															class="min-btn"
+															class="min-btn clickable"
 															name="cloud-upload-outline"
 															*ngIf="g.controls.Id.value"
 														></ion-icon>
 													</div>
+
+													<div class="col-checkbox cell">
+														<ion-icon
+															(click)="calcPriceListVersion(g.controls.Id.value)"
+															color="primary"
+															class="min-btn clickable"
+															title="{{'Calculate price for all units' | translate}}"
+															name="calculator-outline"
+															*ngIf="g.controls.Id.value"
+														></ion-icon>
+													</div>	
 													<div class="col-code cell" *ngIf="pageConfig.canEdit">
 														<a class="clickable" (click)="applyPriceListVersion(g.controls.Id.value)" *ngIf="g.controls.Id.value"
 															>{{'Apply price' | translate}}</a
