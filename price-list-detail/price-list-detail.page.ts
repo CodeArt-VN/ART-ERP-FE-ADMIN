@@ -132,6 +132,15 @@ export class PriceListDetailPage extends PageBase {
 		this.setVersions();
 	}
 
+	calcPriceListVersion(id) {
+		this.env
+			.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('POST', 'WMS/PriceList/CalculatePriceListVersionDetail', {Id : parseInt(id)}).toPromise())
+			.then((resp) => {
+				if(resp)this.env.showMessage('Calculation completed', 'success');
+				else this.env.showMessage('Calculation failed', 'danger');
+			});
+	}
+
 	setVersions() {
 		this.formGroup.controls.Versions = new FormArray([]);
 		if (this.item.Versions?.length)
