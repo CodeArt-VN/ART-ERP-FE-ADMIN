@@ -245,6 +245,7 @@ export class PriceListDetailPage extends PageBase {
 				return ApiSetting.apiDomain('WMS/Item/ItemPrice');
 			},
 		};
+		this.itemsQuery.IsDisabled = 'skipped';
 		this.pageProvider.commonService
 			.connect(apiPath.method, apiPath.url(), this.itemsQuery)
 			.toPromise()

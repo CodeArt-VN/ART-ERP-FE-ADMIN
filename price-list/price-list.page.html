@@ -22,6 +22,12 @@
 				<ion-icon class="min-btn" *ngIf="sort.Name" [name]="sort.Name == 'Name'?'arrow-down': 'arrow-up'"></ion-icon>
 				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Name" name="search" color="primary"></ion-icon>
 			</div>
+			<div class="col-code cell" (click)="sortToggle('IsPriceListForVendor')">
+				{{'Vendor price list' | translate}}
+				<ion-icon class="min-btn" *ngIf="sort.Name" [name]="sort.Name == 'Name'?'arrow-down': 'arrow-up'"></ion-icon>
+				<ion-icon class="min-btn" (click)="pageConfig.isShowSearch = !pageConfig.isShowSearch" *ngIf="query.Name" name="search" color="primary"></ion-icon>
+			</div>
+
 			<div class="col-id cell">{{'Main unit' | translate}}</div>
 		</header>
 		<form (submit)="refresh()" action="#">
@@ -35,6 +41,7 @@
 					<input [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Name" class="c-input" [ngClass]="{active: query.Name}" type="text" />
 					<ion-icon class="min-btn" (click)="query.Name=''; refresh()" *ngIf="query.Name" name="close-circle-outline"></ion-icon>
 				</div>
+				<div class="col-code cell"></div>
 				<div class="col-id cell"></div>
 				<button mat-raised-button type="submit" style="display: none">Search</button>
 			</header>
@@ -52,6 +59,9 @@
 				</div>
 				<div (click)="nav('price-list/'+i.Id,'forward')" class="col-id cell">{{i.Id}}</div>
 				<div (click)="nav('price-list/'+i.Id,'forward')" class="col-name cell">{{i.Name}}</div>
+				<div class="col-code cell" style="justify-content: center">
+					<ion-icon class="min-btn" [name]="i.IsPriceListForVendor?'checkmark-outline': 'ban-outline' "> </ion-icon>
+				</div>
 				<div class="col-id cell">
 					<b>{{i.PrimaryDefaultCurrency}}</b>
 				</div>
