@@ -23,5 +23,7 @@ export const ADMINRoutes: Routes = [
   { path: 'user-group/:id', loadChildren: () => import('./user-group-detail/user-group-detail.module').then(m => m.UserGroupDetailPageModule), canActivate: [AuthGuard] },
   
   { path: 'config-grid', loadChildren: () => import('./config-grid/config-grid.module').then(m => m.ConfigGridPageModule), canActivate: [AuthGuard] },
-
+ { path: 'printer', loadChildren: () => import('../ADMIN/printer/printer.module').then(m => m.PrinterPageModule) },
+    { path: 'printer/:id', loadChildren: () => import('../ADMIN/printer-detail/printer-detail.module').then(m => m.PrinterDetailPageModule) },
+  
 ];
