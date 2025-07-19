@@ -88,38 +88,34 @@ export class PrinterDetailPage extends PageBase {
 		// }
 	}
 	loadedData(event) {
+		this.printerList = [];
 		super.loadedData(event);
-
 		let branchID = this.env.selectedBranch;
 		if (this.item?.IDBranch > 0) {
 			branchID = this.item.IDBranch;
 		}
-		this.printingService.getPrintersFromPrintingServer(branchID).then((rs: any) => {
-			if (rs && rs.printers.length > 0) {
-				this.printers = [
-					...rs.printers.map((i) => {
-						return {
-							Name: i,
-							Code: i,
-						};
-					}),
-				];
-				this.printingServerConfig = rs?.config;
-			} else if (this.item?.Code && this.printerList.length == 0) {
-				{
-					this.printerList = [{ Name: this.item.Code, Code: this.item.Code }];
-				}
-			}
-			else this.env.showMessage('No printers found from {value}!', 'warning', rs?.config.PrintingHost, null, true);
+		if (this.item?.Code && this.printerList.length == 0) {
+			this.printerList = [{ Name: this.item.Code, Code: this.item.Code }];
+		}
+		this.printingService
+			.getPrintersFromPrintingServer(branchID)
+			.then((rs: any) => {
+				if (rs && rs.printers.length > 0) {
+					this.printerList = [
+						...rs.printers.map((i) => {
+							return {
+								Name: i,
+								Code: i,
+							};
+						}),
+					];
+					this.printingServerConfig = rs?.config;
+				} else this.env.showMessage('No printers found from {value}!', 'warning', rs?.config.PrintingHost, null, true);
+			})
+			.catch((err) => {
+				this.env.showMessage(err?.error, 'warning');
+			})
 			
-			console.log(this.printers);
-		}).catch(err=>{
-			if (this.item?.Code && this.printerList.length == 0) {
-				
-					this.printerList = [{ Name: this.item.Code, Code: this.item.Code }];
-			}
-			else  this.env.showMessage(err?.error, 'warning');
-		});
 	}
 	changePrinterCode() {
 		this.formGroup.get('IsSecure').setValue(this.printingServerConfig?.PrintingIsSecure);
