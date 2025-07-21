@@ -15,7 +15,7 @@
 							</ion-list-header>
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="4">
-							<app-form-control (change)="changePrinterCode()" [field]="{id: 'Code', label: 'Code', type: 'ng-select',bindLabel:'Name',bindValue:'Code',dataSource:printers, form: formGroup }" (change)="saveChange()">
+							<app-form-control (change)="changePrinterCode()" [field]="{id: 'Code', label: 'Code', type: 'ng-select',bindLabel:'Name',bindValue:'Code',dataSource:printerList, form: formGroup }" (change)="saveChange()">
 								<small label *ngIf="item.Id">{{item.Id}}</small>
 							</app-form-control>
 							<app-form-control [field]="{id: 'Name', label: 'Name', type: 'text', form: formGroup }" (change)="saveChange()"> </app-form-control>
