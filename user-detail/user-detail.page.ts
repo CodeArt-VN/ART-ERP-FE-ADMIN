@@ -170,10 +170,12 @@ export class UserDetailPage extends PageBase {
 				.get('SysRoles')
 				?.valueChanges.pipe(startWith([]), pairwise())
 				.subscribe(([oldValue, currentValue]: [string[], string[]]) => {
-					const detachCheckRoles = ['CUSTOMER', 'VENDOR', 'STORER'];
-					const rolesRemoved = oldValue.filter((role) => detachCheckRoles.includes(role) && !currentValue.includes(role));
-					const rolesAdded = currentValue.filter((role) => detachCheckRoles.includes(role) && !oldValue.includes(role));
-					if (rolesRemoved.length || rolesAdded.length) {
+					const detachCheckRoles = ['CUSTOMER', 'VENDOR', 'STORER', 'STAFF'];
+
+					if (oldValue?.length === 0 && currentValue?.length > 0) return
+					const rolesRemoved = oldValue?.filter((role) => detachCheckRoles.includes(role) && !currentValue?.includes(role));
+					const rolesAdded = currentValue?.filter((role) => detachCheckRoles.includes(role) && !oldValue?.includes(role));
+					if (rolesRemoved?.length || rolesAdded?.length) {
 						if (!currentValue.some((role) => detachCheckRoles.includes(role))) {
 							this.formGroup.get('IDBusinessPartner')?.setValue(null);
 							this.formGroup.get('IDBusinessPartner')?.setValidators([]);
@@ -199,10 +201,13 @@ export class UserDetailPage extends PageBase {
 						}
 						this.formGroup.get('IDBusinessPartner')?.updateValueAndValidity();
 					}
-					if (!currentValue.includes('STAFF')) {
+
+					const staffRemoved = oldValue?.includes('STAFF') && !currentValue?.includes('STAFF');
+					const staffAdded = !oldValue?.includes('STAFF') && currentValue?.includes('STAFF');
+					if (staffRemoved) {
 						this.formGroup.get('StaffID')?.setValue(null);
 						this.formGroup.get('StaffID')?.setValidators([]);
-					} else {
+					} else if (staffAdded) {
 						this.formGroup.get('StaffID')?.setValidators([Validators.required]);
 					}
 					this.formGroup.get('StaffID')?.updateValueAndValidity();
@@ -292,6 +297,7 @@ export class UserDetailPage extends PageBase {
 		}
 		this.formGroup.get('Password').setValue('');
 		this.formGroup.get('ConfirmPassword').setValue('');
+		this.item = savedItem;
 		this.loadedData();
 		this.env.showMessage('Saving completed!', 'success');
 	}
