@@ -87,7 +87,7 @@ export class PrinterDetailPage extends PageBase {
 		// 	 super.preLoadData()
 		// }
 	}
-	loadedData(event) {
+	async loadedData(event?:any	) {
 		this.printerList = [];
 		super.loadedData(event);
 		let branchID = this.env.selectedBranch;
@@ -97,7 +97,7 @@ export class PrinterDetailPage extends PageBase {
 		if (this.item?.Code && this.printerList.length == 0) {
 			this.printerList = [{ Name: this.item.Code, Code: this.item.Code }];
 		}
-		this.printingService
+		await this.printingService
 			.getPrintersFromPrintingServer(branchID)
 			.then((rs: any) => {
 				if (rs && rs.printers.length > 0) {
@@ -114,8 +114,7 @@ export class PrinterDetailPage extends PageBase {
 			})
 			.catch((err) => {
 				this.env.showMessage(err?.error, 'warning');
-			})
-			
+			});
 	}
 	changePrinterCode() {
 		this.formGroup.get('IsSecure').setValue(this.printingServerConfig?.PrintingIsSecure);
@@ -129,5 +128,10 @@ export class PrinterDetailPage extends PageBase {
 
 	async saveChange() {
 		super.saveChange2();
+	}
+
+	async loadprintingServerConfig() {
+		await this.loadedData();
+		this.changePrinterCode();
 	}
 }
