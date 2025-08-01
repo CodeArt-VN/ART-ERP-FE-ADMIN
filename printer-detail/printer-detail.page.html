@@ -6,6 +6,8 @@
 	<app-page-title class="ion-padding safe-max-width" [pageConfig]="pageConfig"></app-page-title>
 	<div class="main-view" *ngIf="pageConfig.showSpinner == false">
 		<div class="row-full shadow full-screen ion-padding">
+			<div id="ng-select" style="position: absolute; z-index: 30005"></div>
+
 			<ion-grid fixed>
 				<form [formGroup]="formGroup">
 					<ion-row class="hr-group">
@@ -15,7 +17,11 @@
 							</ion-list-header>
 						</ion-col>
 						<ion-col size="12" size-sm size-xl="4">
-							<app-form-control (change)="changePrinterCode()" [field]="{id: 'Code', label: 'Code', type: 'ng-select',bindLabel:'Name',bindValue:'Code',dataSource:printerList, form: formGroup }" (change)="saveChange()">
+							<app-form-control
+								(change)="changePrinterCode()"
+								[field]="{id: 'Code', label: 'Code', type: 'ng-select',bindLabel:'Name',bindValue:'Code',dataSource:printerList, form: formGroup,appendTo : '#ng-select' }"
+								(change)="saveChange()"
+							>
 								<small label *ngIf="item.Id">{{item.Id}}</small>
 							</app-form-control>
 							<app-form-control [field]="{id: 'Name', label: 'Name', type: 'text', form: formGroup }" (change)="saveChange()"> </app-form-control>
@@ -39,6 +45,10 @@
 							<app-form-control [field]="{id: 'Host', label: 'Host', type: 'text', form: formGroup }" (change)="saveChange()"> </app-form-control>
 							<app-form-control [field]="{id: 'Port', label: 'Port', type: 'text', form: formGroup }" (change)="saveChange()"> </app-form-control>
 							<app-form-control [field]="{id: 'IsSecure', label: 'Is secure', type: 'checkbox', form: formGroup }" (change)="saveChange()"> </app-form-control>
+							<ion-button fill="clear" size="small" (click)="loadprintingServerConfig()">
+								<ion-icon slot="start" name="reload-circle-outline"></ion-icon>
+								{{ 'Load printer server' | translate }}
+							</ion-button>
 						</ion-col>
 					</ion-row>
 					<ion-row class="hr-group" *ngIf="item.Id">
