@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, ModalController, NavController } from '@ionic/angular';
-import { pairwise, startWith } from 'rxjs';
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
@@ -51,6 +50,8 @@ export class UserDetailPage extends PageBase {
 			IDBusinessPartner: [''],
 			StaffID: [''],
 			GroupIds: [[]],
+			TrackingRoles: [[]],
+			TrackingBusinessPartner: []
 		});
 		this.formGroup.valueChanges.subscribe((change) => {
 			if (change.Password && change.Password != change.ConfirmPassword) {
@@ -137,12 +138,14 @@ export class UserDetailPage extends PageBase {
 		super.loadedData();
 		if (this.item.Roles) {
 			this.formGroup.get('SysRoles').setValue(this.item.Roles.map((r) => r.RoleId));
+			this.formGroup.get('TrackingRoles').setValue(this.item.Roles.map((r) => r.RoleId))
 		}
 		if (this.item._Staff?.Id) {
 			this._staffDataSource.selected.push(this.item._Staff);
 		}
 		if (this.item._BusinessPartner?.Id) {
 			this._businessPartnerDataSource.selected.push(this.item._BusinessPartner);
+			this.formGroup.get('TrackingBusinessPartner').setValue(this.item._BusinessPartner)
 		}
 		Promise.all([
 			this.contactProvider.read({
@@ -166,52 +169,6 @@ export class UserDetailPage extends PageBase {
 			}
 			this._staffDataSource.initSearch();
 			this._businessPartnerDataSource.initSearch();
-			this.formGroup
-				.get('SysRoles')
-				?.valueChanges.pipe(startWith([]), pairwise())
-				.subscribe(([oldValue, currentValue]: [string[], string[]]) => {
-					const detachCheckRoles = ['CUSTOMER', 'VENDOR', 'STORER', 'STAFF'];
-
-					if (oldValue?.length === 0 && currentValue?.length > 0) return
-					const rolesRemoved = oldValue?.filter((role) => detachCheckRoles.includes(role) && !currentValue?.includes(role));
-					const rolesAdded = currentValue?.filter((role) => detachCheckRoles.includes(role) && !oldValue?.includes(role));
-					if (rolesRemoved?.length || rolesAdded?.length) {
-						if (!currentValue.some((role) => detachCheckRoles.includes(role))) {
-							this.formGroup.get('IDBusinessPartner')?.setValue(null);
-							this.formGroup.get('IDBusinessPartner')?.setValidators([]);
-						} else {
-							this.formGroup.get('IDBusinessPartner')?.setValue(null);
-							this.contactProvider
-								.read({
-									Take: 20,
-									SkipMCP: true,
-									SkipAddress: true,
-									IsVendor: this.formGroup.get('SysRoles')?.value.includes('VENDOR') ? true : undefined,
-									IsStorer: this.formGroup.get('SysRoles')?.value.includes('STORER') ? true : undefined,
-									IsCustomer: this.formGroup.get('SysRoles')?.value.includes('CUSTOMER') ? true : undefined,
-									IsBranch: false,
-								})
-								.then((result: any) => {
-									if (result && result.data?.length > 0) {
-										this._businessPartnerDataSource.selected = [...result.data];
-										this._businessPartnerDataSource.initSearch();
-									}
-								});
-							this.formGroup.get('IDBusinessPartner')?.setValidators([Validators.required]);
-						}
-						this.formGroup.get('IDBusinessPartner')?.updateValueAndValidity();
-					}
-
-					const staffRemoved = oldValue?.includes('STAFF') && !currentValue?.includes('STAFF');
-					const staffAdded = !oldValue?.includes('STAFF') && currentValue?.includes('STAFF');
-					if (staffRemoved) {
-						this.formGroup.get('StaffID')?.setValue(null);
-						this.formGroup.get('StaffID')?.setValidators([]);
-					} else if (staffAdded) {
-						this.formGroup.get('StaffID')?.setValidators([Validators.required]);
-					}
-					this.formGroup.get('StaffID')?.updateValueAndValidity();
-				});
 		});
 		if (this.item.Id == 0) {
 			this.formGroup.get('Password').setValidators([Validators.required]);
@@ -222,6 +179,75 @@ export class UserDetailPage extends PageBase {
 		}
 		if (this.item.LockoutEnabled) this.formGroup.disable();
 		else this.formGroup.enable();
+	}
+	changeBusinessPartner(e){
+		this.formGroup.get('TrackingBusinessPartner').setValue(e);
+	}
+
+	changeRole(){
+		let oldValue = this.formGroup.get('TrackingRoles').value;
+		let currentValue = this.formGroup.get('SysRoles').value;
+		const detachCheckRoles = ['CUSTOMER', 'VENDOR', 'STORER'];
+		const rolesRemoved = oldValue?.filter((role) => detachCheckRoles.includes(role) && !currentValue?.includes(role));
+		const rolesAdded = currentValue?.filter((role) => detachCheckRoles.includes(role) && !oldValue?.includes(role));
+		
+		if (rolesRemoved?.length || rolesAdded?.length) {
+			if (!currentValue?.some((role) => detachCheckRoles.includes(role))) {
+				this.formGroup.get('IDBusinessPartner')?.setValue(null);
+				this.formGroup.get('IDBusinessPartner')?.setValidators([]);
+			} else {
+				let currentBusinessPartner = this.formGroup.get('TrackingBusinessPartner').value;
+				let checked = true;
+				if(currentBusinessPartner == null) {
+					checked = false;
+				} else {
+					for (let role of currentValue) {
+						if (role === 'CUSTOMER' && !currentBusinessPartner.IsCustomer) {
+							checked = false;
+							break;
+						}
+						if (role === 'VENDOR' && !currentBusinessPartner?.IsVendor) {
+							checked = false;
+							break;
+						}
+						if (role === 'STORER' &&!currentBusinessPartner?.IsStorer) {
+							checked = false;
+							break;
+						}
+					}
+				}
+				
+				if (!checked) {
+					this.formGroup.get('IDBusinessPartner')?.setValue(null);
+					this.contactProvider
+						.read({
+							Take: 20,
+							SkipMCP: true,
+							SkipAddress: true,
+							IsVendor: this.formGroup.get('SysRoles')?.value.includes('VENDOR') ? true : undefined,
+							IsStorer: this.formGroup.get('SysRoles')?.value.includes('STORER') ? true : undefined,
+							IsCustomer: this.formGroup.get('SysRoles')?.value.includes('CUSTOMER') ? true : undefined,
+							IsBranch: false,
+						})
+						.then((result: any) => {
+							if (result && result.data?.length > 0) {
+								this._businessPartnerDataSource.selected = [...result.data];
+								this._businessPartnerDataSource.initSearch();
+							}
+						});
+				}
+				this.formGroup.get('IDBusinessPartner')?.setValidators([Validators.required]);
+			}
+			this.formGroup.get('IDBusinessPartner')?.updateValueAndValidity();
+		}
+		if (!currentValue?.includes('STAFF')) {
+			this.formGroup.get('StaffID')?.setValue(null);
+			this.formGroup.get('StaffID')?.setValidators([]);
+		} else {
+			this.formGroup.get('StaffID')?.setValidators([Validators.required]);
+		}
+
+		this.formGroup.get('TrackingRoles').setValue(currentValue);
 	}
 
 	changeEmail() {
@@ -254,6 +280,7 @@ export class UserDetailPage extends PageBase {
 							this.pageProvider
 								.resetPassword(obj.Id, obj.Password, obj.ConfirmPassword)
 								.then((savedItem: any) => {
+									this.submitAttempt = false;
 									this.env.showMessage('Password changed', 'success');
 									this.cdr.detectChanges();
 									this.formGroup.markAsPristine();
@@ -266,8 +293,10 @@ export class UserDetailPage extends PageBase {
 									} else {
 										this.env.showMessage('Cannot save, please try again', 'danger');
 									}
+									this.submitAttempt = false;
 								});
 						}
+						this.submitAttempt = false;
 						this.savedChange(savedItem, this.formGroup);
 					})
 					.catch((err) => {
@@ -277,6 +306,7 @@ export class UserDetailPage extends PageBase {
 						reject(err);
 					});
 			} else {
+				this.submitAttempt = false;
 				reject('submitAttempt');
 			}
 		});
@@ -289,6 +319,7 @@ export class UserDetailPage extends PageBase {
 			if (this.pageConfig.isDetailPage && form == this.formGroup && this.id == 0) {
 				this.item.Id = savedItem?.Id || savedItem;
 				this.id = savedItem?.Id || savedItem;
+				this.formGroup.get('Id').setValue(this.id);
 				if (window.location.hash.endsWith('/0')) {
 					let newURL = window.location.hash.substring(0, window.location.hash.length - 1) + (savedItem?.Id || savedItem);
 					history.pushState({}, null, newURL);
