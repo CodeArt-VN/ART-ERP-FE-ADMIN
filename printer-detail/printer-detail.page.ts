@@ -112,9 +112,7 @@ export class PrinterDetailPage extends PageBase {
 					this.printingServerConfig = rs?.config;
 				} else this.env.showMessage('No printers found from {value}!', 'warning', rs?.config.PrintingHost, null, true);
 			})
-			.catch((err) => {
-				this.env.showMessage(err?.error, 'warning');
-			});
+			
 	}
 	changePrinterCode() {
 		this.formGroup.get('IsSecure').setValue(this.printingServerConfig?.PrintingIsSecure);
