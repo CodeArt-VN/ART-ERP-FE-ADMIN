@@ -158,4 +158,13 @@ export class TranslatePage extends PageBase {
 			return { ...accumulator, [key]: value };
 		}, {});
 	}
+
+	generateTranslation() {
+		if (this.submitAttempt) return;
+		this.submitAttempt = true;
+		this.env
+			.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('POST', 'SYS/Translate/GenerateTranslationFile', null).toPromise())
+			.then(() => this.env.showMessage('Generate translation completed', 'success'))
+			.finally(() => this.submitAttempt = false);
+	}
 }
