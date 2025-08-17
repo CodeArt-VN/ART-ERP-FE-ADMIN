@@ -26,7 +26,7 @@
 		(sort)="onSort($event)"
 	>
 		<datatable-column [checkbox]="true"></datatable-column>
-		<datatable-column class="col-date" format="yyyy-MM-dd" name="Modified date" property="ModifiedDate" filterControlType="date"></datatable-column>
+		<datatable-column class="col-date" format="yyyy-MM-dd" name="Last modified date" property="ModifiedDate" filterControlType="date"></datatable-column>
 		<datatable-column class="col-code" name="Code" property="Code">
 			<ng-template let-i="row" datatable-cell-template>
 				<span *ngIf="!i?.isEdit">{{i?.Code}}</span>
