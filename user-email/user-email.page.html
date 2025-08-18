@@ -1,0 +1,71 @@
+<ion-header>
+	<app-toolbar [page]="this"></app-toolbar>
+</ion-header>
+
+<ion-content appScrollbarTheme class="left scrollx" [ngClass]="{withFeature: pageConfig.isShowFeature}"
+	forceOverscroll="false">
+
+	<app-page-title class="ion-padding safe-max-width" [pageConfig]="pageConfig"></app-page-title>
+
+
+	<div class="safe-max-width">
+		<app-data-table 
+			class="box-shadow responsive" 
+			[rows]="items" 
+			[trackBy]="'Id'" 
+			[(selectedRows)]="selectedItems"
+			[showSpinner]="pageConfig.showSpinner" 
+			[showFilter]="pageConfig.isShowSearch" 
+			[(query)]="query"
+			(dataInfinite)="loadData($event)" 
+			(filter)="onDatatableFilter($event)" 
+			(sort)="onSort($event)"
+			(selectedRowsChange)="showCommandBySelectedRows($event)">
+			
+			<datatable-column [checkbox]="true" name=""></datatable-column>
+			<datatable-column class="col-id" name="#" property="Id"></datatable-column>
+
+			<datatable-column class="col-email" name="Email" property="Email">
+				<ng-template let-i="row" datatable-cell-template>
+					<div (click)="showModal(i)" class="clickable">
+						<ion-text color="primary">
+							<strong>{{i.Email}}</strong>
+						</ion-text>
+						<ion-badge 
+							*ngIf="i.IsDisabled" 
+							color="danger" 
+							class="ion-margin-start">
+							Suspended
+						</ion-badge>
+					</div>
+				</ng-template>
+			</datatable-column>
+
+			<datatable-column class="col-name" name="User" property="FullName">
+				<ng-template let-i="row" datatable-cell-template>
+					<div (click)="showModal(i)" class="col-name cell clickable">
+						<ion-avatar class="avatar" slot="start">
+							<ion-img 
+								#img 
+								[src]="i.Avatar" 
+								(ionError)="img.src = 'assets/avartar-empty.jpg'">
+							</ion-img>
+						</ion-avatar>
+						<div>
+							<span class="bold">{{i.FullName}}</span>
+							<br />
+							<small class="text-muted">{{i.OrgUnitPath || '/'}}</small>
+						</div>
+					</div>
+				</ng-template>
+			</datatable-column>
+
+
+		</app-data-table>
+	</div>
+
+		<div class="ion-padding"></div>
+	<ion-infinite-scroll color="primary" threshold="30%" (ionInfinite)="loadData($event)" [disabled]="!pageConfig.infiniteScroll || pageConfig.isEndOfData">
+		<ion-infinite-scroll-content loadingSpinner="dots"></ion-infinite-scroll-content>
+	</ion-infinite-scroll>
+</ion-content>

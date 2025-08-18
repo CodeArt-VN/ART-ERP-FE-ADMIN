@@ -21,6 +21,8 @@ export const ADMINRoutes: Routes = [
   { path: 'user/:id', loadChildren: () => import('./user-detail/user-detail.module').then(m => m.UserDetailPageModule), canActivate: [AuthGuard] },
   { path: 'user-group', loadChildren: () => import('./user-group/user-group.module').then(m => m.UserGroupPageModule), canActivate: [AuthGuard] },
   { path: 'user-group/:id', loadChildren: () => import('./user-group-detail/user-group-detail.module').then(m => m.UserGroupDetailPageModule), canActivate: [AuthGuard] },
+  { path: 'user-email', loadChildren: () => import('./user-email/user-email.module').then(m => m.UserEmailPageModule), canActivate: [AuthGuard] },
+  { path: 'user-email/:id', loadChildren: () => import('./user-email-detail/user-email-detail.module').then(m => m.UserEmailDetailPageModule), canActivate: [AuthGuard] },
   
   { path: 'config-grid', loadChildren: () => import('./config-grid/config-grid.module').then(m => m.ConfigGridPageModule), canActivate: [AuthGuard] },
   { path: 'printer', loadChildren: () => import('../ADMIN/printer/printer.module').then(m => m.PrinterPageModule), canActivate: [AuthGuard]  },
