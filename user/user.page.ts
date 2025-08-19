@@ -102,8 +102,10 @@ export class UserPage extends PageBase {
 	async export(): Promise<void> {
 		if (this.submitAttempt) return;
 		this.submitAttempt = true;
+		let query = this.query;
+		query.Take = 5000;
 		this.env
-			.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('DOWNLOAD', 'ACCOUNT/ApplicationUsers/Export', this.query).toPromise())
+			.showLoading('Please wait for a few moments', this.pageProvider.commonService.connect('DOWNLOAD', 'ACCOUNT/ApplicationUsers/Export', query).toPromise())
 			.then((response: any) => {
 				this.downloadURLContent(response);
 				this.submitAttempt = false;
