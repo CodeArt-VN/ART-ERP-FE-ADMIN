@@ -23,23 +23,7 @@
 			(selectedRowsChange)="showCommandBySelectedRows($event)">
 			
 			<datatable-column [checkbox]="true" name=""></datatable-column>
-			<datatable-column class="col-id" name="#" property="Id"></datatable-column>
-
-			<datatable-column class="col-email" name="Email" property="Email">
-				<ng-template let-i="row" datatable-cell-template>
-					<div (click)="showModal(i)" class="clickable">
-						<ion-text color="primary">
-							<strong>{{i.Email}}</strong>
-						</ion-text>
-						<ion-badge 
-							*ngIf="i.IsDisabled" 
-							color="danger" 
-							class="ion-margin-start">
-							Suspended
-						</ion-badge>
-					</div>
-				</ng-template>
-			</datatable-column>
+			
 
 			<datatable-column class="col-name" name="User" property="FullName">
 				<ng-template let-i="row" datatable-cell-template>
@@ -59,7 +43,18 @@
 					</div>
 				</ng-template>
 			</datatable-column>
+			<datatable-column class="col-name" name="Email" property="Email"></datatable-column>
+			<!-- <datatable-column class="col-name" name="Image" property="Image"></datatable-column> -->
+			<datatable-column class="col-remark" name="Phones" property="Phones">
 
+				<ng-template let-i="row" datatable-cell-template>
+					<div class="col-remark">
+						<ng-container *ngFor="let phone of i.Phones">
+							<span class="badge badge-secondary">{{phone.value}}</span>
+						</ng-container>
+					</div>
+				</ng-template>
+			</datatable-column>
 
 		</app-data-table>
 	</div>
