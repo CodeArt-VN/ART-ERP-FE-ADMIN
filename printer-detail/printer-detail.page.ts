@@ -59,6 +59,13 @@ export class PrinterDetailPage extends PageBase {
 			ModifiedBy: new FormControl({ value: '', disabled: true }),
 			ModifiedDate: new FormControl({ value: '', disabled: true }),
 		});
+		this.subscriptions.push(
+			this.printingService.tracking.subscribe((status) => {
+				if (status == 'connected') {
+					this.loadPrinterList(this.env.selectedBranch);
+				}
+			})
+		);
 	}
 
 	segmentView = 's1';
@@ -66,54 +73,30 @@ export class PrinterDetailPage extends PageBase {
 		this.segmentView = ev.detail.value;
 	}
 
-	preLoadData(event?: any): void {
-		// this.printerProvider.read().then((rs: any) => {
-		// 	if (rs && rs.data?.length > 0) {
-		// 		this.printerList = rs.data;
-		// 	}
-		// });
-
-		super.preLoadData();
-		// if(!this.printingService.printe
-		// rs ){
-		// 	 this.printingService.getPrinters().then(()=>{
-		// 		 this.printers = this.printingService.printers;
-		// 		console.log(this.printers);
-
-		// 	 }).finally(()=>super.preLoadData())
-		// }
-		// else {
-		// 	 this.printers = this.printingService.printers;
-		// 	 super.preLoadData()
-		// }
-	}
-	async loadedData(event?:any	) {
+	async loadedData(event?: any) {
 		this.printerList = [];
 		super.loadedData(event);
 		let branchID = this.env.selectedBranch;
-		if (this.item?.IDBranch > 0) {
-			branchID = this.item.IDBranch;
-		}
-		if (this.item?.Code && this.printerList.length == 0) {
-			this.printerList = [{ Name: this.item.Code, Code: this.item.Code }];
-		}
-		await this.printingService
-			.getPrintersFromPrintingServer(branchID)
-			.then((rs: any) => {
-				if (rs && rs.printers.length > 0) {
-					this.printerList = [
-						...rs.printers.map((i) => {
-							return {
-								Name: i,
-								Code: i,
-							};
-						}),
-					];
-					this.printingServerConfig = rs?.config;
-				} else this.env.showMessage('No printers found from {value}!', 'warning', rs?.config.PrintingHost, null, true);
-			})
-			
+		if (this.item?.IDBranch > 0) branchID = this.item.IDBranch;
+
+		if (this.item?.Code && this.printerList.length == 0) this.printerList = [{ Name: this.item.Code, Code: this.item.Code }];
+
+		if (this.printingService.isReady) this.loadPrinterList(branchID);
 	}
+
+	loadPrinterList(branchID) {
+		this.printingService.getAvailablePrinters(branchID).then((rs: any) => {
+			if (rs && rs.printers.length > 0) {
+				this.printerList = [
+					...rs.printers.map((i) => {
+						return { Name: i, Code: i };
+					}),
+				];
+				this.printingServerConfig = rs?.config;
+			} else this.env.showMessage('No printers found from {value}!', 'warning', rs?.config.PrintingHost, null, true);
+		});
+	}
+
 	changePrinterCode() {
 		this.formGroup.get('IsSecure').setValue(this.printingServerConfig?.PrintingIsSecure);
 		this.formGroup.get('Host').setValue(this.printingServerConfig?.PrintingHost);
