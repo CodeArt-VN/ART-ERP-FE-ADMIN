@@ -53,6 +53,22 @@ export class ConfigPage extends PageBase {
 			if (!this.selectedBranch || this.selectedBranch.disabled) {
 				this.selectedBranch = this.branchList.find((d) => d.disabled == false);
 			}
+
+			if (!this.segmentView && this.pageConfig.pageName != 'config') {
+				this.pageConfig.isShowFeature = false;
+				if (this.pageConfig.pageName.toLowerCase().indexOf('pos') > -1) {
+					this.segmentView = 'POS';
+				}
+				if (this.pageConfig.pageName.toLowerCase().indexOf('crm') > -1) {
+					let nodeContactList = this.optionGroup.filter(d=>d.Code.toLowerCase().includes('contact'))
+					if(nodeContactList.length > 1) {
+						this.pageConfig.isShowFeature = true;
+						this.optionGroup = this.optionGroup.filter(d => d.Code.toLowerCase().includes('contact'));
+					}
+					this.segmentView = nodeContactList[0].Code;
+				}
+			}
+
 			super.loadedData(event);
 
 			setTimeout(() => {
