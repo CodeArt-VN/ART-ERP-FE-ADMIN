@@ -422,7 +422,7 @@ export class PriceListDetailPage extends PageBase {
 		});
 		await loading.present().then(() => {
 			this.priceListVersionDetail
-				.export({ IDPriceListVersion: id })
+				.export({ IDPriceListVersion: id, IsDisabled: 'skipped'})
 				.then((response: any) => {
 					this.downloadURLContent(response);
 					if (loading) loading.dismiss();
