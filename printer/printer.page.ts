@@ -4,7 +4,7 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
 import { BRA_BranchProvider, SYS_ActionProvider, SYS_IntegrationProviderProvider, SYS_PrinterProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
-import { SortConfig } from 'src/app/models/options-interface';
+import { SortConfig } from 'src/app/interfaces/options-interface';
 import { SYS_Printer } from 'src/app/models/model-list-interface';
 
 @Component({

@@ -39,41 +39,23 @@ export class HelpPage extends PageBase {
 	}
 
 	preLoadData(event?: any): void {
-		//Lay danh sach cac Form
-		this.env
-			.getStorage('UserProfile')
-			.then((userProfile) => {
-				let result = userProfile.Forms;
+		let functions = this.env.user.Forms;
+		const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
+		if (shouldFilter) functions = functions.filter((e) => e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase()));
 
-				const shouldFilter = this.query?.Keyword && this.query.Keyword !== '';
+		functions = functions.filter((d) => !d.Code.startsWith('can'));
 
-				if (shouldFilter) {
-					result = result.filter((e) => e.Name.toLowerCase().includes(this.query.Keyword.toLowerCase()));
-				}
+		if (functions.length === 0) this.pageConfig.isEndOfData = true;
 
-				result = result.filter((d) => !d.Code.startsWith('can'));
+		if (functions.length > 0) {
+			let firstRow = functions[0];
 
-				if (result.length === 0) {
-					this.pageConfig.isEndOfData = true;
-				}
-
-				if (result.length > 0) {
-					let firstRow = result[0];
-
-					// Fix duplicate rows
-					if (this.formList.findIndex((d) => d.Id === firstRow.Id) === -1) {
-						this.formList = [...this.formList, ...result];
-					}
-				}
-				super.preLoadData(event);
-			})
-			.catch((err) => {
-				if (err.message != null) {
-					this.env.showMessage(err.message, 'danger');
-				} else {
-					this.env.showMessage('Cannot extract data', 'danger');
-				}
-			});
+			// Fix duplicate rows
+			if (this.formList.findIndex((d) => d.Id === firstRow.Id) === -1) {
+				this.formList = [...this.formList, ...functions];
+			}
+		}
+		super.preLoadData(event);
 	}
 
 	loadData(event = null) {

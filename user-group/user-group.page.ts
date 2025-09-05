@@ -4,7 +4,7 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { PageBase } from 'src/app/page-base';
 import { BRA_BranchProvider, SYS_AccountGroupProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
-import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
+import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom/custom.service';
 
 @Component({
 	selector: 'app-user-group',

@@ -5,7 +5,7 @@ import { PageBase } from 'src/app/page-base';
 import { BRA_BranchProvider, SYS_AccountGroupProvider, SYS_TranslateProvider } from 'src/app/services/static/services.service';
 import { Location } from '@angular/common';
 import { environment } from 'src/environments/environment';
-import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
+import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom/custom.service';
 import { ApiSetting } from 'src/app/services/static/api-setting';
 import { APIList } from 'src/app/services/static/global-variable';
 

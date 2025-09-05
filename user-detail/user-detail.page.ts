@@ -5,7 +5,7 @@ import { AlertController, LoadingController, ModalController, NavController } fr
 import { PageBase } from 'src/app/page-base';
 import { CommonService } from 'src/app/services/core/common.service';
 import { EnvService } from 'src/app/services/core/env.service';
-import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
+import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom/custom.service';
 import { CRM_ContactProvider, HRM_StaffProvider, SYS_AccountGroupProvider } from 'src/app/services/static/services.service';
 
 @Component({

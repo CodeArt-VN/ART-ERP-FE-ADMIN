@@ -8,7 +8,7 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { BRA_BranchProvider, CRM_ContactProvider, SYS_AccountGroupProvider, SYS_BranchInGroupProvider, SYS_UserInGroupProvider } from 'src/app/services/static/services.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
-import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom.service';
+import { ACCOUNT_ApplicationUserProvider } from 'src/app/services/custom/custom.service';
 import { environment } from 'src/environments/environment';
 
 @Component({

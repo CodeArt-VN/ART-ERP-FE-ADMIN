@@ -6,7 +6,7 @@ import { EnvService } from 'src/app/services/core/env.service';
 import { SYS_ConfigProvider, SYS_PrinterProvider } from 'src/app/services/static/services.service';
 import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CommonService } from 'src/app/services/core/common.service';
-import { PrintingService } from 'src/app/services/printing.service';
+import { PrintingService } from 'src/app/services/util/printing.service';
 
 @Component({
 	selector: 'app-printer-detail',
