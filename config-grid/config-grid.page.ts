@@ -72,7 +72,19 @@ export class ConfigGridPage extends PageBase {
 	preLoadData(event?: any) {
 		this.env.getBranch(this.env.selectedBranch, true).then((ls) => {
 			let it = this.env.branchList.find((d) => d.Id == this.env.selectedBranch);
-			ls.unshift(it);
+			const parentIds: any[] = [];
+            lib.findParent(this.env.branchList, it.Id, parentIds);
+			const parentNodes = parentIds.reduce((acc, pid) => {
+				const node = this.env.branchList.find(x => x.Id === pid);
+				if (node && !acc.some(n => n.Id === node.Id)) {
+					node.show = true; 
+					acc.push(node);
+				}
+				return acc;
+			}, []).reverse();
+			
+    		it.show = true;
+			ls.unshift(...parentNodes, it);
 			this.itemsState = lib.cloneObject(ls);
 		});
 		// this.query.Code_in = 'BPCreditLimit';
@@ -364,7 +376,7 @@ export class ConfigGridPage extends PageBase {
 								});
 
 								!this.pageConfig.canEdit ? field.form.disable() : field.form.enable();
-								if (!config) field.showEdit = true;
+								if (!config || config?.Value == "null") field.showEdit = true;
 								else field.showed = true;
 								//  b._data = config;
 								// b._field = field;
