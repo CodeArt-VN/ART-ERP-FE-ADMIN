@@ -376,7 +376,7 @@ export class ConfigGridPage extends PageBase {
 								});
 
 								!this.pageConfig.canEdit ? field.form.disable() : field.form.enable();
-								if (!config || config?.Value == "null") field.showEdit = true;
+								if (!config || config?.Value == "null" || config?.Value == "\"\"") field.showEdit = true;
 								else field.showed = true;
 								//  b._data = config;
 								// b._field = field;
