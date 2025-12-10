@@ -410,6 +410,7 @@ export class ConfigGridPage extends PageBase {
 		}
 	}
 	saveChangeDetail(field, event) {
+		if(this.submitAttempt) return;
 		let saveValue = '';
 		let formGroup = field.form;
 		if (event.type === 'ionChange' && event.detail && event.detail.hasOwnProperty('checked')) {
@@ -420,11 +421,15 @@ export class ConfigGridPage extends PageBase {
 			saveValue = JSON.stringify(event);
 		}
 		formGroup.get('Value').setValue(saveValue);
-
+		this.submitAttempt = true;
 		return new Promise((resolve, reject) => {
 			this.pageProvider.save(formGroup.getRawValue()).then((resp) => {
+				this.submitAttempt = false;
 				formGroup.get('Id').setValue(resp['Id']);
 				this.env.showMessage('Saving completed!', 'success');
+			}).catch((err) => {
+				this.submitAttempt = false;
+				this.env.showMessage('Cannot save, please try again', 'danger');
 			});
 		});
 	}
