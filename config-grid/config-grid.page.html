@@ -36,6 +36,7 @@
 						<app-input-control
 							*ngIf="i[c.Code] && i[c.Code]._field &&  i[c.Code]._field?.showed"
 							[field]="i[c.Code]._field"
+							(change)="saveChangeDetail(i[c.Code]._field,$event)"
 							(inputChange)="saveChangeDetail(i[c.Code]._field,$event)"
 						></app-input-control>
 						<ion-icon
