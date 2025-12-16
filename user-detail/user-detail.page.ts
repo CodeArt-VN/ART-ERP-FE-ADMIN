@@ -77,7 +77,7 @@ export class UserDetailPage extends PageBase {
 			SortBy: ['Id_desc'],
 			Take: 20,
 			Skip: 0,
-			Term: term,
+			Keyword: term
 		});
 	});
 	_businessPartnerDataSource = this.buildSelectDataSource((term) => {
@@ -86,7 +86,7 @@ export class UserDetailPage extends PageBase {
 			SortBy: ['Id_desc'],
 			Take: 20,
 			Skip: 0,
-			Term: term,
+			Keyword: term,
 			SkipMCP: true,
 			SkipAddress: true,
 			IsVendor: that.formGroup.get('SysRoles')?.value.includes('VENDOR') ? true : undefined,
