@@ -61,7 +61,7 @@ export class FormPage extends PageBase {
 				item: i,
 				id: i.Id,
 			},
-			cssClass: 'my-custom-class',
+			cssClass: 'modal90vh',
 		});
 		return await modal.present();
 	}
@@ -86,7 +86,7 @@ export class FormPage extends PageBase {
 				copyFrom: this.selectedItems[0],
 				id: 0,
 			},
-			cssClass: 'my-custom-class',
+			cssClass: 'modal90vh',
 		});
 		return await modal.present();
 	}
