@@ -26,4 +26,5 @@ export const ADMINRoutes: Routes = [
   { path: 'printer', loadChildren: () => import('../ADMIN/printer/printer.module').then(m => m.PrinterPageModule), canActivate: [AuthGuard]  },
   { path: 'printer/:id', loadChildren: () => import('../ADMIN/printer-detail/printer-detail.module').then(m => m.PrinterDetailPageModule) , canActivate: [AuthGuard] },
   
+  { path: 'currency', loadChildren: () => import('./currency/currency.module').then(m => m.CurrencyPageModule), canActivate: [AuthGuard] },
 ];
