@@ -59,11 +59,15 @@ export class ConfigPage extends PageBase {
 				if (this.pageConfig.pageName.toLowerCase().indexOf('pos') > -1) {
 					this.segmentView = 'POS';
 				}
+
+				if (this.pageConfig.pageName.toLowerCase().indexOf('hrm') > -1) {
+					this.segmentView = 'HRM';
+				}
 				if (this.pageConfig.pageName.toLowerCase().indexOf('crm') > -1) {
-					let nodeContactList = this.optionGroup.filter(d=>d.Code.toLowerCase().includes('contact'))
-					if(nodeContactList.length > 1) {
+					let nodeContactList = this.optionGroup.filter((d) => d.Code.toLowerCase().includes('contact'));
+					if (nodeContactList.length > 1) {
 						this.pageConfig.isShowFeature = true;
-						this.optionGroup = this.optionGroup.filter(d => d.Code.toLowerCase().includes('contact'));
+						this.optionGroup = this.optionGroup.filter((d) => d.Code.toLowerCase().includes('contact'));
 					}
 					this.segmentView = nodeContactList[0].Code;
 				}
