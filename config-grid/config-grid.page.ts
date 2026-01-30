@@ -185,7 +185,7 @@ export class ConfigGridPage extends PageBase {
 															Take: 20,
 															Skip: 0,
 															IDDepartment: this.env.selectedBranchAndChildren,
-															Term: term,
+															Keyword: term,
 														});
 													});
 
@@ -231,7 +231,7 @@ export class ConfigGridPage extends PageBase {
 															Take: 20,
 															Skip: 0,
 															IDDepartment: this.env.selectedBranchAndChildren,
-															Term: term,
+															Keyword: term,
 														});
 													});
 
