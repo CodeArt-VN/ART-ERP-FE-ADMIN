@@ -35,6 +35,9 @@
 		</datatable-column>
 
 		<datatable-column class="col-name" name="Name" property="UserName">
+			<ng-template datatable-filter-template>
+				<input class="c-input" type="text" placeholder="{{ 'Name' | translate }}" [ngModelOptions]="{standalone: true}" [(ngModel)]="query.Keyword" (change)="refresh()" />
+			</ng-template>
 			<ng-template let-i="row" datatable-cell-template>
 				<div (click)="nav('/'+pageConfig.pageName+'/'+i.Id,'forward')" class="col-name cell">
 					<ion-avatar class="avatar" slot="start">
