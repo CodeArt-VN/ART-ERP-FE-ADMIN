@@ -12,7 +12,7 @@
 	</ion-fab>
 	<div class="safe-max-width">
 		<app-data-table
-			class="box-shadow responsive"
+			class="box-shadow responsive padding-number-right"
 			[rows]="items"
 			[trackBy]="'Id'"
 			[(selectedRows)]="selectedItems"
@@ -30,7 +30,7 @@
 				</ng-template>
 			</datatable-column>
 
-			<datatable-column class="col-name" name="Name" property="Name"> </datatable-column>
+			<datatable-column class="col-name flex-break" name="Name" property="Name"> </datatable-column>
 
 			<datatable-column
 				class="col-code"
