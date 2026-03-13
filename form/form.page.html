@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
 	<app-toolbar
 		[page]="this"
 		pageTitle="{{'System function' | translate}}"
@@ -41,7 +41,7 @@
 	</section>
 </ion-header>
 
-<ion-content appScrollbarTheme class="header-table">
+<ion-content [fullscreen]="true" appScrollbarTheme class="header-table">
 	<app-page-message [itemsLength]="itemsState.length" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 	<div class="table">
 		<div *ngFor="let i of itemsView; let j = index;" class="row" [ngClass]="{selected: i.checked}">

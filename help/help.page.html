@@ -1,9 +1,9 @@
-<ion-header>
+<ion-header [translucent]="true">
 	<app-toolbar [page]="this">
 		<ion-toggle *ngIf="pageConfig.canAdd" [checked]="isShowAll" (ionChange)="showAll($event)">{{'All' | translate}}</ion-toggle>
 	</app-toolbar>
 </ion-header>
-<ion-content appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
+<ion-content [fullscreen]="true" appScrollbarTheme class="left" [ngClass]="{withFeature: pageConfig.isShowFeature}" forceOverscroll="false">
 	<div class="help-page-title">
 		<div class="ion-text-center">
 			<h1>{{ pageConfig.pageTitle | translate }}</h1>

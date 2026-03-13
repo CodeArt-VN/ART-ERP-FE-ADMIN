@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
 	<app-toolbar [page]="this">
 		<ion-button tollbarSelected (click)="viewPermission()">
 			<label>{{ 'View' | translate }}</label>
@@ -37,7 +37,7 @@
 	</section>
 </ion-header>
 
-<ion-content appScrollbarTheme>
+<ion-content [fullscreen]="true" appScrollbarTheme>
 	<app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 
 	<section class="table" *ngIf="pageConfig.showSpinner==false">

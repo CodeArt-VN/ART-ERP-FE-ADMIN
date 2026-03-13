@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header [translucent]="true">
 	<app-toolbar
 		[page]="this"
 		pageTitle="{{'Access authorazation' | translate}}"
@@ -38,7 +38,7 @@
 	</div>
 </ion-header>
 
-<ion-content appScrollbarTheme class="header-table left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
+<ion-content [fullscreen]="true" appScrollbarTheme class="header-table left" [ngClass]="{withFeature: pageConfig.isShowFeature}">
 	<app-page-message [itemsLength]="1" [showSpinner]="pageConfig.showSpinner"></app-page-message>
 	<ion-fab *ngIf="pageConfig.isShowFeature" [ngClass]="{withSearch: pageConfig.isShowSearch}" class="feature no-print" vertical="bottom" horizontal="start" slot="fixed">
 		<!-- <ion-list-header lines="inset">
