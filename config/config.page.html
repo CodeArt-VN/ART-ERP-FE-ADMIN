@@ -1,13 +1,5 @@
 <ion-header [translucent]="true">
-	<app-toolbar
-		[page]="this"
-		pageTitle="{{'Configuration' | translate}}"
-		[pageConfig]="pageConfig"
-		[selectedItems]="selectedItems"
-		[query]="optionQuery"
-		(refresh)="refresh()"
-		(help)="help()"
-	></app-toolbar>
+	<app-toolbar [page]="this"></app-toolbar>
 	<div class="withFeature left" [ngClass]="{withFeature: pageConfig.isShowFeature}" *ngIf="pageConfig.isShowSearch">
 		<section class="table">
 			<header class="bold">
