@@ -11,6 +11,7 @@ import { BRA_BranchProvider, SYS_FormProvider, SYS_PermissionListProvider } from
 	standalone: false,
 })
 export class FormPermissionPage extends PageBase {
+	noCheckDirty = false;
 	showCheckedOnly = false;
 	isAllRowOpened = false;
 	itemsView = [];

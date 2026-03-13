@@ -18,6 +18,7 @@ import { environment } from 'src/environments/environment';
 	standalone: false,
 })
 export class UserGroupDetailPage extends PageBase {
+	noCheckDirty = false;
 	@ViewChild('popoverTitlePosition') popoverTitlePosition;
 
 	roleDataSource: any;
@@ -170,7 +171,7 @@ export class UserGroupDetailPage extends PageBase {
 		this.isPopoverTitlePositionOpen = true;
 	}
 
-	onTitlePositionChange() {
+	onTitlePositionChange(e = null, fg = null) {
 		const id = this.formGroupTitle.get('Id')?.value ?? 0;
 		const idBranch = this.formGroupTitle.get('IDBranch')?.value;
 		const name = this.titlePositions.find((p) => p.Id == idBranch)?.Name;

@@ -15,7 +15,7 @@ import { lib } from 'src/app/services/static/global-functions';
 	standalone: false,
 })
 export class TranslatePage extends PageBase {
-	languageList: [];
+	languageList: { Name?: string; Remark?: string; Code?: string }[] = [];
 	constructor(
 		public pageProvider: SYS_TranslateProvider,
 		public branchProvider: BRA_BranchProvider,

@@ -7,7 +7,7 @@
 		<ion-grid fixed>
 			<ion-row>
 				<ion-col size="12" size-sm>
-					<app-page-title [icon]="person-outline" [color]="warning" [title]="'User group'"></app-page-title>
+					<app-page-title [icon]="'person-outline'" [color]="'warning'" [title]="'User group'"></app-page-title>
 				</ion-col>
 			</ion-row>
 		</ion-grid>
@@ -106,7 +106,7 @@
 													appendTo="#ng-select-holder"
 													class="c-input"
 													(change)="changeUserAccount($event, i?._formGroup)"
-													[labelForId]="'IDUser'+idx"
+													[labelForId]="'IDUser'+i?.Id"
 													[items]="i?._formGroup.controls._UserDataSource.value | async"
 													[clearable]="false"
 													[typeahead]="i?._formGroup.controls._UserSearchInput.value"

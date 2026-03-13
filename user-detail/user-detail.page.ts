@@ -17,7 +17,7 @@ import { CRM_ContactProvider, HRM_StaffProvider, SYS_AccountGroupProvider } from
 export class UserDetailPage extends PageBase {
 	roleList: any = [];
 	passwordViewType = 'password';
-	groupList: [];
+	groupList: any[] = [];
 	constructor(
 		public pageProvider: ACCOUNT_ApplicationUserProvider,
 
@@ -369,4 +369,7 @@ export class UserDetailPage extends PageBase {
 				});
 		}
 	}
+
+	//TODO: Remove empty functions
+	segmentChanged(_ev?: any) {}
 }
