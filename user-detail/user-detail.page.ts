@@ -53,13 +53,15 @@ export class UserDetailPage extends PageBase {
 			TrackingRoles: [[]],
 			TrackingBusinessPartner: []
 		});
-		this.formGroup.valueChanges.subscribe((change) => {
-			if (change.Password && change.Password != change.ConfirmPassword) {
-				this.formGroup.get('ConfirmPassword').setErrors({ isError: true });
-			} else {
-				this.formGroup.get('ConfirmPassword').setErrors(null);
-			}
-		});
+		this.subscriptions.push(
+			this.formGroup.valueChanges.subscribe((change) => {
+				if (change.Password && change.Password != change.ConfirmPassword) {
+					this.formGroup.get('ConfirmPassword').setErrors({ isError: true });
+				} else {
+					this.formGroup.get('ConfirmPassword').setErrors(null);
+				}
+			})
+		);
 	}
 	passwordMatchValidator(): ValidatorFn {
 		return (formGroup: FormControl): { [key: string]: any } | null => {
