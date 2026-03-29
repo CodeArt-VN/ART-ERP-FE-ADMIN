@@ -192,7 +192,7 @@ export class DynamicConfigComponent extends PageBase {
 														Take: 20,
 														Skip: 0,
 														IDDepartment: this.env.selectedBranchAndChildren,
-														Term: term,
+														Keyword: term,
 													})
 													.pipe(
 														catchError(() => of([])),
@@ -302,7 +302,7 @@ export class DynamicConfigComponent extends PageBase {
 	// 		this.staffListInput$.pipe(
 	// 			distinctUntilChanged(),
 	// 			tap(() => this.staffListLoading = true),
-	// 			switchMap(term => this.staffProvider.search({ Take: 20, Skip: 0, IDDepartment: this.env.selectedBranchAndChildren, Term: term }).pipe(
+	// 			switchMap(term => this.staffProvider.search({ Take: 20, Skip: 0, IDDepartment: this.env.selectedBranchAndChildren, Keyword: term }).pipe(
 	// 				catchError(() => of([])), // empty list on error
 	// 				tap(() => this.staffListLoading = false)
 	// 			))
@@ -322,7 +322,7 @@ export class DynamicConfigComponent extends PageBase {
 	// 		this.contactListInput$.pipe(
 	// 			distinctUntilChanged(),
 	// 			tap(() => this.contactListLoading = true),
-	// 			switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, IDDepartment: this.env.selectedBranchAndChildren, Term: term }).pipe(
+	// 			switchMap(term => this.contactProvider.search({ Take: 20, Skip: 0, IDDepartment: this.env.selectedBranchAndChildren, Keyword: term }).pipe(
 	// 				catchError(() => of([])), // empty list on error
 	// 				tap(() => this.contactListLoading = false)
 	// 			))

@@ -208,7 +208,7 @@ export class ConfigGridPage extends PageBase {
 													// 							Take: 20,
 													// 							Skip: 0,
 													// 							IDDepartment: this.page.env.selectedBranchAndChildren,
-													// 							Term: term,
+													// 							Keyword: term,
 													// 						})
 													// 						.pipe(
 													// 							catchError(() => of([])),
@@ -255,7 +255,7 @@ export class ConfigGridPage extends PageBase {
 													// 							Take: 20,
 													// 							Skip: 0,
 													// 							IDDepartment: this.page.env.selectedBranchAndChildren,
-													// 							Term: term,
+													// 							Keyword: term,
 													// 						})
 													// 						.pipe(
 													// 							catchError(() => of([])),
