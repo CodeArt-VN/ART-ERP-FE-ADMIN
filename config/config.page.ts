@@ -20,6 +20,7 @@ export class ConfigPage extends PageBase {
 	subOptions = null;
 	segmentView = '';
 	loadedConfig = false;
+	searchResultIdList = { term: '', ids: [] };
 
 	constructor(
 		public pageProvider: SYS_ConfigProvider,
@@ -160,4 +161,12 @@ export class ConfigPage extends PageBase {
 	savedConfig(data) {
 		this.items = [...data];
 	}
+
+	searchShowAllChildren = (term: string, item: any) => {
+		if (this.searchResultIdList.term != term) {
+			this.searchResultIdList.term = term;
+			this.searchResultIdList.ids = lib.searchTreeReturnId(this.branchList, term);
+		}
+		return this.searchResultIdList.ids.indexOf(item.Id) > -1;
+	};
 }

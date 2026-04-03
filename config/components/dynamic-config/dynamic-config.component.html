@@ -4,6 +4,7 @@
 		<ion-grid fixed>
 			<app-group-control
 				[title]="o.Name"
+				[code]="o.Code"
 				[fields]="o.children"
 				(onChange)="saveChange($event)"
 				[hideBorder]="idx == optionList.length - 1"
