@@ -108,6 +108,11 @@ export class ConfigGridPage extends PageBase {
 	}
 
 	private async resolveConfigCodes(routeCode: string, navigationState?: string[]) {
+		if (navigationState?.length) {
+			this.query.Code_in = navigationState;
+			return;
+		}
+
 		if (routeCode) {
 			const result: any = await this.configOptionProvider.read({
 				Code: routeCode,
@@ -124,8 +129,6 @@ export class ConfigGridPage extends PageBase {
 				return;
 			}
 		}
-
-		this.query.Code_in = navigationState;
 	}
 
 	async loadedData(event?: any, ignoredFromGroup?: boolean) {
