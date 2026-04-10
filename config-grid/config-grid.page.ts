@@ -44,6 +44,7 @@ export class ConfigGridPage extends PageBase {
 	zoneList = null;
 	putawayStrategyList = null;
 	allocationStrategyList = null;
+
 	constructor(
 		public pageProvider: SYS_ConfigProvider,
 		public configOptionProvider: SYS_ConfigOptionProvider,
@@ -69,33 +70,65 @@ export class ConfigGridPage extends PageBase {
 	) {
 		super();
 	}
-	preLoadData(event?: any) {
-		this.env.getBranch(this.env.selectedBranch, true).then((ls) => {
+
+	async preLoadData(event?: any) {
+		const routeCode = this.route.snapshot?.paramMap?.get('code');
+		const navigationState = this.router.getCurrentNavigation()?.extras?.state as string[] | undefined;
+
+		await Promise.all([
+			this.loadBranchState(),
+			this.resolveConfigCodes(routeCode, navigationState),
+			Promise.all([this.priceListProvider.read(), this.taxDefinitionProvider.read()]).then((result) => {
+				this.priceList = result[0]['data'];
+				this.taxDefinitionList = result[1]['data'];
+			}),
+		]);
+
+		super.preLoadData(event);
+	}
+
+	private loadBranchState() {
+		return this.env.getBranch(this.env.selectedBranch, true).then((ls) => {
 			let it = this.env.branchList.find((d) => d.Id == this.env.selectedBranch);
 			const parentIds: any[] = [];
-            lib.findParent(this.env.branchList, it.Id, parentIds);
+			lib.findParent(this.env.branchList, it.Id, parentIds);
 			const parentNodes = parentIds.reduce((acc, pid) => {
-				const node = this.env.branchList.find(x => x.Id === pid);
+				const node = this.env.branchList.find((x) => x.Id === pid);
 				if (node && !acc.some(n => n.Id === node.Id)) {
-					node.show = true; 
+					node.show = true;
 					acc.push(node);
 				}
 				return acc;
 			}, []).reverse();
-			
-    		it.show = true;
+
+			it.show = true;
 			ls.unshift(...parentNodes, it);
 			this.itemsState = lib.cloneObject(ls);
 		});
-		// this.query.Code_in = 'BPCreditLimit';
-		this.route.queryParams.subscribe((params) => {
-			this.query.Code_in = this.router.getCurrentNavigation().extras.state;
-		});
-		Promise.all([this.priceListProvider.read(), this.taxDefinitionProvider.read()]).then((result) => {
-			this.priceList = result[0]['data'];
-			this.taxDefinitionList = result[1]['data'];
-			super.preLoadData(event);
-		});
+	}
+
+	private async resolveConfigCodes(routeCode: string, navigationState?: string[]) {
+		if (navigationState?.length) {
+			this.query.Code_in = navigationState;
+			return;
+		}
+
+		if (routeCode) {
+			const result: any = await this.configOptionProvider.read({
+				Code: routeCode,
+				AllChildren: true,
+				AllParent: true,
+				Take: 5000,
+			});
+			const optionList = result?.data || [];
+			const targetNode = optionList.find((d) => d.Code == routeCode);
+			const childCodes = optionList.filter((d) => d.IDParent == targetNode?.Id).map((d) => d.Code).filter((d) => !!d);
+
+			if (childCodes.length) {
+				this.query.Code_in = childCodes;
+				return;
+			}
+		}
 	}
 
 	async loadedData(event?: any, ignoredFromGroup?: boolean) {
