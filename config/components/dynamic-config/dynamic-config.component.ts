@@ -5,6 +5,7 @@ import { AlertController, LoadingController, NavController } from '@ionic/angula
 import { PageBase } from 'src/app/page-base';
 import { EnvService } from 'src/app/services/core/env.service';
 import {
+	CRM_BrandProvider,
 	CRM_ContactProvider,
 	FINANCE_TaxDefinitionProvider,
 	HRM_StaffProvider,
@@ -31,6 +32,7 @@ export class DynamicConfigComponent extends PageBase {
 	priceList = [];
 	locationList: [] = null;
 	zoneList: [] = null;
+	brandList: [] = null;
 	putawayStrategyList: [] = null;
 	allocationStrategyList: [] = null;
 	taxDefinitionList = [];
@@ -65,6 +67,7 @@ export class DynamicConfigComponent extends PageBase {
 		public locationProvider: WMS_LocationProvider,
 		public putawayStrategyProvider: WMS_PutawayStrategyProvider,
 		public allocationStrategyProvider: WMS_AllocationStrategyProvider,
+		public brandProvider: CRM_BrandProvider,
 
 		public env: EnvService,
 		public route: ActivatedRoute,
@@ -79,9 +82,10 @@ export class DynamicConfigComponent extends PageBase {
 	}
 
 	preLoadData(event) {
-		Promise.all([this.priceListProvider.read(), this.taxDefinitionProvider.read()]).then((result) => {
+		Promise.all([this.priceListProvider.read(), this.taxDefinitionProvider.read(), this.brandProvider.read()]).then((result) => {
 			this.priceList = result[0]['data'];
 			this.taxDefinitionList = result[1]['data'];
+			this.brandList = result[2]['data'];
 			this.isPreloaded = true;
 			super.preLoadData(event);
 		});
@@ -254,7 +258,12 @@ export class DynamicConfigComponent extends PageBase {
 									c.type = 'select';
 									c.bindValue = 'Id';
 									break;
-							}
+								case 'CRM_Brand':
+									c.items = [...this.brandList];
+									c.type = 'select';
+									c.bindValue = 'Id';
+									break;	
+								}
 						}
 					} catch (error) {
 						console.log(error);
