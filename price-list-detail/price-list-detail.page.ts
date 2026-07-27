@@ -374,8 +374,8 @@ export class PriceListDetailPage extends PageBase {
 
 						this.alertCtrl
 							.create({
-								header: 'Có lỗi import dữ liệu',
-								subHeader: 'Bạn có muốn xem lại các mục bị lỗi?',
+								header: 'Data import error',
+								subHeader: 'Do you want to review the items with errors?',
 								message: 'Có ' + resp.ErrorList.length + ' lỗi khi import:' + message,
 								cssClass: 'alert-text-left',
 								buttons: [
