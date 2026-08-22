@@ -57,14 +57,14 @@ export class UserPage extends PageBase {
 					.connect('PUT', 'Account/EnableAccount/' + this.selectedItems.map((s) => s.Id).join(','), null)
 					.toPromise()
 					.then(() => {
-						this.env.showMessage('Reopened {{value}} lines!', 'success', this.selectedItems.length);
+						this.env.showMessage('Reopened {value} lines!', 'success', this.selectedItems.length);
 					});
 			} else {
 				this.pageProvider.commonService
 					.connect('PUT', 'Account/DisableAccount/' + this.selectedItems.map((s) => s.Id).join(','), null)
 					.toPromise()
 					.then(() => {
-						this.env.showMessage('Archived {{value}} lines!', 'success', this.selectedItems.length);
+						this.env.showMessage('Archived {value} lines!', 'success', this.selectedItems.length);
 					});
 			}
 			this.removeSelectedItems();
@@ -79,7 +79,7 @@ export class UserPage extends PageBase {
 						value: this.selectedItems.length,
 					},
 					null,
-					{ code: 'Are you sure you want to delete the {{value}} selected item(s)?', value: this.selectedItems.length }
+					{ code: 'Are you sure you want to delete the {value} selected item(s)?', value: this.selectedItems.length }
 				)
 				.then((_) => {
 					this.env
@@ -137,7 +137,7 @@ export class UserPage extends PageBase {
 					this.env
 						.showPrompt(
 							{
-								code: '{{value}} error(s) during import: {{value1}}',
+								code: '{value} error(s) during import: {value1}',
 								value: resp.ErrorList.length,
 								value1: message,
 							},

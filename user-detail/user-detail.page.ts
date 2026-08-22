@@ -266,7 +266,7 @@ export class UserDetailPage extends PageBase {
 				const translationPromises = invalidControls.map((control) => this.env.translateResource(control));
 				Promise.all(translationPromises).then((values) => {
 					let invalidControls = values;
-					this.env.showMessage('Please recheck control(s): {{value}}', 'warning', invalidControls.join(' | '));
+					this.env.showMessage('Please recheck control(s): {value}', 'warning', invalidControls.join(' | '));
 					reject('form invalid');
 				});
 			} else if (this.submitAttempt == false) {
