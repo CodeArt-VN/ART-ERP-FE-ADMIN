@@ -16,6 +16,7 @@ describe('ConfigPage', () => {
 			IDBranch: [2],
 		});
 		component.selectedBranch = null;
+		component.pageConfig = { isSubActive: false } as any;
 		loadDataSpy = spyOn(component, 'loadData');
 		loadNodeSpy = spyOn(component, 'loadNode');
 	});
@@ -24,12 +25,12 @@ describe('ConfigPage', () => {
 		expect(component).toBeTruthy();
 	});
 
-	it('selectBranch should resolve selectedBranch from IDBranch', () => {
+	it('selectBranch should resolve selectedBranch from IDBranch and reload via loadNode only', () => {
 		component.selectBranch();
 
 		expect(component.selectedBranch).toEqual({ Id: 2, Name: 'Branch B', disabled: false });
-		expect(loadDataSpy).toHaveBeenCalledWith(null);
 		expect(loadNodeSpy).toHaveBeenCalled();
+		expect(loadDataSpy).not.toHaveBeenCalled();
 	});
 
 	it('selectBranch should clear selectedBranch when IDBranch is empty', () => {
@@ -38,7 +39,20 @@ describe('ConfigPage', () => {
 		component.selectBranch();
 
 		expect(component.selectedBranch).toBeNull();
-		expect(loadDataSpy).toHaveBeenCalledWith(null);
 		expect(loadNodeSpy).toHaveBeenCalled();
+		expect(loadDataSpy).not.toHaveBeenCalled();
+	});
+
+	it('loadNode should call loadData once', () => {
+		loadNodeSpy.and.callThrough();
+		spyOn(history, 'pushState');
+		component.optionGroup = [{ Code: 'POS', children: [{ Code: 'POS.A' }] }];
+		component.segmentView = 'POS';
+		component.selectedBranch = { Id: 2 };
+
+		component.loadNode();
+
+		expect(loadDataSpy).toHaveBeenCalledTimes(1);
+		expect(loadDataSpy).toHaveBeenCalledWith(null);
 	});
 });
