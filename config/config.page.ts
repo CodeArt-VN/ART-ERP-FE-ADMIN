@@ -20,7 +20,6 @@ export class ConfigPage extends PageBase {
 	subOptions = null;
 	segmentView = '';
 	loadedConfig = false;
-	searchResultIdList = { term: '', ids: [] };
 
 	constructor(
 		public pageProvider: SYS_ConfigProvider,
@@ -42,6 +41,9 @@ export class ConfigPage extends PageBase {
 		this.pageConfig.ShowArchive = false;
 		this.pageConfig.isFeatureAsMain = true;
 		this.segmentView = this.route.snapshot?.paramMap?.get('segment');
+		this.formGroup = this.formBuilder.group({
+			IDBranch: [null],
+		});
 	}
 
 	optionQuery = { Keyword: '', AllChildren: true, AllParent: true, Take: 5000 };
@@ -54,6 +56,7 @@ export class ConfigPage extends PageBase {
 			if (!this.selectedBranch || this.selectedBranch.disabled) {
 				this.selectedBranch = this.branchList.find((d) => d.disabled == false);
 			}
+			this.formGroup.get('IDBranch')?.setValue(this.selectedBranch?.Id || null, { emitEvent: false });
 
 			if (!this.segmentView && this.pageConfig.pageName != 'config') {
 				this.pageConfig.isShowFeature = false;
@@ -116,6 +119,8 @@ export class ConfigPage extends PageBase {
 	}
 
 	selectBranch() {
+		const branchId = this.formGroup.get('IDBranch')?.value;
+		this.selectedBranch = branchId ? this.branchList.find((d) => d.Id == branchId) : null;
 		this.loadData(null);
 		this.loadNode();
 	}
@@ -161,12 +166,4 @@ export class ConfigPage extends PageBase {
 	savedConfig(data) {
 		this.items = [...data];
 	}
-
-	searchShowAllChildren = (term: string, item: any) => {
-		if (this.searchResultIdList.term != term) {
-			this.searchResultIdList.term = term;
-			this.searchResultIdList.ids = lib.searchTreeReturnId(this.branchList, term);
-		}
-		return this.searchResultIdList.ids.indexOf(item.Id) > -1;
-	};
 }
