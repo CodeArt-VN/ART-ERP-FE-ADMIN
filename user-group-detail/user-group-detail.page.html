@@ -57,13 +57,8 @@
 									<datatable-column class="col-name" property="IDBranch">
 										<ng-template let-i="row" datatable-cell-template>
 											<app-branch-breadcrumbs
-												[maxItems]="2"
-												[itemsBeforeCollapse]="0"
-												[itemsAfterCollapse]="2"
 												[Id]="i.IDBranch"
 												[Items]="this.titlePositions"
-												[ngClass]="{'no-check-dirty': noCheckDirty}"
-												class="c-input disable breadcrumbs"
 												*ngIf="i.IDBranch"
 											></app-branch-breadcrumbs>
 										</ng-template>

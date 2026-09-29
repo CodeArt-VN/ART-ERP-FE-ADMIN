@@ -69,13 +69,8 @@
 					<div>
 						<div *ngFor="let j of i._groups;" class="row">
 							<app-branch-breadcrumbs
-								[maxItems]="2"
-								[itemsBeforeCollapse]="0"
-								[itemsAfterCollapse]="2"
 								[Id]="j.IDBranch"
 								[Items]="env.jobTitleList"
-								[ngClass]="{'no-check-dirty': noCheckDirty}"
-								class="c-input disable breadcrumbs"
 								*ngIf="j.IDBranch"
 							></app-branch-breadcrumbs>
 						</div>
